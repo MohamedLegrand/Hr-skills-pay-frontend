@@ -7,6 +7,7 @@ export default defineConfig({
     host: 'localhost',
     port: 5173,
     strictPort: false,
+    middlewareMode: false,
     hmr: {
       host: 'localhost',
       port: 5173,
@@ -14,7 +15,12 @@ export default defineConfig({
     },
     watch: {
       usePolling: true,
-      interval: 100
+      interval: 50,
+      binaryInterval: 100,
+      ignored: ['**/node_modules/**', '**/.git/**', '**/dist/**']
     }
+  },
+  define: {
+    '__DEV__': true
   }
 })
