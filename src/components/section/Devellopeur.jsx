@@ -56,15 +56,20 @@ const apiEndpoints = [
   }
 ];
 
-// Exemples de code par langage
+// 🛡️ Exemples de code par langage - CLÉS API SÉCURISÉES
+// NOTE: Les clés affichées sont des placeholders. En production, utilisez des variables d'environnement.
 const codeExamples = [
   {
     language: 'JavaScript',
     icon: '🟨',
-    code: `const HrSkillsPay = require('hrskills-pay');
+    code: `// 🔐 Bonnes pratiques : utilisez des variables d'environnement
+// Créez un fichier .env.local avec : REACT_APP_API_KEY=votre_clé
+
+const HrSkillsPay = require('hrskills-pay');
 
 const client = new HrSkillsPay({
-  apiKey: 'sk_live_votre_clé_secrète'
+  // ⚠️ Ne jamais committer de vraies clés dans le code
+  apiKey: process.env.REACT_APP_API_KEY || 'REMOVEDYOUR_API_KEY_HERE'
 });
 
 // Créer un paiement
@@ -86,11 +91,14 @@ console.log(payment);`
     language: 'PHP',
     icon: '🐘',
     code: `<?php
-require_once 'vendor/autoload.php';
+// 🔐 Bonnes pratiques : chargez les variables d'environnement
+// require_once __DIR__ . '/vendor/autoload.php';
 
 use HrSkillsPay\\Client;
 
-$client = new Client('sk_live_votre_clé_secrète');
+// ⚠️ Utilisez getenv() ou un package comme vlucas/phpdotenv
+$apiKey = getenv('HR_SKILLS_API_KEY') ?: 'REMOVEDYOUR_API_KEY_HERE';
+$client = new Client($apiKey);
 
 // Créer un paiement
 $payment = $client->payments()->create([
@@ -111,10 +119,13 @@ print_r($payment);`
     language: 'Python',
     icon: '🐍',
     code: `import hrskills_pay
+import os
 
-client = hrskills_pay.Client(
-    api_key='sk_live_votre_clé_secrète'
-)
+# 🔐 Bonnes pratiques : utilisez des variables d'environnement
+# Créez un fichier .env avec : HR_SKILLS_API_KEY=votre_clé
+
+api_key = os.getenv('HR_SKILLS_API_KEY', 'REMOVEDYOUR_API_KEY_HERE')
+client = hrskills_pay.Client(api_key=api_key)
 
 # Créer un paiement
 payment = client.payments.create(
@@ -134,8 +145,11 @@ print(payment)`
   {
     language: 'cURL',
     icon: '📡',
-    code: `curl -X POST https://api.hrskillspay.com/v1/payments \\
-  -u sk_live_votre_clé_secrète: \\
+    code: `# 🔐 Bonnes pratiques : utilisez une variable shell ou un fichier .env
+# export HR_SKILLS_API_KEY="REMOVEDYOUR_API_KEY_HERE"
+
+curl -X POST https://api.hrskillspay.com/v1/payments \\
+  -u "\${HR_SKILLS_API_KEY}:" \\
   -H "Content-Type: application/json" \\
   -d '{
     "amount": 10000,
@@ -515,7 +529,7 @@ function Developpeurs() {
                 ))}
               </div>
 
-              {/* Clés API */}
+              {/* 🔐 Clés API - Placeholder sécurisé */}
               <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
                 <div className="flex items-center gap-2 mb-3">
                   <Key className="w-4 h-4 text-amber-400" />
@@ -523,10 +537,30 @@ function Developpeurs() {
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between gap-2">
-                    <code className="text-xs text-slate-300">REMOVED4eC39HqLyjWDarjtT1zdp7dc</code>
-                    <CopyButton text="REMOVED4eC39HqLyjWDarjtT1zdp7dc" />
+                    {/* ✅ Placeholder sécurisé qui ne trigger pas GitHub Secret Scanning */}
+                    <code className="text-xs text-slate-300 font-mono">
+                      REMOVEDYOUR_API_KEY_HERE
+                    </code>
+                    <CopyButton text="REMOVEDYOUR_API_KEY_HERE" />
                   </div>
-                  <p className="text-xs text-slate-400">Clé secrète de test (ne jamais committer)</p>
+                  <p className="text-xs text-slate-400">
+                    ⚠️ Générez vos clés dans le dashboard • Utilisez des variables d'environnement
+                  </p>
+                </div>
+              </div>
+
+              {/* 🛡️ Note sécurité */}
+              <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                <div className="flex items-start gap-3">
+                  <Shield className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold text-blue-200">Bonnes pratiques sécurité</p>
+                    <ul className="text-xs text-slate-400 mt-1 space-y-1 list-disc list-inside">
+                      <li>Ne commitez jamais de clés réelles dans Git</li>
+                      <li>Utilisez <code className="bg-slate-800 px-1 rounded">.env.local</code> pour les variables</li>
+                      <li>Révoquez immédiatement toute clé exposée par erreur</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
 
@@ -575,7 +609,7 @@ function Developpeurs() {
                     <span className="text-xs text-slate-400">Créer un paiement</span>
                     <span className="text-xs text-slate-500">POST /v1/payments</span>
                   </div>
-                  <CodeBlock code={activeExample.code} language={activeExample.language} />
+                  <CodeBlock code={activeExample.code} />
                 </div>
               )}
 
@@ -596,7 +630,7 @@ function Developpeurs() {
   "metadata": {
     "order_id": "12345"
   }
-}`} language="json" />
+}`} />
               </div>
             </div>
           </div>
