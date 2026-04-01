@@ -71,24 +71,7 @@ const Hero = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isHoveringPhone, setIsHoveringPhone] = useState(false);
 
-  // Auto-play avec pause au hover
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (!isHoveringPhone) nextSlide();
-    }, 7000);
-    return () => clearInterval(timer);
-  }, [currentSlide, isHoveringPhone]);
-
-  // Navigation clavier
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowRight') nextSlide();
-      if (e.key === 'ArrowLeft') prevSlide();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
+  // Déclarer les fonctions de slide AVANT les useEffect
   const nextSlide = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
@@ -103,6 +86,24 @@ const Hero = () => {
     setTimeout(() => setIsAnimating(false), 400);
   }, [isAnimating]);
 
+  // Auto-play avec pause au hover
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (!isHoveringPhone) nextSlide();
+    }, 7000);
+    return () => clearInterval(timer);
+  }, [currentSlide, isHoveringPhone, nextSlide]);
+
+  // Navigation clavier
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [nextSlide, prevSlide]);
+
   const goToSlide = (index) => {
     if (isAnimating || index === currentSlide) return;
     setIsAnimating(true);
@@ -114,6 +115,7 @@ const Hero = () => {
 
   return (
     <section 
+      id="home"
       className="relative min-h-screen flex flex-col items-center bg-gradient-to-br from-slate-50 via-violet-50/40 to-slate-100 overflow-hidden pt-8 pb-16"
       aria-label="Section principale - Solutions de paiement"
     >
@@ -439,7 +441,7 @@ const Hero = () => {
       </div>
 
       {/* ========== ANIMATIONS CSS ========== */}
-      <style jsx>{`
+      <style jsx={true}>{`
         @keyframes fadeInDown {
           from { opacity: 0; transform: translateY(-16px); }
           to { opacity: 1; transform: translateY(0); }

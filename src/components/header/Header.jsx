@@ -1,15 +1,36 @@
 import { useState } from "react";
 
 const NAV_LINKS = [
-  { label: "Produits", href: "#" },
-  { label: "Solutions", href: "#" },
-  { label: "Tarifs", href: "#" },
-  { label: "Développeurs", href: "#" },
-  { label: "Support", href: "#" },
+  { label: "Accueil", href: "#home" },
+  { label: "Produits", href: "#produits" },
+  { label: "Solutions", href: "#solutions" },
+  { label: "Tarifs", href: "#tarifs" },
+  { label: "Développeurs", href: "#developpeurs" },
+  { label: "Support", href: "#support" },
 ];
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Fonction pour faire défiler vers une section
+  const handleNavClick = (e, href) => {
+    e.preventDefault();
+    
+    if (href === "#home") {
+      // Scroll vers le top
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      // Scroll vers la section
+      const sectionId = href.substring(1);
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+    
+    // Fermer le menu mobile si ouvert
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -35,8 +56,9 @@ function Header() {
             {NAV_LINKS.map((link, index) => (
               <a 
                 key={index} 
-                href={link.href} 
-                className="hover:text-violet-200 transition"
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="hover:text-violet-200 transition cursor-pointer"
               >
                 {link.label}
               </a>
@@ -79,7 +101,12 @@ function Header() {
         <div className="md:hidden bg-violet-700 p-6 space-y-6 text-lg text-white shadow-lg">
           
           {NAV_LINKS.map((link, index) => (
-            <a key={index} href={link.href} className="block hover:text-violet-200 transition">
+            <a 
+              key={index} 
+              href={link.href}
+              onClick={(e) => handleNavClick(e, link.href)}
+              className="block hover:text-violet-200 transition cursor-pointer"
+            >
               {link.label}
             </a>
           ))}
