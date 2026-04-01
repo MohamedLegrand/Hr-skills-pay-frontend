@@ -21,7 +21,7 @@ const slides = [
     title: "Mobile Money",
     subtitle: "Couverture panafricaine",
     description: "Étendez votre présence commerciale avec Mobile Money. Une infrastructure robuste et sécurisée pour encaisser des paiements dans 15+ pays africains, avec une disponibilité de 99.9%.",
-    features: ["Couverture 15+ pays", "Settlement J+1", "Dashboard analytique"],
+    features: ["Couverture pays", "Settlement J+1", "Dashboard analytique"],
     image: "/images/momo.jpg",
     icon: "🌍",
     gradient: "from-blue-600 via-blue-700 to-cyan-500",
