@@ -30,9 +30,7 @@ export default function Footer() {
         <div>
           <h3 className="text-white font-semibold text-lg mb-4">Entreprise</h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="/a-propos" className="hover:text-white transition">À propos</a></li>
-            <li><a href="/blog" className="hover:text-white transition">Blog</a></li>
-            <li><a href="/carrieres" className="hover:text-white transition">Carrières</a></li>
+            <li><a href="/aboutus" className="hover:text-white transition">À propos</a></li>
             <li><a href="/contact" className="hover:text-white transition">Contact</a></li>
           </ul>
         </div>
@@ -43,8 +41,8 @@ export default function Footer() {
           <ul className="space-y-2 text-sm">
             <li><a href="/passerelle" className="hover:text-white transition">Passerelle de paiement</a></li>
             <li><a href="/abonnements" className="hover:text-white transition">Paiement récurrent</a></li>
-            <li><a href="/facturation" className="hover:text-white transition">Facturation électronique</a></li>
-            <li><a href="/marketplace" className="hover:text-white transition">Marketplace</a></li>
+            
+          
           </ul>
         </div>
 
@@ -53,9 +51,7 @@ export default function Footer() {
           <h3 className="text-white font-semibold text-lg mb-4">Ressources</h3>
           <ul className="space-y-2 text-sm">
             <li><a href="/docs" className="hover:text-white transition">Documentation API</a></li>
-            <li><a href="/statut" className="hover:text-white transition">Statut du service</a></li>
             <li><a href="/faq" className="hover:text-white transition">FAQ</a></li>
-            <li><a href="/telechargement" className="hover:text-white transition">Télécharger l'application</a></li>
           </ul>
         </div>
 
@@ -63,12 +59,11 @@ export default function Footer() {
         <div>
           <h3 className="text-white font-semibold text-lg mb-4">Support</h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="/centre-aide" className="hover:text-white transition">Centre d'aide</a></li>
+           
             <li><a href="/securite" className="hover:text-white transition">Sécurité</a></li>
             <li><a href="/partenaires" className="hover:text-white transition">Partenaires</a></li>
-            <li><a href="/legal/mentions-legales" className="hover:text-white transition">Mentions légales</a></li>
-            <li><a href="/legal/cgv" className="hover:text-white transition">CGV</a></li>
-            <li><a href="/legal/confidentialite" className="hover:text-white transition">Politique de confidentialité</a></li>
+            <li><a href="/mentions" className="hover:text-white transition">Mentions légales</a></li>
+            <li><a href="/confidentialite" className="hover:text-white transition">Politique de confidentialité</a></li>
           </ul>
         </div>
 
@@ -101,8 +96,8 @@ export default function Footer() {
           {/* Ombre au survol sur chaque icône de paiement */}
           <img src="/icons/visa.svg" alt="Visa" className="h-5 w-auto transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 rounded-md" />
           <img src="/icons/mastercard.svg" alt="Mastercard" className="h-5 w-auto transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 rounded-md" />
-          <img src="/icons/mtn.png" alt="MTN" className="h-5 w-auto transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 rounded-md" />
-          <img src="/icons/orange.png" alt="Orange" className="h-5 w-auto transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 rounded-md" />
+          <img src="/images/momo.jpg" alt="MTN" className="h-5 w-auto transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 rounded-md" />
+          <img src="/images/orange.jpg" alt="Orange" className="h-5 w-auto transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 rounded-md" />
           <img src="/icons/ssl.png" alt="SSL" className="h-5 w-auto transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 rounded-md" />
         </div>
       </div>
