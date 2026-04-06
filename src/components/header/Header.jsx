@@ -121,7 +121,7 @@ function Header() {
             {/* CTA principal */}
             <button 
               className="bg-white text-violet-800 px-5 lg:px-6 py-2 rounded-lg font-semibold hover:bg-violet-100 transition shadow-sm"
-              onClick={() => window.location.href = "/signup"}
+              onClick={() => window.location.href = "/register"}
             >
               S'inscrire
             </button>
@@ -173,7 +173,7 @@ function Header() {
 
           <button 
             className="w-full bg-white text-violet-800 px-4 py-3 rounded-lg font-semibold hover:bg-violet-100 transition text-center"
-            onClick={() => { setIsOpen(false); window.location.href = "/signup"; }}
+            onClick={() => { setIsOpen(false); window.location.href = "/register"; }}
           >
             S'inscrire
           </button>
