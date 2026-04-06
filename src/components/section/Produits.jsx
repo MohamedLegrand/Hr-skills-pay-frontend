@@ -1,684 +1,351 @@
-import React, { useState } from 'react';
-import { 
-  CreditCard, Link2, Lock, Settings, Bell, RotateCw, 
-  Zap, Share2, Code2, Smartphone, Clock, Radio, 
-  Repeat, ArrowRightLeft, Users, Globe, Building2, 
-  ShieldCheck, BarChart3, Webhook, Terminal, SmartphoneNfc
-} from 'lucide-react';
+// Produits.jsx
+import React, { useMemo, useCallback, memo, useState } from 'react';
+import { CreditCard, Code2, ShieldCheck, ArrowRight, Link2, Check } from 'lucide-react';
 
 // ============================================================================
-// CONFIGURATION & DONNÉES
+// 📦 DONNÉES CENTRALISÉES
 // ============================================================================
 
-// Mapping des icônes Lucide
-const iconMap = {
-  creditCard: CreditCard, link: Link2, lock: Lock, settings: Settings,
-  bell: Bell, rotateCw: RotateCw, zap: Zap, share: Share2,
-  code: Code2, smartphone: Smartphone, clock: Clock, radio: Radio,
-  repeat: Repeat, payouts: ArrowRightLeft, users: Users,
-  globe: Globe, building: Building2, shield: ShieldCheck,
-  chart: BarChart3, webhook: Webhook, terminal: Terminal, nfc: SmartphoneNfc
-};
-
-// 🎯 MÉTHODES DE PAIEMENT SUPPORTÉES (Partenaires)
-const paymentProviders = [
+const PAYMENT_PROVIDERS = [
   {
     id: 'orange-money',
     name: 'Orange Money',
-    logo: '/logos/orange-money.svg',
-    description: 'Paiement mobile leader en Afrique francophone',
-    countries: ['Cameroun', 'Sénégal', 'Côte d\'Ivoire', 'Mali', 'Burkina'],
-    features: ['USSD', 'App mobile', 'API directe'],
-    color: 'from-orange-500 to-amber-500',
-    status: 'active',
+    region: 'Afrique Francophone • 8 pays',
     processingTime: 'Instantané',
-    fees: '2.5%'
+    fee: '2.5%',
+    features: ['USSD & App mobile', 'API documentée', 'Webhooks temps réel'],
+    image: '/images/orange.jpg',
+    placeholder: 'https://placehold.co/320x120/ff7900/ffffff?text=Orange+Money',
+    gradient: 'from-orange-500 to-amber-500'
   },
   {
     id: 'mtn-momo',
     name: 'MTN Mobile Money',
-    logo: '/logos/mtn-momo.svg',
-    description: 'Solution mobile money la plus répandue en Afrique',
-    countries: ['Cameroun', 'Ghana', 'Ouganda', 'Rwanda', 'Zambie'],
-    features: ['USSD', 'App mobile', 'Bulk payments'],
-    color: 'from-yellow-400 to-amber-500',
-    status: 'active',
+    region: 'Afrique Subsaharienne • 12 pays',
     processingTime: '< 3s',
-    fees: '2.5%'
-  },
-  {
-    id: 'maviance',
-    name: 'Maviance',
-    logo: '/logos/maviance.svg',
-    description: 'Agrégateur local avec expertise terrain',
-    countries: ['Cameroun', 'Gabon', 'RDC'],
-    features: ['Multi-wallets', 'Reconciliation', 'Support FR'],
-    color: 'from-blue-600 to-indigo-600',
-    status: 'active',
-    processingTime: '1-2 min',
-    fees: 'Sur devis'
-  },
-  {
-    id: 'afrique-pay',
-    name: 'Afrique Pay',
-    logo: '/logos/afrique-pay.svg',
-    description: 'Solution panafricaine de paiement digital',
-    countries: ['15+ pays africains'],
-    features: ['Cross-border', 'Multi-devises', 'Compliance local'],
-    color: 'from-emerald-500 to-teal-500',
-    status: 'active',
-    processingTime: 'Instantané',
-    fees: '2.9%'
-  },
-  {
-    id: 'carveto',
-    name: 'Carveto',
-    logo: '/logos/carveto.svg',
-    description: 'Paiements sécurisés pour e-commerce africain',
-    countries: ['Cameroun', 'Afrique Centrale'],
-    features: ['Anti-fraud', 'Checkout optimisé', 'Analytics'],
-    color: 'from-violet-600 to-purple-600',
-    status: 'active',
-    processingTime: '< 5s',
-    fees: '3.2%'
-  },
-  {
-    id: 'cards',
-    name: 'Cartes Bancaires',
-    logo: '/logos/cards.svg',
-    description: 'Visa, Mastercard, UnionPay via processeurs internationaux',
-    countries: ['Monde entier'],
-    features: ['3D Secure 2.0', 'Tokenization', 'Chargeback protection'],
-    color: 'from-slate-600 to-slate-800',
-    status: 'active',
-    processingTime: '2-5s',
-    fees: '3.4% + fixe'
+    fee: '2.5%',
+    features: ['Bulk payments', 'Reconciliation auto', 'Multi-pays'],
+    image: '/images/momo.jpg',
+    placeholder: 'https://placehold.co/320x120/fbbf24/1e293b?text=MTN+MoMo',
+    gradient: 'from-yellow-400 to-amber-500'
   }
 ];
 
-// 🔧 SOLUTIONS D'INTÉGRATION & OUTILS
-const integrationSolutions = [
+const INTEGRATION_SOLUTIONS = [
   {
-    id: 'hosted-checkout',
-    title: 'Checkout Hébergé',
-    category: 'integration',
-    icon: 'creditCard',
-    shortDesc: 'Page de paiement prête à l\'emploi',
-    description: 'Redirigez vos clients vers une page de paiement sécurisée, personnalisable à votre image. Aucune compétence technique requise.',
-    features: [
-      { label: 'Personnalisation marque', icon: 'settings' },
-      { label: 'Tous les wallets supportés', icon: 'globe' },
-      { label: 'Conforme PCI DSS', icon: 'shield' }
-    ],
-    gradient: 'from-violet-500 to-indigo-600',
-    badge: { text: 'Recommandé', variant: 'violet' },
-    stats: { value: '+40%', label: 'Conversion' },
-    cta: 'Tester gratuitement',
-    setupTime: '5 minutes'
-  },
-  {
-    id: 'api-sdk',
-    title: 'API & SDK Développeurs',
-    category: 'integration',
-    icon: 'terminal',
-    shortDesc: 'Intégration technique puissante',
-    description: 'API REST documentée, SDK natifs iOS/Android, webhooks en temps réel. Pour les équipes techniques qui veulent un contrôle total.',
-    features: [
-      { label: 'REST API + Webhooks', icon: 'webhook' },
-      { label: 'SDK Android & iOS', icon: 'smartphone' },
-      { label: 'Sandbox de test', icon: 'rotateCw' }
-    ],
-    gradient: 'from-blue-500 to-cyan-500',
-    badge: { text: 'Développeurs', variant: 'blue' },
-    stats: { value: '< 15 min', label: 'Intégration' },
-    cta: 'Voir la documentation',
-    setupTime: '15 minutes'
+    id: 'api-developers',
+    title: 'API Développeurs',
+    icon: Code2,
+    description: 'API REST complète avec webhooks et sandbox de test.',
+    features: ['OpenAPI docs', 'SDKs 5 langages', 'Webhooks temps réel'],
+    timeToLive: '15 min',
+    gradient: 'from-blue-500 to-cyan-500'
   },
   {
     id: 'payment-links',
-    title: 'Liens & QR Code',
-    category: 'integration',
-    icon: 'link',
-    shortDesc: 'Paiement sans site web',
-    description: 'Créez un lien ou QR code en 30 secondes. Partagez par WhatsApp, SMS, email ou réseaux sociaux. Idéal pour freelances et commerce informel.',
-    features: [
-      { label: 'Création instantanée', icon: 'zap' },
-      { label: 'QR dynamique', icon: 'radio' },
-      { label: 'Aucun code requis', icon: 'code' }
-    ],
-    gradient: 'from-orange-400 to-amber-500',
-    badge: { text: 'Sans code', variant: 'orange' },
-    stats: { value: '30s', label: 'Pour créer' },
-    cta: 'Créer un lien',
-    setupTime: '30 secondes'
-  },
-  {
-    id: 'mobile-sdk',
-    title: 'SDK Mobile Natif',
-    category: 'integration',
-    icon: 'nfc',
-    shortDesc: 'Expérience in-app fluide',
-    description: 'Intégrez le paiement directement dans vos applications iOS et Android. UI native, gestion offline, biométrie supportée.',
-    features: [
-      { label: 'iOS & Android natifs', icon: 'smartphone' },
-      { label: 'Authentification biométrique', icon: 'lock' },
-      { label: 'Mode offline intelligent', icon: 'clock' }
-    ],
-    gradient: 'from-pink-500 to-rose-500',
-    badge: { text: 'Nouveau v2.0', variant: 'pink' },
-    stats: { value: '99.2%', label: 'Succès' },
-    cta: 'Télécharger le SDK',
-    setupTime: '1 heure'
+    title: 'Liens de Paiement',
+    icon: Link2,
+    description: 'Créez et partagez un lien de paiement en 30 secondes.',
+    features: ['QR dynamique', 'Suivi temps réel', 'Aucun code'],
+    timeToLive: '30 sec',
+    gradient: 'from-orange-400 to-amber-500'
   }
 ];
 
-// 💼 FONCTIONNALITÉS BUSINESS
-const businessFeatures = [
-  {
-    id: 'recurring',
-    title: 'Abonnements & Facturation',
-    category: 'business',
-    icon: 'repeat',
-    shortDesc: 'Gérez vos clients fidèles',
-    description: 'Gérez les paiements récurrents, abonnements SaaS, frais de scolarité. Dunning intelligent pour réduire le churn.',
-    features: [
-      { label: 'Échéanciers flexibles', icon: 'clock' },
-      { label: 'Relances automatiques', icon: 'bell' },
-      { label: 'Portail client', icon: 'globe' }
-    ],
-    gradient: 'from-rose-500 to-pink-600',
-    badge: { text: 'Essenticiel', variant: 'pink' },
-    stats: { value: '-38%', label: 'Churn réduit' }
-  },
-  {
-    id: 'payouts',
-    title: 'Payouts & Transferts',
-    category: 'business',
-    icon: 'payouts',
-    shortDesc: 'Distribuez le paiement',
-    description: 'Envoyez de l\'argent en masse : salaires, commissions, remboursements. Multi-destinataires, multi-wallets.',
-    features: [
-      { label: 'Transferts en masse', icon: 'share' },
-      { label: 'Multi-devises', icon: 'globe' },
-      { label: 'Settlement J+1', icon: 'clock' }
-    ],
-    gradient: 'from-emerald-500 to-teal-600',
-    badge: { text: 'Pro', variant: 'green' },
-    stats: { value: 'Instantané', label: 'Traitement' }
-  },
-  {
-    id: 'notifications',
-    title: 'Notifications Twilio',
-    category: 'business',
-    icon: 'bell',
-    shortDesc: 'Automatisez les alertes',
-    description: 'Automatisez les confirmations SMS/WhatsApp via Twilio. Reçus, alertes transaction, rappels personnalisés.',
-    features: [
-      { label: 'Multi-canaux', icon: 'share' },
-      { label: 'Templates custom', icon: 'settings' },
-      { label: 'Analytics', icon: 'chart' }
-    ],
-    gradient: 'from-red-500 to-rose-500',
-    badge: { text: 'Engagement', variant: 'pink' },
-    stats: { value: '94%', label: 'Taux ouverture' }
-  },
-  {
-    id: 'analytics',
-    title: 'Dashboard & Analytics',
-    category: 'business',
-    icon: 'chart',
-    shortDesc: 'Analysez vos revenus',
-    description: 'Suivez vos revenus en temps réel. Rapports personnalisés, export comptable, insights actionnables.',
-    features: [
-      { label: 'Temps réel', icon: 'zap' },
-      { label: 'Export PDF/CSV', icon: 'share' },
-      { label: 'Alertes custom', icon: 'bell' }
-    ],
-    gradient: 'from-indigo-500 to-violet-600',
-    badge: { text: 'Business', variant: 'violet' },
-    stats: { value: '99.99%', label: 'Précision' }
-  }
+const SECURITY_PILLARS = [
+  { icon: ShieldCheck, label: 'PCI DSS Level 1', desc: 'Certification bancaire' },
+  { icon: Code2, label: 'Chiffrement AES-256', desc: 'Protection end-to-end' },
+  { icon: ShieldCheck, label: '3D Secure 2.0', desc: 'Authentification forte' },
+  { icon: Code2, label: 'Détection fraude IA', desc: 'Analyse en temps réel' }
 ];
 
-// 🛡️ SÉCURITÉ & CONFORMITÉ
-const securityFeatures = [
-  { icon: 'shield', label: 'Chiffrement AES-256', desc: 'Données protégées de bout en bout' },
-  { icon: 'lock', label: 'PCI DSS Level 1', desc: 'Certification bancaire internationale' },
-  { icon: 'building', label: '3D Secure 2.0', desc: 'Authentification forte des paiements carte' },
-  { icon: 'zap', label: 'Détection fraude IA', desc: 'Analyse comportementale en temps réel' }
-];
-
-// Styles des badges
-const badgeVariants = {
-  violet: 'bg-violet-100 text-violet-800 border-violet-200',
-  blue: 'bg-blue-100 text-blue-800 border-blue-200',
-  orange: 'bg-orange-100 text-orange-800 border-orange-200',
-  pink: 'bg-rose-100 text-rose-800 border-rose-200',
-  green: 'bg-emerald-100 text-emerald-800 border-emerald-200'
-};
-
 // ============================================================================
-// COMPOSANTS RÉUTILISABLES
+// 🧩 COMPOSANTS RÉUTILISABLES
 // ============================================================================
 
-// Badge de statut
-const StatusBadge = ({ status, text }) => (
-  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${
-    status === 'active' 
-      ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
-      : 'bg-amber-50 text-amber-700 border-amber-200'
-  }`}>
-    <span className={`w-1.5 h-1.5 rounded-full ${status === 'active' ? 'bg-emerald-500' : 'bg-amber-500'} animate-pulse`} />
-    {text}
+const StatusBadge = memo(() => (
+  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border bg-emerald-50 text-emerald-700 border-emerald-200">
+    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+    Actif
   </span>
-);
+));
+StatusBadge.displayName = 'StatusBadge';
 
-// Card Méthode de Paiement
-const PaymentProviderCard = ({ provider }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  
+const PaymentProviderCard = memo(({ provider, onActivate }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
   return (
-    <article
-      className={`group relative bg-white rounded-2xl border border-slate-200/60 overflow-hidden transition-all duration-400 hover:shadow-xl hover:shadow-slate-900/5 hover:border-violet-300/50 ${
-        isHovered ? 'z-10 scale-[1.02]' : ''
-      }`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <article 
+      className="group relative bg-white rounded-xl border border-slate-200 overflow-hidden 
+                 hover:shadow-lg hover:border-violet-300/50 transition-all duration-300 
+                 flex flex-col"
+      role="listitem"
     >
-      {/* Header avec gradient et logo */}
-      <div className={`relative h-20 bg-gradient-to-r ${provider.color} p-4 flex items-center justify-between`}>
+      {/* Header avec image */}
+      <div className={`relative h-16 bg-gradient-to-r ${provider.gradient} p-3 flex items-center justify-between`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-            <span className="text-white font-bold text-sm">
-              {provider.name.charAt(0)}
-            </span>
+          <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+            <img
+              src={imageError ? provider.placeholder : provider.image}
+              alt={provider.name}
+              className={`max-h-6 w-auto object-contain transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              loading="lazy"
+              onLoad={() => setImageLoaded(true)}
+              onError={() => { setImageError(true); setImageLoaded(true); }}
+            />
           </div>
           <div>
             <h4 className="text-white font-semibold text-sm">{provider.name}</h4>
-            <p className="text-white/80 text-[10px]">{provider.countries[0]}</p>
+            <p className="text-white/80 text-[10px]">{provider.region}</p>
           </div>
         </div>
-        <StatusBadge status={provider.status} text="Actif" />
+        <StatusBadge />
       </div>
 
-      {/* Contenu */}
-      <div className="p-4 space-y-4">
-        <p className="text-sm text-slate-600 leading-relaxed">{provider.description}</p>
-        
-        {/* Features tags */}
-        <div className="flex flex-wrap gap-1.5">
+      {/* Contenu compact */}
+      <div className="p-4 flex-grow flex flex-col">
+        <ul className="space-y-1.5 mb-4">
           {provider.features.map((feature, idx) => (
-            <span key={idx} className="px-2 py-0.5 bg-slate-100 rounded-md text-[10px] font-medium text-slate-600">
+            <li key={idx} className="flex items-center gap-2 text-xs text-slate-600">
+              <Check className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" aria-hidden="true" />
               {feature}
-            </span>
+            </li>
           ))}
-        </div>
+        </ul>
 
-        {/* Métriques */}
-        <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+        <div className="grid grid-cols-2 gap-2 py-2 border-t border-slate-100 mb-3">
           <div>
-            <span className="text-xs text-slate-500">Traitement</span>
+            <span className="text-[10px] text-slate-400">Traitement</span>
             <p className="text-sm font-semibold text-slate-900">{provider.processingTime}</p>
           </div>
           <div>
-            <span className="text-xs text-slate-500">Commission</span>
-            <p className="text-sm font-semibold text-slate-900">{provider.fees}</p>
+            <span className="text-[10px] text-slate-400">Commission</span>
+            <p className="text-sm font-semibold text-slate-900">{provider.fee}</p>
           </div>
         </div>
 
-        {/* CTA */}
-        <button className="w-full py-2 text-xs font-semibold text-violet-700 hover:text-violet-900 hover:bg-violet-50 rounded-lg transition-colors">
-          Activer {provider.name}
+        <button 
+          onClick={() => onActivate?.(provider.id)}
+          className="w-full py-2 text-xs font-medium text-violet-700 hover:text-violet-900 
+                     hover:bg-violet-50 rounded-lg transition-colors text-left flex items-center gap-1"
+          aria-label={`Activer ${provider.name}`}
+        >
+          Activer
+          <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" aria-hidden="true" />
         </button>
       </div>
     </article>
   );
-};
+});
+PaymentProviderCard.displayName = 'PaymentProviderCard';
 
-// Card Solution/Feature
-const SolutionCard = ({ solution }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const IconComponent = iconMap[solution.icon];
-
+const SolutionCard = memo(({ solution, onExplore }) => {
+  const Icon = solution.icon;
+  
   return (
-    <article className="group relative bg-white rounded-2xl border border-slate-200/60 overflow-hidden hover:shadow-xl hover:shadow-slate-900/5 hover:border-violet-300/50 transition-all duration-400">
-      {/* Badge */}
-      <div className="absolute top-4 right-4 z-10">
-        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold border backdrop-blur-sm ${badgeVariants[solution.badge.variant]}`}>
-          {solution.badge.text}
-        </span>
-      </div>
-
-      {/* Header avec icône et gradient */}
-      <div className={`p-5 pb-3 bg-gradient-to-br ${solution.gradient} bg-opacity-5`}>
-        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${solution.gradient} flex items-center justify-center shadow-lg mb-4`}>
-          {IconComponent && <IconComponent className="w-6 h-6 text-white" />}
+    <article 
+      className="group relative bg-white rounded-xl border border-slate-200 p-4 
+                 hover:shadow-lg hover:border-violet-300/50 transition-all duration-300 
+                 flex flex-col"
+      role="listitem"
+    >
+      {/* Header */}
+      <div className="flex items-start gap-3 mb-3">
+        <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${solution.gradient} 
+                        flex items-center justify-center flex-shrink-0`}>
+          <Icon className="w-4 h-4 text-white" aria-hidden="true" />
         </div>
-        <h3 className="text-lg font-bold text-slate-900 group-hover:text-violet-700 transition-colors">
-          {solution.title}
-        </h3>
-        <p className="text-sm font-medium text-slate-500 mt-0.5">{solution.shortDesc}</p>
-      </div>
-
-      {/* Contenu */}
-      <div className="px-5 pb-5 space-y-4">
-        <p className="text-sm text-slate-600 leading-relaxed">
-          {isExpanded ? solution.description : `${solution.description.slice(0, 100)}...`}
-        </p>
-        {solution.description.length > 100 && (
-          <button 
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-xs font-medium text-violet-600 hover:text-violet-800"
-          >
-            {isExpanded ? 'Voir moins' : 'Voir plus'}
-          </button>
-        )}
-
-        {/* Features */}
-        <ul className="space-y-2">
-          {solution.features.map((feature, idx) => {
-            const FeatureIcon = iconMap[feature.icon];
-            return (
-              <li key={idx} className="flex items-center gap-2.5 text-xs text-slate-600">
-                {FeatureIcon && <FeatureIcon className="w-4 h-4 text-violet-500" />}
-                <span className="font-medium">{feature.label}</span>
-              </li>
-            );
-          })}
-        </ul>
-
-        {/* Stats & CTA */}
-        <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-          <div>
-            <span className={`text-lg font-black bg-gradient-to-r ${solution.gradient} bg-clip-text text-transparent`}>
-              {solution.stats.value}
-            </span>
-            <span className="text-[10px] text-slate-500 ml-1">{solution.stats.label}</span>
-          </div>
-          <button className="text-xs font-semibold text-violet-700 hover:text-violet-900 flex items-center gap-1 group/btn">
-            {solution.cta}
-            <ArrowRightLeft className="w-3 h-3 transition-transform group-hover/btn:translate-x-1" />
-          </button>
+        <div>
+          <h3 className="text-sm font-semibold text-slate-900">{solution.title}</h3>
+          <span className={`text-[10px] font-medium bg-gradient-to-r ${solution.gradient} 
+                          bg-clip-text text-transparent`}>
+            {solution.timeToLive}
+          </span>
         </div>
       </div>
+
+      {/* Content */}
+      <p className="text-xs text-slate-600 leading-relaxed mb-3">{solution.description}</p>
+      
+      <ul className="space-y-1 mb-4 flex-grow">
+        {solution.features.map((feature, idx) => (
+          <li key={idx} className="flex items-center gap-1.5 text-[10px] text-slate-500">
+            <span className="w-1 h-1 rounded-full bg-violet-400" aria-hidden="true" />
+            {feature}
+          </li>
+        ))}
+      </ul>
+
+      <button 
+        onClick={() => onExplore?.(solution.id)}
+        className="text-xs font-medium text-violet-600 hover:text-violet-800 
+                   flex items-center gap-1 self-start"
+        aria-label={`En savoir plus sur ${solution.title}`}
+      >
+        Explorer
+        <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+      </button>
     </article>
   );
-};
+});
+SolutionCard.displayName = 'SolutionCard';
 
 // ============================================================================
-// COMPOSANT PRINCIPAL
+// 🎯 COMPOSANT PRINCIPAL
 // ============================================================================
 export default function Produits() {
-  const [activeTab, setActiveTab] = useState('all');
+  const providers = useMemo(() => PAYMENT_PROVIDERS, []);
+  const solutions = useMemo(() => INTEGRATION_SOLUTIONS, []);
 
-  const tabs = [
-    { id: 'all', label: 'Tout voir', icon: Globe },
-    { id: 'payments', label: 'Méthodes de paiement', icon: CreditCard },
-    { id: 'integration', label: 'Intégration', icon: Code2 },
-    { id: 'business', label: 'Fonctionnalités', icon: Building2 }
-  ];
+  const handleActivate = useCallback((id) => {
+    console.log('Activate:', id);
+    // window.location.href = `/onboarding?provider=${id}`;
+  }, []);
 
-  // Filtrage
-  const filteredIntegration = activeTab === 'all' || activeTab === 'integration' 
-    ? integrationSolutions 
-    : [];
-  const filteredBusiness = activeTab === 'all' || activeTab === 'business' 
-    ? businessFeatures 
-    : [];
-  const showPayments = activeTab === 'all' || activeTab === 'payments';
+  const handleExplore = useCallback((id) => {
+    console.log('Explore:', id);
+    // Scroll vers docs ou modal
+  }, []);
 
   return (
     <section 
       id="produits" 
-      className="relative py-20 lg:py-28 bg-gradient-to-b from-white via-slate-50/50 to-white overflow-hidden"
+      className="relative py-16 lg:py-24 bg-gradient-to-b from-white via-slate-50/30 to-white"
       aria-labelledby="products-heading"
     >
-      {/* Arrière-plan décoratif */}
-      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-violet-200/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-indigo-200/20 rounded-full blur-3xl" />
-        <div 
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(124,58,237,0.15) 1px, transparent 0)`,
-            backgroundSize: '32px 32px'
-          }}
-        />
+      {/* Background subtil */}
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute top-10 left-1/4 w-72 h-72 bg-violet-200/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-indigo-200/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
-        {/* ========== EN-TÊTE DE SECTION ========== */}
-        <div className="text-center max-w-4xl mx-auto mb-12 lg:mb-16 animate-fadeInDown">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-violet-100/80 border border-violet-200 rounded-full mb-5">
-            <span className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
-            <span className="text-xs font-semibold text-violet-800 uppercase tracking-wide">Solutions</span>
+        {/* HEADER */}
+        <header className="text-center mb-14 lg:mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-violet-100/70 border border-violet-200 rounded-full mb-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" aria-hidden="true" />
+            <span className="text-xs font-medium text-violet-800">Solutions</span>
           </div>
           
-          <h2 id="products-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight">
-            Une plateforme de paiement{" "}
-            <span className="relative">
-              <span className="relative z-10 bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-                complète et flexible
-              </span>
+          <h1 id="products-heading" className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
+            Paiements simples,{' '}
+            <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+              intégration flexible
             </span>
-          </h2>
+          </h1>
           
-          <p className="mt-5 text-lg text-slate-600 max-w-2xl mx-auto">
-            Acceptez Orange Money, MTN MoMo, cartes et plus encore. Intégrez en quelques lignes de code ou utilisez nos outils no-code.
+          <p className="mt-4 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
+            Orange Money, MTN MoMo et outils développeurs pour encaisser partout en Afrique.
           </p>
-        </div>
+        </header>
 
-        {/* ========== TABS DE NAVIGATION ========== */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10 lg:mb-14">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 ${
-                  activeTab === tab.id
-                    ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/25'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:border-violet-300 hover:text-violet-700'
-                }`}
-                aria-pressed={activeTab === tab.id}
-              >
-                <Icon className="w-4 h-4" />
-                <span className="hidden sm:inline">{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* ========== SECTION : MÉTHODES DE PAIEMENT ========== */}
-        {showPayments && (
-          <div className="mb-16 lg:mb-20 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-xl lg:text-2xl font-bold text-slate-900 flex items-center gap-3">
-                  <CreditCard className="w-6 h-6 text-violet-600" />
-                  Méthodes de paiement supportées
-                </h3>
-                <p className="text-slate-500 mt-1 text-sm">6+ partenaires, 15+ pays africains, cartes internationales</p>
-              </div>
-              <a href="#tous-les-paiements" className="text-sm font-semibold text-violet-600 hover:text-violet-800 flex items-center gap-1">
-                Voir tout <ArrowRightLeft className="w-4 h-4" />
-              </a>
+        {/* MÉTHODES DE PAIEMENT */}
+        <section aria-labelledby="payments-heading" className="mb-14 lg:mb-16">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-2.5">
+              <CreditCard className="w-5 h-5 text-violet-600" aria-hidden="true" />
+              <h2 id="payments-heading" className="text-lg font-semibold text-slate-900">
+                Méthodes de paiement
+              </h2>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-              {paymentProviders.map((provider) => (
-                <PaymentProviderCard key={provider.id} provider={provider} />
-              ))}
-            </div>
+            <span className="text-xs text-slate-500">2 partenaires</span>
           </div>
-        )}
-
-        {/* ========== SECTION : SOLUTIONS D'INTÉGRATION ========== */}
-        {filteredIntegration.length > 0 && (
-          <div className="mb-16 lg:mb-20 animate-fadeInUp" style={{ animationDelay: '200ms' }}>
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-xl lg:text-2xl font-bold text-slate-900 flex items-center gap-3">
-                  <Code2 className="w-6 h-6 text-violet-600" />
-                  Solutions d'intégration
-                </h3>
-                <p className="text-slate-500 mt-1 text-sm">Du no-code à l'API complète, choisissez votre niveau de contrôle</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {filteredIntegration.map((solution, index) => (
-                <div key={solution.id} className="animate-fadeInUp" style={{ animationDelay: `${index * 100}ms` }}>
-                  <SolutionCard solution={solution} />
-                </div>
-              ))}
-            </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" role="list">
+            {providers.map((provider) => (
+              <PaymentProviderCard 
+                key={provider.id} 
+                provider={provider} 
+                onActivate={handleActivate}
+              />
+            ))}
           </div>
-        )}
+        </section>
 
-        {/* ========== SECTION : FONCTIONNALITÉS BUSINESS ========== */}
-        {filteredBusiness.length > 0 && (
-          <div className="mb-16 lg:mb-20 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-xl lg:text-2xl font-bold text-slate-900 flex items-center gap-3">
-                  <Building2 className="w-6 h-6 text-violet-600" />
-                  Fonctionnalités business
-                </h3>
-                <p className="text-slate-500 mt-1 text-sm">Outils pour gérer, analyser et optimiser vos revenus</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {filteredBusiness.map((feature, index) => (
-                <div key={feature.id} className="animate-fadeInUp" style={{ animationDelay: `${index * 100}ms` }}>
-                  <SolutionCard solution={feature} />
-                </div>
-              ))}
-            </div>
+        {/* SOLUTIONS D'INTÉGRATION */}
+        <section aria-labelledby="integration-heading" className="mb-14 lg:mb-16">
+          <div className="flex items-center gap-2.5 mb-5">
+            <Code2 className="w-5 h-5 text-violet-600" aria-hidden="true" />
+            <h2 id="integration-heading" className="text-lg font-semibold text-slate-900">
+              Intégration
+            </h2>
           </div>
-        )}
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" role="list">
+            {solutions.map((solution) => (
+              <SolutionCard 
+                key={solution.id} 
+                solution={solution}
+                onExplore={handleExplore}
+              />
+            ))}
+          </div>
+        </section>
 
-        {/* ========== BANDEAU SÉCURITÉ & CONFORMITÉ ========== */}
-        <div className="mb-16 lg:mb-20">
-          <div className="bg-gradient-to-br from-slate-900 via-violet-900 to-indigo-900 rounded-3xl p-8 lg:p-10 overflow-hidden relative">
-            {/* Décoratif */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl" />
+        {/* SÉCURITÉ */}
+        <section aria-labelledby="security-heading" className="mb-14 lg:mb-16">
+          <div className="bg-gradient-to-br from-slate-900 via-violet-900 to-indigo-900 rounded-2xl p-6 lg:p-8">
+            <div className="flex items-center gap-2 mb-4">
+              <ShieldCheck className="w-5 h-5 text-emerald-400" aria-hidden="true" />
+              <span className="text-xs font-medium text-white/90">Sécurité enterprise</span>
+            </div>
             
-            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              {/* Contenu */}
-              <div className="space-y-5">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/20 rounded-full">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs font-medium text-white/90">Sécurité de niveau bancaire</span>
-                </div>
-                
-                <h3 className="text-2xl lg:text-3xl font-black text-white leading-tight">
-                  Vos transactions,{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-300">
-                    protégées par défaut
-                  </span>
-                </h3>
-                
-                <p className="text-lg text-white/80 leading-relaxed">
-                  Chaque paiement bénéficie de notre infrastructure sécurisée, certifiée et auditée en permanence.
-                </p>
+            <h2 id="security-heading" className="text-lg lg:text-xl font-bold text-white mb-1">
+              Transactions protégées
+            </h2>
+            <p className="text-sm text-white/70 mb-5">Infrastructure certifiée et auditée</p>
 
-                {/* Features sécurité */}
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                  {securityFeatures.map((item, idx) => {
-                    const Icon = iconMap[item.icon];
-                    return (
-                      <div key={idx} className="flex items-start gap-3">
-                        {Icon && <Icon className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />}
-                        <div>
-                          <p className="text-sm font-semibold text-white">{item.label}</p>
-                          <p className="text-xs text-white/60">{item.desc}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Visual certification */}
-              <div className="flex justify-center lg:justify-end">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 max-w-sm">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
-                      <ShieldCheck className="w-8 h-8 text-white" />
-                    </div>
+            <div className="grid grid-cols-2 gap-3">
+              {SECURITY_PILLARS.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div key={idx} className="flex items-start gap-2">
+                    {Icon && <Icon className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" aria-hidden="true" />}
                     <div>
-                      <p className="text-white font-bold text-lg">Certifié PCI DSS</p>
-                      <p className="text-white/70 text-sm">Level 1 • Audit trimestriel</p>
+                      <p className="text-xs font-medium text-white">{item.label}</p>
+                      <p className="text-[10px] text-white/60">{item.desc}</p>
                     </div>
                   </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-white/70">Chiffrement</span>
-                      <span className="text-white font-semibold">AES-256</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-white/70">3D Secure</span>
-                      <span className="text-white font-semibold">2.0 activé</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-white/70">Détection fraude</span>
-                      <span className="text-white font-semibold">IA en temps réel</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* ========== CTA FINAL ========== */}
-        <div className="text-center">
-          <div className="inline-flex flex-col sm:flex-row items-center gap-4">
+        {/* CTA */}
+        <section className="text-center">
+          <div className="inline-flex flex-col sm:flex-row items-center gap-3">
             <a
-              href="#commencer"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-2xl font-semibold shadow-xl shadow-violet-500/25 hover:shadow-2xl hover:shadow-violet-500/40 hover:-translate-y-0.5 transition-all duration-300 group"
+              href="/register"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-medium text-sm shadow-lg shadow-violet-500/20 hover:shadow-xl hover:shadow-violet-500/30 hover:-translate-y-0.5 transition-all duration-200"
             >
-              <span>Commencer gratuitement</span>
-              <ArrowRightLeft className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              Commencer gratuitement
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </a>
             <a
-              href="#demo"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-900 rounded-2xl font-semibold border border-slate-200 hover:border-violet-300 hover:bg-violet-50 transition-all duration-300"
+              href="/demo"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl font-medium text-sm border border-slate-200 hover:border-violet-300 hover:bg-violet-50 transition-all duration-200"
             >
-              <span>Voir une démo personnalisée</span>
+              Voir la démo
             </a>
           </div>
-          <p className="mt-6 text-sm text-slate-500">
-            ✓ Aucune carte requise • ✓ Support 24/7 • ✓ Migration assistée gratuite
+          
+          <p className="mt-5 text-xs text-slate-500 flex items-center justify-center gap-4 flex-wrap">
+            <span className="inline-flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" aria-hidden="true" /> PCI DSS
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Check className="w-3.5 h-3.5 text-violet-500" aria-hidden="true" /> Sans carte
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Code2 className="w-3.5 h-3.5 text-amber-500" aria-hidden="true" /> API docs
+            </span>
           </p>
-        </div>
+        </section>
 
       </div>
-
-      {/* ========== ANIMATIONS CSS ========== */}
-      <style jsx>{`
-        @keyframes fadeInDown {
-          from { opacity: 0; transform: translateY(-20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(24px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-fadeInDown { animation: fadeInDown 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-fadeInUp { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        
-        :focus-visible {
-          outline: 2px solid #7c3aed;
-          outline-offset: 2px;
-        }
-      `}</style>
     </section>
   );
 }
