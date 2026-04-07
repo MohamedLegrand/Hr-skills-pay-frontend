@@ -13,7 +13,7 @@ function Home() {
       <Solutions />
       <Tarif />
       <Devellopeus />
-     
+      
     </div>
   );
 }

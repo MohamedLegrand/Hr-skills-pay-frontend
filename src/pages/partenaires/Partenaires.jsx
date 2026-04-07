@@ -8,7 +8,7 @@ const Partenaires = () => {
   
   // Partenaires officiels avec logos et détails
   const partners = [
-    {
+    { 
       id: 'orange-money',
       name: 'Orange Money',
       logo: '📱',

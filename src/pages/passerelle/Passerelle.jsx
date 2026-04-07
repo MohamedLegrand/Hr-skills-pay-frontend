@@ -12,7 +12,7 @@ const Passerelle = () => {
     phone: '',
     email: '',
     name: '',
-    promoCode: ''
+    promoCode: '' 
   });
   const [status, setStatus] = useState('idle'); // idle, processing, success, error
   const [errors, setErrors] = useState({});

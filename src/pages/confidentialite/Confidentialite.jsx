@@ -9,7 +9,7 @@ import {
 const Confidentialite = () => {
   const [openSection, setOpenSection] = useState('collection');
 
-  // Informations de contact DPO
+  // Informations de contact DPO 
   const dpo = {
     email: 'dpo@hrskillspay.com',
     phone: '+237 6XX XXX XXX',

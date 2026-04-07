@@ -5,7 +5,7 @@ import {
   CreditCard, Clock, AlertCircle
 } from 'lucide-react';
 
-const Docs = () => {
+const Docs = () => { 
   const [activeSection, setActiveSection] = useState('introduction');
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedCode, setCopiedCode] = useState(null);

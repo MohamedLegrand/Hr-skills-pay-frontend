@@ -9,7 +9,7 @@ const Securite = () => {
   
   // Certifications et conformités
   const certifications = [
-    {
+    { 
       icon: Shield,
       title: 'PCI DSS Level 1',
       description: 'Certification bancaire internationale pour le traitement sécurisé des cartes.',

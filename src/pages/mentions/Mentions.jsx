@@ -8,7 +8,7 @@ import {
 const Mentions = () => {
   const [openSection, setOpenSection] = React.useState('company');
 
-  // Informations entreprise
+  // Informations entreprise 
   const company = {
     name: 'Hr Skills Pay',
     legalName: 'Hr Skills Pay SARL',

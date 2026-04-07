@@ -30,7 +30,7 @@ const Abonnements = () => {
         { label: 'API REST', included: false },
         { label: 'Paiements récurrents', included: false },
         { label: 'Support prioritaire', included: false },
-        { label: 'White-label', included: false }
+        { label: 'White-label', included: false } 
       ],
       cta: 'Commencer gratuitement',
       popular: false,

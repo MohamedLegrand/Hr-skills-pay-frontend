@@ -14,7 +14,7 @@ const FormField = ({ label, name, value, onChange, placeholder, type = 'text', e
         ? 'border-violet-500 ring-2 ring-violet-200'
         : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'
     }`,
-    [error, focused, name]
+    [error, focused, name] 
   );
 
   return (
