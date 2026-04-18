@@ -1,4 +1,4 @@
-// Hero.jsx — fond blanc, vraies images, flèches aux extrémités, animations sur images
+// Hero.jsx — version professionnelle neutre (gris/blanc/bleu profond)
 import React, {
   useState, useEffect, useCallback, useRef, memo,
 } from 'react';
@@ -16,7 +16,9 @@ const SLIDES = [
     ctaSub: 'Aucune carte requise · Gratuit 30 jours',
     stats: [{ value: '+12 000', label: 'entreprises actives' }, { value: '99,9 %', label: 'disponibilité' }, { value: '< 2 s', label: 'traitement' }],
     image: '/images/heros/dashbord.jpg',
-    accent: '#7C3AED', accentBg: '#F5F3FF', accentText: '#5B21B6',
+    accent: '#1E40AF',      // Bleu profond professionnel
+    accentBg: '#F0F4FF',
+    accentText: '#1E3A8A',
   },
   {
     id: 'mobile-money',
@@ -28,7 +30,9 @@ const SLIDES = [
     ctaSub: 'Intégration en moins de 10 minutes',
     stats: [{ value: '8+', label: 'opérateurs supportés' }, { value: '0 %', label: "frais d'installation" }, { value: '24/7', label: 'collecte automatique' }],
     image: '/images/heros/paiement_mobile.jpg',
-    accent: '#0891B2', accentBg: '#ECFEFF', accentText: '#0E7490',
+    accent: '#0F5B7A',      // Bleu canard élégant
+    accentBg: '#EAF4F8',
+    accentText: '#0A4A63',
   },
   {
     id: 'secure',
@@ -40,7 +44,9 @@ const SLIDES = [
     ctaSub: 'Certifié PCI-DSS · Chiffrement AES-256',
     stats: [{ value: '0', label: 'incident de sécurité' }, { value: 'PCI-DSS', label: 'niveau 1' }, { value: '256-bit', label: 'chiffrement' }],
     image: '/images/heros/security.jpg',
-    accent: '#059669', accentBg: '#ECFDF5', accentText: '#047857',
+    accent: '#2D5A4C',      // Vert sapin professionnel
+    accentBg: '#EDF3F0',
+    accentText: '#1E463B',
   },
   {
     id: 'api',
@@ -52,7 +58,9 @@ const SLIDES = [
     ctaSub: 'SDK disponibles · Sandbox gratuit',
     stats: [{ value: '< 5 min', label: 'premier appel' }, { value: '3', label: 'SDKs officiels' }, { value: '99,9 %', label: 'uptime garanti' }],
     image: '/images/heros/developpeur.jpg',
-    accent: '#D97706', accentBg: '#FFFBEB', accentText: '#B45309',
+    accent: '#7A5C2E',      // Taupe / bronze élégant
+    accentBg: '#F7F4EF',
+    accentText: '#5E451C',
   },
   {
     id: 'growth',
@@ -64,7 +72,9 @@ const SLIDES = [
     ctaSub: 'Essai gratuit · Sans engagement',
     stats: [{ value: '+34 %', label: 'revenus en moyenne' }, { value: '-60 %', label: 'temps administratif' }, { value: '1 seul', label: 'outil pour tout' }],
     image: '/images/heros/business.jpg',
-    accent: '#DB2777', accentBg: '#FDF2F8', accentText: '#BE185D',
+    accent: '#4A5568',      // Gris ardoise élégant
+    accentBg: '#F1F3F5',
+    accentText: '#2D3748',
   },
 ];
 
@@ -95,7 +105,7 @@ const ProgressBar = memo(({ active, duration, paused }) => {
   }, [active, duration]);
   return (
     <div style={{ height: 2, width: 28, borderRadius: 2, background: '#E5E7EB', overflow: 'hidden' }}>
-      {active && <div style={{ height: '100%', width: `${width}%`, background: '#7C3AED', borderRadius: 2, transition: 'none' }} />}
+      {active && <div style={{ height: '100%', width: `${width}%`, background: '#1E40AF', borderRadius: 2, transition: 'none' }} />}
     </div>
   );
 });
@@ -121,7 +131,7 @@ const AnimatedTitle = memo(({ lines, slideKey }) => {
   );
 });
 
-// ── Image panel (star of the show) ────────────────────────────────────────────
+// ── Image panel ────────────────────────────────────────────────────────────────
 const ImagePanel = memo(({ slide, slideKey }) => {
   const [entered, setEntered] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -140,11 +150,9 @@ const ImagePanel = memo(({ slide, slideKey }) => {
 
       <div style={{ position: 'relative', width: '100%', maxWidth: 500, transform: entered ? 'translateY(0) scale(1)' : 'translateY(28px) scale(0.96)', opacity: entered ? 1 : 0, transition: 'transform 0.85s cubic-bezier(0.22,1,0.36,1), opacity 0.65s ease' }}>
 
-        {/* Tinted bg pad */}
         <div style={{ position: 'absolute', inset: '-8px -8px -20px -8px', borderRadius: 28, background: slide.accentBg, zIndex: 0, transition: 'background 0.8s ease' }} />
 
-        {/* Card */}
-        <div style={{ position: 'relative', zIndex: 1, borderRadius: 20, overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 20px 60px rgba(0,0,0,0.12),0 4px 16px rgba(0,0,0,0.06)', background: '#F3F4F6' }}>
+        <div style={{ position: 'relative', zIndex: 1, borderRadius: 20, overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.05)', background: '#F3F4F6' }}>
           {!loaded && (
             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg,#F3F4F6 25%,#E9EAEC 50%,#F3F4F6 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.6s infinite' }} />
           )}
@@ -155,25 +163,21 @@ const ImagePanel = memo(({ slide, slideKey }) => {
             onLoad={() => setLoaded(true)}
             style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: loaded ? 1 : 0, transition: 'opacity 0.5s ease', animation: loaded ? 'kenBurns 8s ease-out forwards' : 'none' }}
           />
-          {/* Bottom gradient */}
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(to top,rgba(0,0,0,0.18) 0%,transparent 100%)', pointerEvents: 'none' }} />
-          {/* Accent wash */}
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '60%', height: '50%', background: `radial-gradient(ellipse at top left,${slide.accent}18 0%,transparent 70%)`, pointerEvents: 'none', transition: 'background 0.8s ease' }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(to top,rgba(0,0,0,0.12) 0%,transparent 100%)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, width: '60%', height: '50%', background: `radial-gradient(ellipse at top left,${slide.accent}12 0%,transparent 70%)`, pointerEvents: 'none', transition: 'background 0.8s ease' }} />
         </div>
 
-        {/* Trust badge — bottom left */}
-        <div style={{ position: 'absolute', bottom: -16, left: -16, zIndex: 2, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', background: 'white', borderRadius: 14, boxShadow: '0 8px 32px rgba(0,0,0,0.1),0 1px 4px rgba(0,0,0,0.06)', border: `1px solid ${slide.accentBg}`, transform: entered ? 'translateY(0)' : 'translateY(16px)', opacity: entered ? 1 : 0, transition: 'transform 0.75s cubic-bezier(0.22,1,0.36,1) 0.3s,opacity 0.6s ease 0.3s' }}>
+        <div style={{ position: 'absolute', bottom: -16, left: -16, zIndex: 2, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', background: 'white', borderRadius: 14, boxShadow: '0 8px 32px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04)', border: `1px solid ${slide.accentBg}`, transform: entered ? 'translateY(0)' : 'translateY(16px)', opacity: entered ? 1 : 0, transition: 'transform 0.75s cubic-bezier(0.22,1,0.36,1) 0.3s,opacity 0.6s ease 0.3s' }}>
           <div style={{ width: 32, height: 32, borderRadius: 10, flexShrink: 0, background: slide.accentBg, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.6s ease' }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={slide.accent} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </div>
           <div>
             <div style={{ fontSize: 12, fontWeight: 600, color: '#111827', lineHeight: 1.3 }}>{slide.badge}</div>
-            <div style={{ fontSize: 10, color: '#9CA3AF', marginTop: 1 }}>{slide.ctaSub}</div>
+            <div style={{ fontSize: 10, color: '#6B7280', marginTop: 1 }}>{slide.ctaSub}</div>
           </div>
         </div>
 
-        {/* Slide counter pill — top right */}
-        <div style={{ position: 'absolute', top: -12, right: -12, zIndex: 2, padding: '5px 12px', background: slide.accent, borderRadius: 999, fontSize: 11, fontWeight: 700, color: 'white', letterSpacing: '0.06em', textTransform: 'uppercase', boxShadow: `0 4px 12px ${slide.accent}55`, transform: entered ? 'translateY(0) rotate(-2deg)' : 'translateY(-12px) rotate(-2deg)', opacity: entered ? 1 : 0, transition: 'transform 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s,opacity 0.5s ease 0.2s' }}>
+        <div style={{ position: 'absolute', top: -12, right: -12, zIndex: 2, padding: '5px 12px', background: slide.accent, borderRadius: 999, fontSize: 11, fontWeight: 700, color: 'white', letterSpacing: '0.06em', textTransform: 'uppercase', boxShadow: `0 4px 12px ${slide.accent}40`, transform: entered ? 'translateY(0) rotate(-2deg)' : 'translateY(-12px) rotate(-2deg)', opacity: entered ? 1 : 0, transition: 'transform 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s,opacity 0.5s ease 0.2s' }}>
           {slide.eyebrow} / 05
         </div>
       </div>
@@ -181,16 +185,15 @@ const ImagePanel = memo(({ slide, slideKey }) => {
   );
 });
 
-// ── Slide content (left column) ───────────────────────────────────────────────
+// ── Slide content ───────────────────────────────────────────────────────────────
 const SlideContent = memo(({ slide, slideKey }) => {
   const [visible, setVisible] = useState(false);
   useEffect(() => { setVisible(false); const t = setTimeout(() => setVisible(true), 80); return () => clearTimeout(t); }, [slideKey]);
   const fade = (delay) => ({ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(14px)', transition: `opacity 0.65s ease ${delay}ms,transform 0.65s cubic-bezier(0.22,1,0.36,1) ${delay}ms` });
   return (
     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: 520 }}>
-      {/* Badge */}
       <div style={{ ...fade(0), marginBottom: 20 }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '5px 14px 5px 8px', background: slide.accentBg, border: `1px solid ${slide.accent}30`, borderRadius: 999, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: slide.accentText, transition: 'all 0.5s ease' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '5px 14px 5px 8px', background: slide.accentBg, border: `1px solid ${slide.accent}20`, borderRadius: 999, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: slide.accentText, transition: 'all 0.5s ease' }}>
           <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: slide.accent, animation: 'pulse 2s infinite' }} />
           {slide.badge}
         </span>
@@ -198,38 +201,38 @@ const SlideContent = memo(({ slide, slideKey }) => {
 
       <AnimatedTitle lines={slide.title} slideKey={slideKey} />
 
-      <p style={{ ...fade(200), marginTop: 18, fontSize: 15, lineHeight: 1.75, color: '#6B7280', maxWidth: 430 }}>
+      <p style={{ ...fade(200), marginTop: 18, fontSize: 15, lineHeight: 1.75, color: '#4B5563', maxWidth: 430 }}>
         {slide.description}
       </p>
 
       <div style={{ ...fade(280), display: 'flex', gap: 12, marginTop: 28, flexWrap: 'wrap' }}>
         <button
           onClick={() => (window.location.href = '/register')}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 22px', background: slide.accent, color: 'white', border: 'none', borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: `0 4px 14px ${slide.accent}45`, transition: 'all 0.15s' }}
-          onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(1.08)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-          onMouseLeave={e => { e.currentTarget.style.filter = ''; e.currentTarget.style.transform = ''; }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 22px', background: slide.accent, color: 'white', border: 'none', borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: `0 2px 8px ${slide.accent}30`, transition: 'all 0.2s ease' }}
+          onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(1.05)'; e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = `0 6px 16px ${slide.accent}40`; }}
+          onMouseLeave={e => { e.currentTarget.style.filter = ''; e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = `0 2px 8px ${slide.accent}30`; }}
         >
           {slide.cta}
           <svg width="14" height="14" fill="none" stroke="white" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5-5 5M6 12h12" /></svg>
         </button>
         <button
           onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 22px', background: 'white', color: '#374151', border: '1.5px solid #E5E7EB', borderRadius: 12, fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s' }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = slide.accent; e.currentTarget.style.color = slide.accent; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.color = '#374151'; }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 22px', background: 'white', color: '#374151', border: '1.5px solid #E5E7EB', borderRadius: 12, fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s ease' }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = slide.accent; e.currentTarget.style.color = slide.accent; e.currentTarget.style.backgroundColor = slide.accentBg; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.color = '#374151'; e.currentTarget.style.backgroundColor = 'white'; }}
         >
           Voir la démo
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
         </button>
       </div>
 
-      <p style={{ ...fade(340), marginTop: 10, fontSize: 11, color: '#9CA3AF' }}>{slide.ctaSub}</p>
+      <p style={{ ...fade(340), marginTop: 10, fontSize: 11, color: '#6B7280' }}>{slide.ctaSub}</p>
 
-      <div style={{ ...fade(400), display: 'flex', flexWrap: 'wrap', gap: '16px 32px', marginTop: 28, paddingTop: 24, borderTop: '1px solid #F3F4F6' }}>
+      <div style={{ ...fade(400), display: 'flex', flexWrap: 'wrap', gap: '16px 32px', marginTop: 28, paddingTop: 24, borderTop: '1px solid #F0F2F5' }}>
         {slide.stats.map((s, i) => (
           <div key={i}>
             <div style={{ fontFamily: "'DM Serif Display',Georgia,serif", fontSize: 26, color: slide.accent, lineHeight: 1, transition: 'color 0.5s ease' }}>{s.value}</div>
-            <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 3, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{s.label}</div>
+            <div style={{ fontSize: 11, color: '#6B7280', marginTop: 3, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{s.label}</div>
           </div>
         ))}
       </div>
@@ -242,9 +245,9 @@ const NavArrow = memo(({ dir, onClick, accent }) => (
   <button
     onClick={onClick}
     aria-label={dir === 'left' ? 'Précédent' : 'Suivant'}
-    style={{ position: 'absolute', top: '50%', [dir === 'left' ? 'left' : 'right']: 0, transform: 'translateY(-50%)', zIndex: 30, width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', border: '1.5px solid #E5E7EB', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', color: '#6B7280', cursor: 'pointer', transition: 'all 0.15s' }}
-    onMouseEnter={e => { e.currentTarget.style.borderColor = accent; e.currentTarget.style.color = accent; e.currentTarget.style.boxShadow = `0 4px 20px ${accent}30`; e.currentTarget.style.transform = 'translateY(-50%) scale(1.08)'; }}
-    onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.color = '#6B7280'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
+    style={{ position: 'absolute', top: '50%', [dir === 'left' ? 'left' : 'right']: 24, transform: 'translateY(-50%)', zIndex: 30, width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', border: '1px solid #E5E7EB', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', color: '#6B7280', cursor: 'pointer', transition: 'all 0.2s ease' }}
+    onMouseEnter={e => { e.currentTarget.style.borderColor = accent; e.currentTarget.style.color = accent; e.currentTarget.style.boxShadow = `0 4px 12px ${accent}20`; e.currentTarget.style.transform = 'translateY(-50%) scale(1.05)'; }}
+    onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.color = '#6B7280'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
   >
     <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={dir === 'left' ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'} />
@@ -285,21 +288,21 @@ const Hero = () => {
         onTouchEnd={(e) => { if (!touchStart) return; const diff = touchStart - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) diff > 0 ? next() : back(); setTouchStart(null); }}
         aria-label="Carrousel principal"
       >
-        {/* Subtle bg tint — right side */}
-        <div style={{ position: 'absolute', top: 0, right: 0, width: '55%', height: '100%', background: slide.accentBg, opacity: 0.4, transition: 'background 0.8s ease', pointerEvents: 'none', clipPath: 'ellipse(80% 100% at 100% 50%)' }} aria-hidden="true" />
+        {/* Subtle bg gradient — right side */}
+        <div style={{ position: 'absolute', top: 0, right: 0, width: '50%', height: '100%', background: `radial-gradient(ellipse at 100% 50%, ${slide.accentBg} 0%, transparent 70%)`, opacity: 0.6, transition: 'background 0.8s ease', pointerEvents: 'none' }} aria-hidden="true" />
 
         {/* Content grid */}
-        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1200, margin: '0 auto', padding: '0 72px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'center', minHeight: '100svh' }}>
+        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '0 80px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', minHeight: '100svh' }}>
           <SlideContent slide={slide} slideKey={slideKey} />
           <ImagePanel slide={slide} slideKey={slideKey} />
         </div>
 
-        {/* Arrows — true extremities */}
+        {/* Arrows */}
         <NavArrow dir="left"  onClick={back} accent={slide.accent} />
         <NavArrow dir="right" onClick={next} accent={slide.accent} />
 
         {/* Bottom indicator bar */}
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, padding: '16px 0', borderTop: '1px solid #F9FAFB', background: 'white', zIndex: 20 }}>
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24, padding: '20px 0', borderTop: '1px solid #F0F2F5', background: 'white', zIndex: 20 }}>
           {SLIDES.map((s, i) => (
             <button key={s.id} onClick={() => goTo(i)} aria-label={`Slide ${i + 1} — ${s.badge}`}
               style={{ display: 'flex', flexDirection: 'column', gap: 6, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0' }}>

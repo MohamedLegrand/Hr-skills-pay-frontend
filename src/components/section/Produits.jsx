@@ -3,10 +3,10 @@ import React, { useMemo, useCallback, memo, useState } from 'react';
 import { CreditCard, Code2, ShieldCheck, ArrowRight, Link2, Check } from 'lucide-react';
 
 // ============================================================================
-// 📦 DONNÉES CENTRALISÉES
+//  DONNÉES CENTRALISÉES
 // ============================================================================
 
-const PAYMENT_PROVIDERS = [ 
+const PAYMENT_PROVIDERS = [
   {
     id: 'orange-money',
     name: 'Orange Money',
@@ -14,9 +14,12 @@ const PAYMENT_PROVIDERS = [
     processingTime: 'Instantané',
     fee: '2.5%',
     features: ['USSD & App mobile', 'API documentée', 'Webhooks temps réel'],
-    image: '/images/orange.jpg',
-    placeholder: 'https://placehold.co/320x120/ff7900/ffffff?text=Orange+Money',
-    gradient: 'from-orange-500 to-amber-500'
+    image: '/images/produits/orange.jpg',
+    placeholder: 'https://placehold.co/640x160/fff7ed/7c3aed?text=Orange+Money',
+    logoPlaceholder: 'https://placehold.co/48x48/fff7ed/f97316?text=OM',
+    accentColor: '#f97316',
+    accentBg: '#fff7ed',
+    accentBorder: '#fed7aa',
   },
   {
     id: 'mtn-momo',
@@ -25,10 +28,13 @@ const PAYMENT_PROVIDERS = [
     processingTime: '< 3s',
     fee: '2.5%',
     features: ['Bulk payments', 'Reconciliation auto', 'Multi-pays'],
-    image: '/images/momo.jpg',
-    placeholder: 'https://placehold.co/320x120/fbbf24/1e293b?text=MTN+MoMo',
-    gradient: 'from-yellow-400 to-amber-500'
-  }
+    image: '/images/produits/momo.jpg',
+    placeholder: 'https://placehold.co/640x160/fefce8/7c3aed?text=MTN+MoMo',
+    logoPlaceholder: 'https://placehold.co/48x48/fefce8/ca8a04?text=MTN',
+    accentColor: '#ca8a04',
+    accentBg: '#fefce8',
+    accentBorder: '#fde68a',
+  },
 ];
 
 const INTEGRATION_SOLUTIONS = [
@@ -36,103 +42,296 @@ const INTEGRATION_SOLUTIONS = [
     id: 'api-developers',
     title: 'API Développeurs',
     icon: Code2,
+    image: '/images/produits/api.jpg',
+    placeholder: 'https://placehold.co/640x200/eff6ff/7c3aed?text=API+REST',
     description: 'API REST complète avec webhooks et sandbox de test.',
     features: ['OpenAPI docs', 'SDKs 5 langages', 'Webhooks temps réel'],
     timeToLive: '15 min',
-    gradient: 'from-blue-500 to-cyan-500'
+    accentColor: '#2563eb',
+    accentBg: '#eff6ff',
+    accentBorder: '#bfdbfe',
   },
   {
     id: 'payment-links',
     title: 'Liens de Paiement',
     icon: Link2,
+    image: '/images/produits/lien_paiement.jpg',
+    placeholder: 'https://placehold.co/640x200/fdf4ff/7c3aed?text=Liens+de+Paiement',
     description: 'Créez et partagez un lien de paiement en 30 secondes.',
     features: ['QR dynamique', 'Suivi temps réel', 'Aucun code'],
     timeToLive: '30 sec',
-    gradient: 'from-orange-400 to-amber-500'
-  }
+    accentColor: '#9333ea',
+    accentBg: '#fdf4ff',
+    accentBorder: '#e9d5ff',
+  },
 ];
 
 const SECURITY_PILLARS = [
-  { icon: ShieldCheck, label: 'PCI DSS Level 1', desc: 'Certification bancaire' },
-  { icon: Code2, label: 'Chiffrement AES-256', desc: 'Protection end-to-end' },
-  { icon: ShieldCheck, label: '3D Secure 2.0', desc: 'Authentification forte' },
-  { icon: Code2, label: 'Détection fraude IA', desc: 'Analyse en temps réel' }
+  { icon: ShieldCheck, label: 'PCI DSS Level 1',    desc: 'Certification bancaire' },
+  { icon: Code2,       label: 'Chiffrement AES-256', desc: 'Protection end-to-end'  },
+  { icon: ShieldCheck, label: '3D Secure 2.0',       desc: 'Authentification forte'  },
+  { icon: Code2,       label: 'Détection fraude IA', desc: 'Analyse en temps réel'  },
 ];
 
 // ============================================================================
-// 🧩 COMPOSANTS RÉUTILISABLES
+//  COMPOSANTS RÉUTILISABLES
 // ============================================================================
 
+/**
+ * Badge "Actif" avec point animé
+ */
 const StatusBadge = memo(() => (
-  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border bg-emerald-50 text-emerald-700 border-emerald-200">
-    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+  <span
+    style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 6,
+      padding: '3px 10px',
+      borderRadius: 99,
+      fontSize: 11,
+      fontWeight: 600,
+      background: '#f0fdf4',
+      color: '#15803d',
+      border: '1px solid #bbf7d0',
+    }}
+  >
+    <span
+      style={{
+        width: 6,
+        height: 6,
+        borderRadius: '50%',
+        background: '#22c55e',
+        display: 'inline-block',
+        animation: 'pulse 2s infinite',
+      }}
+    />
     Actif
   </span>
 ));
 StatusBadge.displayName = 'StatusBadge';
 
+// ─────────────────────────────────────────────
+//  PaymentProviderCard
+// ─────────────────────────────────────────────
 const PaymentProviderCard = memo(({ provider, onActivate }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
+  const [bgLoaded,   setBgLoaded]   = useState(false);
+  const [bgError,    setBgError]    = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  const [logoError,  setLogoError]  = useState(false);
 
   return (
-    <article 
-      className="group relative bg-white rounded-xl border border-slate-200 overflow-hidden 
-                 hover:shadow-lg hover:border-violet-300/50 transition-all duration-300 
-                 flex flex-col"
+    <article
+      style={{
+        background: '#ffffff',
+        border: '1px solid #ede9fe',
+        borderRadius: 16,
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'box-shadow .25s, border-color .25s',
+        boxShadow: '0 1px 4px rgba(109,40,217,.06)',
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.boxShadow = '0 8px 28px rgba(109,40,217,.14)';
+        e.currentTarget.style.borderColor = '#c4b5fd';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.boxShadow = '0 1px 4px rgba(109,40,217,.06)';
+        e.currentTarget.style.borderColor = '#ede9fe';
+      }}
       role="listitem"
     >
-      {/* Header avec image */}
-      <div className={`relative h-16 bg-gradient-to-r ${provider.gradient} p-3 flex items-center justify-between`}>
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
-            <img
-              src={imageError ? provider.placeholder : provider.image}
-              alt={provider.name}
-              className={`max-h-6 w-auto object-contain transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-              loading="lazy"
-              onLoad={() => setImageLoaded(true)}
-              onError={() => { setImageError(true); setImageLoaded(true); }}
-            />
+      {/* ── IMAGE DE FOND (hauteur fixe, object-fit: cover) ── */}
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: 110,          // hauteur fixe et maîtrisée
+          overflow: 'hidden',
+          flexShrink: 0,
+          background: provider.accentBg,
+        }}
+      >
+        {/* Image de fond pleine largeur */}
+        <img
+          src={bgError ? provider.placeholder : provider.image}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          onLoad={() => setBgLoaded(true)}
+          onError={() => { setBgError(true); setBgLoaded(true); }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',       // couvre sans déformation
+            objectPosition: 'center',
+            opacity: bgLoaded ? 0.18 : 0, // subtil : laisse le violet ressortir
+            transition: 'opacity .3s',
+          }}
+        />
+
+        {/* Overlay dégradé pour lisibilité */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: `linear-gradient(135deg, ${provider.accentBg}ee 0%, ${provider.accentBg}99 100%)`,
+          }}
+        />
+
+        {/* Contenu sur l'image : logo + nom + badge */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '12px 16px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            {/* ── LOGO (object-fit: contain dans un cadre carré) ── */}
+            <div
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 12,
+                background: '#ffffff',
+                border: `1px solid ${provider.accentBorder}`,
+                overflow: 'hidden',
+                flexShrink: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <img
+                src={logoError ? provider.logoPlaceholder : provider.image}
+                alt={`Logo ${provider.name}`}
+                loading="lazy"
+                onLoad={() => setLogoLoaded(true)}
+                onError={() => { setLogoError(true); setLogoLoaded(true); }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',  // logo : contain pour ne pas couper
+                  padding: 6,
+                  opacity: logoLoaded ? 1 : 0,
+                  transition: 'opacity .3s',
+                }}
+              />
+            </div>
+
+            <div>
+              <h4
+                style={{
+                  margin: 0,
+                  fontSize: 15,
+                  fontWeight: 700,
+                  color: '#3b0764',   // violet très sombre
+                  lineHeight: 1.2,
+                }}
+              >
+                {provider.name}
+              </h4>
+              <p
+                style={{
+                  margin: '2px 0 0',
+                  fontSize: 11,
+                  color: '#7c3aed',   // violet moyen
+                }}
+              >
+                {provider.region}
+              </p>
+            </div>
           </div>
-          <div>
-            <h4 className="text-white font-semibold text-sm">{provider.name}</h4>
-            <p className="text-white/80 text-[10px]">{provider.region}</p>
-          </div>
+
+          <StatusBadge />
         </div>
-        <StatusBadge />
       </div>
 
-      {/* Contenu compact */}
-      <div className="p-4 flex-grow flex flex-col">
-        <ul className="space-y-1.5 mb-4">
+      {/* ── CORPS DE LA CARTE ── */}
+      <div
+        style={{
+          padding: '16px',
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {/* Features */}
+        <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
           {provider.features.map((feature, idx) => (
-            <li key={idx} className="flex items-center gap-2 text-xs text-slate-600">
-              <Check className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" aria-hidden="true" />
+            <li
+              key={idx}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#5b21b6' }}
+            >
+              <Check
+                size={14}
+                aria-hidden="true"
+                style={{ color: '#7c3aed', flexShrink: 0 }}
+              />
               {feature}
             </li>
           ))}
         </ul>
 
-        <div className="grid grid-cols-2 gap-2 py-2 border-t border-slate-100 mb-3">
+        {/* Métriques */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 8,
+            padding: '12px 0',
+            borderTop: '1px solid #ede9fe',
+            borderBottom: '1px solid #ede9fe',
+            marginBottom: 14,
+          }}
+        >
           <div>
-            <span className="text-[10px] text-slate-400">Traitement</span>
-            <p className="text-sm font-semibold text-slate-900">{provider.processingTime}</p>
+            <span style={{ fontSize: 10, color: '#a78bfa', display: 'block', marginBottom: 2 }}>
+              Traitement
+            </span>
+            <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: '#4c1d95' }}>
+              {provider.processingTime}
+            </p>
           </div>
           <div>
-            <span className="text-[10px] text-slate-400">Commission</span>
-            <p className="text-sm font-semibold text-slate-900">{provider.fee}</p>
+            <span style={{ fontSize: 10, color: '#a78bfa', display: 'block', marginBottom: 2 }}>
+              Commission
+            </span>
+            <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: '#4c1d95' }}>
+              {provider.fee}
+            </p>
           </div>
         </div>
 
-        <button 
+        {/* CTA */}
+        <button
           onClick={() => onActivate?.(provider.id)}
-          className="w-full py-2 text-xs font-medium text-violet-700 hover:text-violet-900 
-                     hover:bg-violet-50 rounded-lg transition-colors text-left flex items-center gap-1"
           aria-label={`Activer ${provider.name}`}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4,
+            fontSize: 13,
+            fontWeight: 600,
+            color: '#7c3aed',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 0,
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#5b21b6'; }}
+          onMouseLeave={e => { e.currentTarget.style.color = '#7c3aed'; }}
         >
           Activer
-          <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+          <ArrowRight size={13} aria-hidden="true" />
         </button>
       </div>
     </article>
@@ -140,59 +339,250 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
 });
 PaymentProviderCard.displayName = 'PaymentProviderCard';
 
+// ─────────────────────────────────────────────
+//  SolutionCard
+// ─────────────────────────────────────────────
 const SolutionCard = memo(({ solution, onExplore }) => {
   const Icon = solution.icon;
-  
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError,  setImgError]  = useState(false);
+
   return (
-    <article 
-      className="group relative bg-white rounded-xl border border-slate-200 p-4 
-                 hover:shadow-lg hover:border-violet-300/50 transition-all duration-300 
-                 flex flex-col"
+    <article
+      style={{
+        background: '#ffffff',
+        border: '1px solid #ede9fe',
+        borderRadius: 16,
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'box-shadow .25s, border-color .25s',
+        boxShadow: '0 1px 4px rgba(109,40,217,.06)',
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.boxShadow = '0 8px 28px rgba(109,40,217,.14)';
+        e.currentTarget.style.borderColor = '#c4b5fd';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.boxShadow = '0 1px 4px rgba(109,40,217,.06)';
+        e.currentTarget.style.borderColor = '#ede9fe';
+      }}
       role="listitem"
     >
-      {/* Header */}
-      <div className="flex items-start gap-3 mb-3">
-        <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${solution.gradient} 
-                        flex items-center justify-center flex-shrink-0`}>
-          <Icon className="w-4 h-4 text-white" aria-hidden="true" />
-        </div>
-        <div>
-          <h3 className="text-sm font-semibold text-slate-900">{solution.title}</h3>
-          <span className={`text-[10px] font-medium bg-gradient-to-r ${solution.gradient} 
-                          bg-clip-text text-transparent`}>
-            {solution.timeToLive}
-          </span>
+      {/* ── IMAGE BANDEAU (ratio 16:5 contrôlé) ── */}
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          aspectRatio: '16 / 5',    // ratio cohérent entre toutes les cartes
+          overflow: 'hidden',
+          flexShrink: 0,
+          background: solution.accentBg,
+        }}
+      >
+        <img
+          src={imgError ? solution.placeholder : solution.image}
+          alt={`Illustration ${solution.title}`}
+          loading="lazy"
+          onLoad={() => setImgLoaded(true)}
+          onError={() => { setImgError(true); setImgLoaded(true); }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',       // remplit sans déformer
+            objectPosition: 'center',
+            opacity: imgLoaded ? 0.22 : 0,
+            transition: 'opacity .3s',
+          }}
+        />
+
+        {/* Overlay + icône centrale */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: `linear-gradient(135deg, ${solution.accentBg}cc, ${solution.accentBg}88)`,
+          }}
+        >
+          <div
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              background: '#ffffff',
+              border: `1px solid ${solution.accentBorder}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: `0 4px 12px ${solution.accentColor}22`,
+            }}
+          >
+            <Icon
+              size={20}
+              aria-hidden="true"
+              style={{ color: solution.accentColor }}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Content */}
-      <p className="text-xs text-slate-600 leading-relaxed mb-3">{solution.description}</p>
-      
-      <ul className="space-y-1 mb-4 flex-grow">
-        {solution.features.map((feature, idx) => (
-          <li key={idx} className="flex items-center gap-1.5 text-[10px] text-slate-500">
-            <span className="w-1 h-1 rounded-full bg-violet-400" aria-hidden="true" />
-            {feature}
-          </li>
-        ))}
-      </ul>
-
-      <button 
-        onClick={() => onExplore?.(solution.id)}
-        className="text-xs font-medium text-violet-600 hover:text-violet-800 
-                   flex items-center gap-1 self-start"
-        aria-label={`En savoir plus sur ${solution.title}`}
+      {/* ── CORPS ── */}
+      <div
+        style={{
+          padding: '16px',
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
       >
-        Explorer
-        <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-      </button>
+        {/* En-tête texte */}
+        <div style={{ marginBottom: 10 }}>
+          <h3
+            style={{
+              margin: 0,
+              fontSize: 15,
+              fontWeight: 700,
+              color: '#3b0764',
+            }}
+          >
+            {solution.title}
+          </h3>
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 600,
+              color: '#7c3aed',
+              marginTop: 2,
+              display: 'block',
+            }}
+          >
+            ⚡ {solution.timeToLive}
+          </span>
+        </div>
+
+        <p
+          style={{
+            margin: '0 0 12px',
+            fontSize: 13,
+            color: '#5b21b6',
+            lineHeight: 1.6,
+          }}
+        >
+          {solution.description}
+        </p>
+
+        <ul
+          style={{
+            listStyle: 'none',
+            margin: '0 0 14px',
+            padding: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 6,
+            flexGrow: 1,
+          }}
+        >
+          {solution.features.map((feature, idx) => (
+            <li
+              key={idx}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 7,
+                fontSize: 12,
+                color: '#7c3aed',
+              }}
+            >
+              <span
+                aria-hidden="true"
+                style={{
+                  width: 5,
+                  height: 5,
+                  borderRadius: '50%',
+                  background: '#a78bfa',
+                  flexShrink: 0,
+                }}
+              />
+              {feature}
+            </li>
+          ))}
+        </ul>
+
+        <button
+          onClick={() => onExplore?.(solution.id)}
+          aria-label={`En savoir plus sur ${solution.title}`}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4,
+            fontSize: 13,
+            fontWeight: 600,
+            color: '#7c3aed',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 0,
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#5b21b6'; }}
+          onMouseLeave={e => { e.currentTarget.style.color = '#7c3aed'; }}
+        >
+          Explorer
+          <ArrowRight size={13} aria-hidden="true" />
+        </button>
+      </div>
     </article>
   );
 });
 SolutionCard.displayName = 'SolutionCard';
 
+// ─────────────────────────────────────────────
+//  SectionHeading
+// ─────────────────────────────────────────────
+const SectionHeading = memo(({ id, icon: Icon, label, aside }) => (
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 20,
+    }}
+  >
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div
+        style={{
+          width: 34,
+          height: 34,
+          borderRadius: 10,
+          background: '#f5f3ff',
+          border: '1px solid #ede9fe',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Icon size={16} aria-hidden="true" style={{ color: '#7c3aed' }} />
+      </div>
+      <h2
+        id={id}
+        style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#3b0764' }}
+      >
+        {label}
+      </h2>
+    </div>
+    {aside && (
+      <span style={{ fontSize: 12, color: '#a78bfa' }}>{aside}</span>
+    )}
+  </div>
+));
+SectionHeading.displayName = 'SectionHeading';
+
 // ============================================================================
-// 🎯 COMPOSANT PRINCIPAL
+//  COMPOSANT PRINCIPAL
 // ============================================================================
 export default function Produits() {
   const providers = useMemo(() => PAYMENT_PROVIDERS, []);
@@ -205,147 +595,369 @@ export default function Produits() {
 
   const handleExplore = useCallback((id) => {
     console.log('Explore:', id);
-    // Scroll vers docs ou modal
   }, []);
 
   return (
-    <section 
-      id="produits" 
-      className="relative py-16 lg:py-24 bg-gradient-to-b from-white via-slate-50/30 to-white"
-      aria-labelledby="products-heading"
-    >
-      {/* Background subtil */}
-      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute top-10 left-1/4 w-72 h-72 bg-violet-200/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-indigo-200/10 rounded-full blur-3xl" />
-      </div>
+    <>
+      {/* Keyframes pour le badge animé */}
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: .35; }
+        }
+      `}</style>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        
-        {/* HEADER */}
-        <header className="text-center mb-14 lg:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-violet-100/70 border border-violet-200 rounded-full mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" aria-hidden="true" />
-            <span className="text-xs font-medium text-violet-800">Solutions</span>
-          </div>
-          
-          <h1 id="products-heading" className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
-            Paiements simples,{' '}
-            <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-              intégration flexible
-            </span>
-          </h1>
-          
-          <p className="mt-4 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
-            Orange Money, MTN MoMo et outils développeurs pour encaisser partout en Afrique.
-          </p>
-        </header>
+      <section
+        id="produits"
+        aria-labelledby="products-heading"
+        style={{
+          position: 'relative',
+          padding: '72px 0',
+          background: '#ffffff',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Décorations de fond légères */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            top: -80,
+            right: -80,
+            width: 400,
+            height: 400,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, #ede9fe 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            bottom: -60,
+            left: -60,
+            width: 300,
+            height: 300,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, #f5f3ff 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
 
-        {/* MÉTHODES DE PAIEMENT */}
-        <section aria-labelledby="payments-heading" className="mb-14 lg:mb-16">
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-2.5">
-              <CreditCard className="w-5 h-5 text-violet-600" aria-hidden="true" />
-              <h2 id="payments-heading" className="text-lg font-semibold text-slate-900">
-                Méthodes de paiement
+        <div
+          style={{
+            maxWidth: 1100,
+            margin: '0 auto',
+            padding: '0 24px',
+            position: 'relative',
+            zIndex: 1,
+          }}
+        >
+
+          {/* ── EN-TÊTE ── */}
+          <header style={{ textAlign: 'center', marginBottom: 64 }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '5px 14px',
+                background: '#f5f3ff',
+                border: '1px solid #ddd6fe',
+                borderRadius: 99,
+                marginBottom: 18,
+              }}
+            >
+              <span
+                aria-hidden="true"
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: '50%',
+                  background: '#7c3aed',
+                  display: 'inline-block',
+                  animation: 'pulse 2s infinite',
+                }}
+              />
+              <span style={{ fontSize: 12, fontWeight: 600, color: '#7c3aed', letterSpacing: '.04em' }}>
+                Solutions de paiement
+              </span>
+            </div>
+
+            <h1
+              id="products-heading"
+              style={{
+                margin: '0 0 16px',
+                fontSize: 'clamp(26px, 5vw, 42px)',
+                fontWeight: 800,
+                color: '#3b0764',
+                lineHeight: 1.15,
+              }}
+            >
+              Paiements simples,{' '}
+              <span style={{ color: '#7c3aed' }}>
+                intégration flexible
+              </span>
+            </h1>
+
+            <p
+              style={{
+                margin: '0 auto',
+                maxWidth: 560,
+                fontSize: 16,
+                color: '#6d28d9',
+                lineHeight: 1.65,
+              }}
+            >
+              Orange Money, MTN MoMo et outils développeurs pour encaisser partout en Afrique.
+            </p>
+          </header>
+
+          {/* ── MÉTHODES DE PAIEMENT ── */}
+          <section aria-labelledby="payments-heading" style={{ marginBottom: 56 }}>
+            <SectionHeading
+              id="payments-heading"
+              icon={CreditCard}
+              label="Méthodes de paiement"
+              aside="2 partenaires"
+            />
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                gap: 20,
+              }}
+              role="list"
+            >
+              {providers.map((provider) => (
+                <PaymentProviderCard
+                  key={provider.id}
+                  provider={provider}
+                  onActivate={handleActivate}
+                />
+              ))}
+            </div>
+          </section>
+
+          {/* ── INTÉGRATION ── */}
+          <section aria-labelledby="integration-heading" style={{ marginBottom: 56 }}>
+            <SectionHeading
+              id="integration-heading"
+              icon={Code2}
+              label="Intégration"
+            />
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                gap: 20,
+              }}
+              role="list"
+            >
+              {solutions.map((solution) => (
+                <SolutionCard
+                  key={solution.id}
+                  solution={solution}
+                  onExplore={handleExplore}
+                />
+              ))}
+            </div>
+          </section>
+
+          {/* ── SÉCURITÉ ── */}
+          <section aria-labelledby="security-heading" style={{ marginBottom: 56 }}>
+            <div
+              style={{
+                background: 'linear-gradient(135deg, #3b0764 0%, #4c1d95 50%, #1e1b4b 100%)',
+                borderRadius: 20,
+                padding: '32px 36px',
+                border: '1px solid #5b21b6',
+              }}
+            >
+              {/* Header sécurité */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  marginBottom: 8,
+                }}
+              >
+                <ShieldCheck size={20} aria-hidden="true" style={{ color: '#a78bfa' }} />
+                <span
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: '#c4b5fd',
+                    letterSpacing: '.06em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Sécurité enterprise
+                </span>
+              </div>
+
+              <h2
+                id="security-heading"
+                style={{
+                  margin: '0 0 4px',
+                  fontSize: 22,
+                  fontWeight: 700,
+                  color: '#ffffff',
+                }}
+              >
+                Transactions protégées
               </h2>
-            </div>
-            <span className="text-xs text-slate-500">2 partenaires</span>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" role="list">
-            {providers.map((provider) => (
-              <PaymentProviderCard 
-                key={provider.id} 
-                provider={provider} 
-                onActivate={handleActivate}
-              />
-            ))}
-          </div>
-        </section>
+              <p style={{ margin: '0 0 28px', fontSize: 13, color: '#a78bfa' }}>
+                Infrastructure certifiée et auditée
+              </p>
 
-        {/* SOLUTIONS D'INTÉGRATION */}
-        <section aria-labelledby="integration-heading" className="mb-14 lg:mb-16">
-          <div className="flex items-center gap-2.5 mb-5">
-            <Code2 className="w-5 h-5 text-violet-600" aria-hidden="true" />
-            <h2 id="integration-heading" className="text-lg font-semibold text-slate-900">
-              Intégration
-            </h2>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" role="list">
-            {solutions.map((solution) => (
-              <SolutionCard 
-                key={solution.id} 
-                solution={solution}
-                onExplore={handleExplore}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* SÉCURITÉ */}
-        <section aria-labelledby="security-heading" className="mb-14 lg:mb-16">
-          <div className="bg-gradient-to-br from-slate-900 via-violet-900 to-indigo-900 rounded-2xl p-6 lg:p-8">
-            <div className="flex items-center gap-2 mb-4">
-              <ShieldCheck className="w-5 h-5 text-emerald-400" aria-hidden="true" />
-              <span className="text-xs font-medium text-white/90">Sécurité enterprise</span>
-            </div>
-            
-            <h2 id="security-heading" className="text-lg lg:text-xl font-bold text-white mb-1">
-              Transactions protégées
-            </h2>
-            <p className="text-sm text-white/70 mb-5">Infrastructure certifiée et auditée</p>
-
-            <div className="grid grid-cols-2 gap-3">
-              {SECURITY_PILLARS.map((item, idx) => {
-                const Icon = item.icon;
-                return (
-                  <div key={idx} className="flex items-start gap-2">
-                    {Icon && <Icon className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" aria-hidden="true" />}
-                    <div>
-                      <p className="text-xs font-medium text-white">{item.label}</p>
-                      <p className="text-[10px] text-white/60">{item.desc}</p>
+              {/* Piliers */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: 16,
+                }}
+              >
+                {SECURITY_PILLARS.map((item, idx) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={idx}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: 12,
+                        padding: '14px 16px',
+                        background: 'rgba(255,255,255,.06)',
+                        border: '1px solid rgba(167,139,250,.2)',
+                        borderRadius: 12,
+                      }}
+                    >
+                      <Icon
+                        size={16}
+                        aria-hidden="true"
+                        style={{ color: '#a78bfa', flexShrink: 0, marginTop: 2 }}
+                      />
+                      <div>
+                        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#fff' }}>
+                          {item.label}
+                        </p>
+                        <p style={{ margin: '2px 0 0', fontSize: 11, color: '#7c6cce' }}>
+                          {item.desc}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* CTA */}
-        <section className="text-center">
-          <div className="inline-flex flex-col sm:flex-row items-center gap-3">
-            <a
-              href="/register"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-medium text-sm shadow-lg shadow-violet-500/20 hover:shadow-xl hover:shadow-violet-500/30 hover:-translate-y-0.5 transition-all duration-200"
+          {/* ── CTA ── */}
+          <section style={{ textAlign: 'center' }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 12,
+              }}
             >
-              Commencer gratuitement
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </a>
-            <a
-              href="/demo"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl font-medium text-sm border border-slate-200 hover:border-violet-300 hover:bg-violet-50 transition-all duration-200"
-            >
-              Voir la démo
-            </a>
-          </div>
-          
-          <p className="mt-5 text-xs text-slate-500 flex items-center justify-center gap-4 flex-wrap">
-            <span className="inline-flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" aria-hidden="true" /> PCI DSS
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <Check className="w-3.5 h-3.5 text-violet-500" aria-hidden="true" /> Sans carte
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <Code2 className="w-3.5 h-3.5 text-amber-500" aria-hidden="true" /> API docs
-            </span>
-          </p>
-        </section>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <a
+                  href="/register"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '13px 28px',
+                    background: '#7c3aed',
+                    color: '#ffffff',
+                    borderRadius: 12,
+                    fontWeight: 700,
+                    fontSize: 14,
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 18px rgba(124,58,237,.35)',
+                    transition: 'all .2s',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = '#6d28d9';
+                    e.currentTarget.style.boxShadow = '0 8px 28px rgba(124,58,237,.45)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = '#7c3aed';
+                    e.currentTarget.style.boxShadow = '0 4px 18px rgba(124,58,237,.35)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  Commencer gratuitement
+                  <ArrowRight size={15} aria-hidden="true" />
+                </a>
 
-      </div>
-    </section>
+                <a
+                  href="/demo"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '13px 28px',
+                    background: '#ffffff',
+                    color: '#5b21b6',
+                    borderRadius: 12,
+                    fontWeight: 700,
+                    fontSize: 14,
+                    textDecoration: 'none',
+                    border: '1.5px solid #ddd6fe',
+                    transition: 'all .2s',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = '#a78bfa';
+                    e.currentTarget.style.background = '#f5f3ff';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = '#ddd6fe';
+                    e.currentTarget.style.background = '#ffffff';
+                  }}
+                >
+                  Voir la démo
+                </a>
+              </div>
+
+              {/* Badges de confiance */}
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 12,
+                  color: '#a78bfa',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 20,
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                }}
+              >
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <ShieldCheck size={13} aria-hidden="true" style={{ color: '#7c3aed' }} />
+                  PCI DSS
+                </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <Check size={13} aria-hidden="true" style={{ color: '#7c3aed' }} />
+                  Sans carte requise
+                </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <Code2 size={13} aria-hidden="true" style={{ color: '#7c3aed' }} />
+                  API docs
+                </span>
+              </p>
+            </div>
+          </section>
+
+        </div>
+      </section>
+    </>
   );
 }
