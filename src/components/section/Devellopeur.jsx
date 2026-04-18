@@ -4,7 +4,7 @@ import {
   Webhook, Key, FileText, ExternalLink, Copy, Check,
   ArrowRight, ChevronDown, ChevronUp, Play, Download,
   Users, MessageSquare, Bug, Rocket, Layers, Clock
-} from 'lucide-react';
+} from 'lucide-react'; 
 
 // ============================================================================
 // DONNÉES DÉVELOPPEURS

@@ -10,7 +10,7 @@ const FAQ = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [openQuestions, setOpenQuestions] = useState({});
 
-  // Catégories de FAQ
+  // Catégories de FAQ 
   const categories = [
     { id: 'all', label: 'Toutes', icon: HelpCircle },
     { id: 'payments', label: 'Paiements', icon: CreditCard },

@@ -82,16 +82,47 @@ const scrollToSection = (id, closeMenu) => {
   });
 };
 
-// ===== SOUS-COMPOSANTS =====
+// ===== LOGO SVG INLINE (fallback propre) =====
+/**
+ * Logo vectoriel HSP — utilisé quand /images/logo.jpeg ne charge pas.
+ * Dessiné avec un monogramme + une typographie soignée.
+ */
+const LogoMark = () => (
+  <svg
+    width="40"
+    height="40"
+    viewBox="0 0 40 40"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    {/* Fond avec légère transparence */}
+    <rect width="40" height="40" rx="10" fill="rgba(255,255,255,0.15)" />
+    <rect width="40" height="40" rx="10" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
 
-/** Icône de logo de secours quand l'image ne charge pas */
-const LogoFallback = () => (
-  <div className="w-14 h-14 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center text-white text-base font-medium tracking-wide">
-    HSP
-  </div>
+    {/* Lettre H stylisée */}
+    <text
+      x="50%"
+      y="50%"
+      dominantBaseline="central"
+      textAnchor="middle"
+      fill="white"
+      fontSize="18"
+      fontWeight="600"
+      fontFamily="'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+      letterSpacing="-0.5"
+    >
+      H
+    </text>
+
+    {/* Accent décoratif — trait en bas à droite */}
+    <rect x="24" y="27" width="10" height="2" rx="1" fill="rgba(255,255,255,0.5)" />
+  </svg>
 );
 
-/** Logo */
+// ===== SOUS-COMPOSANTS =====
+
+/** Logo principal */
 const Logo = ({ onClick }) => {
   const [imgFailed, setImgFailed] = useState(false);
 
@@ -99,26 +130,49 @@ const Logo = ({ onClick }) => {
     <a
       href="#home"
       onClick={(e) => { e.preventDefault(); onClick?.(); scrollToSection("home"); }}
-      className="flex items-center gap-2.5 flex-shrink-0 group"
-      aria-label="Retour à l'accueil"
+      className="flex items-center gap-3 flex-shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-xl"
+      aria-label="Hr Skills Pay — Retour à l'accueil"
     >
-      {imgFailed ? (
-        <LogoFallback />
-      ) : (
-        <img
-          src="/images/logo.png"
-          alt=""
-          className="h-14 sm:h-16 w-auto transition-transform group-hover:scale-105"
-          loading="eager"
-          onError={() => setImgFailed(true)}
-        />
-      )}
-      <span className="text-base sm:text-lg font-medium text-white tracking-tight whitespace-nowrap hidden xs:block">
-        Hr Skills <span className="text-white/55">Pay</span>
-      </span>
+      {/* Conteneur image / fallback */}
+      <div className="relative flex-shrink-0">
+        {imgFailed ? (
+          /* Fallback SVG propre */
+          <div className="transition-transform duration-200 group-hover:scale-[1.04]">
+            <LogoMark />
+          </div>
+        ) : (
+          <img
+            src="/images/logo.jpeg"
+            alt=""
+            className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl object-cover
+                       ring-1 ring-white/20
+                       transition-transform duration-200 group-hover:scale-[1.04]"
+            loading="eager"
+            onError={() => setImgFailed(true)}
+          />
+        )}
+      </div>
+
+      {/* Wordmark */}
+      <div className="hidden xs:flex flex-col leading-none">
+        <span className="text-[15px] sm:text-base font-semibold text-white tracking-tight">
+          Hr Skills
+        </span>
+        <span
+          className="text-[11px] sm:text-[12px] font-medium tracking-[0.08em] uppercase"
+          style={{ color: "rgba(255,255,255,0.5)" }}
+        >
+          Pay
+        </span>
+      </div>
     </a>
   );
 };
+
+/** Séparateur vertical léger */
+const Divider = () => (
+  <div className="hidden lg:block h-5 w-px bg-white/15 mx-1 flex-shrink-0" aria-hidden="true" />
+);
 
 /** Navigation desktop */
 const DesktopNav = ({ activeId, onNavigate }) => (
@@ -133,15 +187,19 @@ const DesktopNav = ({ activeId, onNavigate }) => (
         href={href}
         onClick={(e) => { e.preventDefault(); onNavigate(id); }}
         aria-current={activeId === id ? "page" : undefined}
-        className={`relative px-3.5 py-2 text-sm rounded-lg transition-all duration-150 ${
+        className={`relative px-3.5 py-2 text-[13.5px] font-medium rounded-lg transition-all duration-150
+          focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30 ${
           activeId === id
             ? "text-white bg-white/12"
-            : "text-white/70 hover:text-white hover:bg-white/8"
+            : "text-white/65 hover:text-white hover:bg-white/8"
         }`}
       >
         {label}
         {activeId === id && (
-          <span className="absolute bottom-[5px] left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/70" />
+          <span
+            className="absolute bottom-[5px] left-1/2 -translate-x-1/2 w-[18px] h-[2px] rounded-full"
+            style={{ background: "rgba(255,255,255,0.6)" }}
+          />
         )}
       </a>
     ))}
@@ -152,19 +210,33 @@ const DesktopNav = ({ activeId, onNavigate }) => (
 const DesktopActions = () => (
   <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
     <button
-      className="px-3.5 py-1.5 text-sm text-white/80 hover:text-white hover:bg-white/8
-                 rounded-lg transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-white/30"
+      className="px-4 py-2 text-[13px] font-medium text-white/75 hover:text-white
+                 hover:bg-white/8 rounded-lg transition-all duration-150
+                 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30"
       onClick={() => (window.location.href = "/login")}
     >
       Connexion
     </button>
+
+    {/* CTA principal */}
     <button
-      className="px-4 py-1.5 text-sm font-medium text-violet-900 bg-white
-                 hover:bg-violet-50 active:scale-[0.97] rounded-lg transition-all duration-150
-                 focus:outline-none focus:ring-2 focus:ring-white/60"
+      className="relative px-4 py-2 text-[13px] font-semibold rounded-lg
+                 transition-all duration-150 active:scale-[0.97]
+                 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50
+                 overflow-hidden group"
+      style={{
+        background: "rgba(255,255,255,1)",
+        color: "#4C1D95", /* violet-900 */
+      }}
       onClick={() => (window.location.href = "/register")}
     >
-      S'inscrire
+      {/* Shimmer au hover */}
+      <span
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{ background: "rgba(237,233,254,1)" }}
+        aria-hidden="true"
+      />
+      <span className="relative">S'inscrire</span>
     </button>
   </div>
 );
@@ -177,20 +249,20 @@ const HamburgerButton = ({ isOpen, onClick }) => (
     aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
     className="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-[5px]
                rounded-lg hover:bg-white/8 active:scale-95 transition-all flex-shrink-0
-               focus:outline-none focus:ring-1 focus:ring-white/30"
+               focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30"
   >
     <span
-      className={`block w-5 h-[1.5px] bg-white rounded transition-all duration-200 ${
+      className={`block w-[18px] h-[1.5px] bg-white rounded-full transition-all duration-200 origin-center ${
         isOpen ? "translate-y-[6.5px] rotate-45" : ""
       }`}
     />
     <span
-      className={`block w-5 h-[1.5px] bg-white rounded transition-all duration-100 ${
+      className={`block w-[18px] h-[1.5px] bg-white rounded-full transition-all duration-150 ${
         isOpen ? "opacity-0 scale-x-0" : ""
       }`}
     />
     <span
-      className={`block w-5 h-[1.5px] bg-white rounded transition-all duration-200 ${
+      className={`block w-[18px] h-[1.5px] bg-white rounded-full transition-all duration-200 origin-center ${
         isOpen ? "-translate-y-[6.5px] -rotate-45" : ""
       }`}
     />
@@ -210,7 +282,7 @@ const MobileMenu = ({ isOpen, activeId, onNavigate, onClose, onLogin, onRegister
     <>
       {/* Overlay */}
       <div
-        className="lg:hidden fixed inset-0 top-[84px] z-40 bg-black/50 backdrop-blur-sm"
+        className="lg:hidden fixed inset-0 top-[72px] z-40 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -220,49 +292,54 @@ const MobileMenu = ({ isOpen, activeId, onNavigate, onClose, onLogin, onRegister
         role="dialog"
         aria-modal="true"
         aria-label="Navigation mobile"
-        className="lg:hidden fixed top-[84px] left-0 right-0 z-50
-                   bg-violet-950 border-b border-white/8
-                   max-h-[calc(100vh-84px)] overflow-y-auto overscroll-contain"
+        className="lg:hidden fixed top-[72px] left-0 right-0 z-50
+                   border-b border-white/10
+                   max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain"
+        style={{ background: "#3B0764" /* violet-950 proche */ }}
       >
-        <div className="p-4 space-y-1">
+        <div className="p-3 space-y-0.5">
+
           {/* Liens */}
           {NAV_LINKS.map(({ id, href, label }) => (
             <a
               key={id}
               href={href}
               onClick={(e) => { e.preventDefault(); onNavigate(id); }}
-              className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[15px] transition-all duration-150
-                         border-l-2 ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-medium
+                         transition-all duration-150 ${
                 activeId === id
-                  ? "bg-white/10 text-white border-white/60"
-                  : "text-white/72 hover:text-white hover:bg-white/6 border-transparent"
+                  ? "bg-white/12 text-white"
+                  : "text-white/65 hover:text-white hover:bg-white/6"
               }`}
             >
-              <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-                activeId === id ? "bg-white" : "bg-white/30"
-              }`} />
+              {/* Indicateur actif */}
+              <span
+                className={`w-1 h-1 rounded-full flex-shrink-0 transition-all ${
+                  activeId === id ? "bg-white scale-125" : "bg-white/25"
+                }`}
+              />
               {label}
             </a>
           ))}
 
           {/* Séparateur */}
-          <div className="h-px bg-white/10 my-3" />
+          <div className="h-px bg-white/10 !my-3 mx-1" />
 
-          {/* Boutons d'action */}
-          <div className="grid grid-cols-2 gap-2.5 pb-2">
+          {/* Boutons */}
+          <div className="grid grid-cols-2 gap-2 pb-3 px-1">
             <button
               onClick={() => { onClose(); onLogin(); }}
-              className="py-3 rounded-xl text-sm text-white/80 bg-white/6
-                         border border-white/10 hover:bg-white/10 hover:text-white
+              className="py-3 rounded-xl text-[13px] font-medium text-white/70
+                         border border-white/15 hover:bg-white/8 hover:text-white
                          transition-colors focus:outline-none"
             >
               Connexion
             </button>
             <button
               onClick={() => { onClose(); onRegister(); }}
-              className="py-3 rounded-xl text-sm font-medium text-violet-900 bg-white
-                         hover:bg-violet-50 active:scale-[0.97] transition-all
-                         focus:outline-none"
+              className="py-3 rounded-xl text-[13px] font-semibold active:scale-[0.97]
+                         transition-all focus:outline-none"
+              style={{ background: "white", color: "#4C1D95" }}
             >
               S'inscrire
             </button>
@@ -282,53 +359,68 @@ const Header = () => {
   const sectionIds = NAV_LINKS.map((l) => l.id);
   const activeId   = useActiveSection(sectionIds);
 
-  // Ref pour stocker l'état actuel du menu sans causer de dépendance
   const menuOpenRef = useRef(menuOpen);
-  useEffect(() => {
-    menuOpenRef.current = menuOpen;
-  }, [menuOpen]);
+  useEffect(() => { menuOpenRef.current = menuOpen; }, [menuOpen]);
 
-  const closeMenu    = useCallback(() => setMenuOpen(false), []);
-  const handleNav    = useCallback((id) => scrollToSection(id, closeMenu), [closeMenu]);
-  const handleLogin  = useCallback(() => { closeMenu(); window.location.href = "/login"; },  [closeMenu]);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const handleNav = useCallback((id) => scrollToSection(id, closeMenu), [closeMenu]);
+  const handleLogin  = useCallback(() => { closeMenu(); window.location.href = "/login"; },    [closeMenu]);
   const handleReg    = useCallback(() => { closeMenu(); window.location.href = "/register"; }, [closeMenu]);
 
-  // Fermer le menu si on passe en desktop (sans dépendance à menuOpen)
   useEffect(() => {
-    if (isDesktop && menuOpenRef.current) {
-      setMenuOpen(false);
-    }
-  }, [isDesktop]); // Seulement quand isDesktop change
+    if (isDesktop && menuOpenRef.current) setMenuOpen(false);
+  }, [isDesktop]);
 
   return (
     <header
       role="banner"
       className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-violet-900/95 backdrop-blur-md shadow-lg shadow-black/20"
-          : "bg-violet-900"
+          ? "shadow-[0_1px_0_0_rgba(255,255,255,0.07),0_4px_24px_0_rgba(0,0,0,0.25)]"
+          : ""
       }`}
+      style={{
+        background: isScrolled
+          ? "rgba(76,29,149,0.97)" /* violet-900 avec légère transparence */
+          : "#4C1D95",             /* violet-900 plein */
+        backdropFilter: isScrolled ? "blur(12px)" : "none",
+      }}
     >
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6">
-        <div className="flex items-center justify-between gap-4 h-[84px]">
+      {/* Ligne décorative subtile en haut */}
+      {isScrolled && (
+        <div
+          className="absolute top-0 left-0 right-0 h-px"
+          style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent)" }}
+          aria-hidden="true"
+        />
+      )}
+
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between gap-4 h-[72px]">
 
           <Logo onClick={closeMenu} />
+
           <DesktopNav activeId={activeId} onNavigate={handleNav} />
-          <DesktopActions />
+
+          <div className="hidden lg:flex items-center gap-1">
+            <Divider />
+            <DesktopActions />
+          </div>
 
           {/* Zone droite mobile */}
-          <div className="flex lg:hidden items-center gap-1">
-            {/* CTA toujours visible sur mobile */}
+          <div className="flex lg:hidden items-center gap-1.5">
             <button
               onClick={handleReg}
-              className="px-3 py-1.5 text-xs sm:text-sm font-medium text-violet-900 bg-white
-                         rounded-lg hover:bg-violet-50 active:scale-[0.97] transition-all"
+              className="px-3 py-1.5 text-[12px] sm:text-[13px] font-semibold rounded-lg
+                         active:scale-[0.97] transition-all"
+              style={{ background: "white", color: "#4C1D95" }}
             >
               <span className="hidden sm:inline">S'inscrire</span>
-              <span className="sm:hidden">+</span>
+              <span className="sm:hidden">S'inscrire</span>
             </button>
             <HamburgerButton isOpen={menuOpen} onClick={() => setMenuOpen((v) => !v)} />
           </div>
+
         </div>
       </div>
 

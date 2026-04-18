@@ -6,11 +6,11 @@ import {
 } from 'lucide-react';
 
 // ============================================================================
-// DONNÉES TARIFS & COMMISSIONS
+// DONNÉES TARIFS & COMMISSIONS 
 // ============================================================================
 
 // Plans d'abonnement
-const pricingPlans = [
+const pricingPlans = [ 
   {
     id: 'starter',
     name: 'Starter',

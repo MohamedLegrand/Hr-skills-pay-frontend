@@ -11,7 +11,7 @@ const Docs = () => {
   const [copiedCode, setCopiedCode] = useState(null);
 
   // Navigation principale
-  const sections = [
+  const sections = [ 
     { id: 'introduction', title: 'Introduction', icon: BookOpen },
     { id: 'api', title: 'API Reference', icon: Code2 },
     { id: 'sdks', title: 'SDKs', icon: Terminal },

@@ -8,7 +8,7 @@ import {
 const Securite = () => {
   
   // Certifications et conformités
-  const certifications = [
+  const certifications = [ 
     { 
       icon: Shield,
       title: 'PCI DSS Level 1',

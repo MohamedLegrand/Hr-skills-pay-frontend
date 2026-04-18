@@ -7,7 +7,7 @@ import {
 const Aboutus = () => {
   
   // Valeurs de l'entreprise
-  const values = [
+  const values = [ 
     {
       icon: Target,
       title: 'Mission',

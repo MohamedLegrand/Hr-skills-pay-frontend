@@ -10,7 +10,7 @@ import {
 // ============================================================================
 
 const PAYMENT_PROVIDERS = [
-  {
+  { 
     id: 'orange-money',
     name: 'Orange Money',
     region: 'Afrique Francophone',

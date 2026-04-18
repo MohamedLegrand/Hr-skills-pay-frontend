@@ -6,7 +6,7 @@ const Contact = () => {
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '' 
   });
   
   const [status, setStatus] = useState('idle'); // idle, submitting, success, error

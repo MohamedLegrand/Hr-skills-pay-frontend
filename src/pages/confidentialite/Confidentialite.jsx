@@ -10,7 +10,7 @@ const Confidentialite = () => {
   const [openSection, setOpenSection] = useState('collection');
 
   // Informations de contact DPO 
-  const dpo = {
+  const dpo = { 
     email: 'dpo@hrskillspay.com',
     phone: '+237 6XX XXX XXX',
     address: 'Akwa, Rue des Palmiers, Immeuble Le Prestige, Douala, Cameroun',

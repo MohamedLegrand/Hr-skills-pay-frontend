@@ -10,7 +10,7 @@ function Home() {
     <div>
       <Heros />
       <Produits />
-      <Solutions />
+      <Solutions /> 
       <Tarif />
       <Devellopeus />
       

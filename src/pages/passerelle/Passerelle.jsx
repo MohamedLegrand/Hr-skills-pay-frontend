@@ -11,7 +11,7 @@ const Passerelle = () => {
   const [formData, setFormData] = useState({
     phone: '',
     email: '',
-    name: '',
+    name: '', 
     promoCode: '' 
   });
   const [status, setStatus] = useState('idle'); // idle, processing, success, error

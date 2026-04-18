@@ -1,276 +1,317 @@
-// Hero.jsx
-import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
+// Hero.jsx — fond blanc, vraies images, flèches aux extrémités, animations sur images
+import React, {
+  useState, useEffect, useCallback, useRef, memo,
+} from 'react';
 
-// ============================================================================
-// CONFIGURATION & CONSTANTES
-// ============================================================================
-const SLIDE_DURATION = 6000;
+const SLIDE_DURATION = 7000;
 
 const SLIDES = [
   {
     id: 'all-in-one',
     badge: 'Plateforme tout-en-un',
-    title: 'Tous vos paiements, une seule plateforme.',
-    description:
-      'Mobile Money, cartes bancaires, virements SEPA — centralisez tout en un tableau de bord intelligent. Gérez, suivez et encaissez sans friction.',
+    eyebrow: '01',
+    title: ['Tous vos paiements,', 'une seule plateforme.'],
+    description: 'Mobile Money, cartes bancaires, virements SEPA — centralisez tout en un tableau de bord intelligent. Gérez, suivez et encaissez sans friction.',
     cta: 'Commencer gratuitement',
     ctaSub: 'Aucune carte requise · Gratuit 30 jours',
-    stats: [
-      { value: '+12 000', label: 'entreprises actives' },
-      { value: '99,9 %', label: 'disponibilité' },
-      { value: '< 2 s', label: 'temps de traitement' },
-    ],
+    stats: [{ value: '+12 000', label: 'entreprises actives' }, { value: '99,9 %', label: 'disponibilité' }, { value: '< 2 s', label: 'traitement' }],
     image: '/images/heros/dashbord.jpg',
+    accent: '#7C3AED', accentBg: '#F5F3FF', accentText: '#5B21B6',
   },
   {
     id: 'mobile-money',
     badge: 'Mobile Money',
-    title: 'MTN, Orange, Wave. Acceptez-les tous.',
-    description:
-      'Plus de 80 % des transactions en Afrique subsaharienne passent par le Mobile Money. Intégrez-les en quelques clics et ne ratez plus aucune vente.',
+    eyebrow: '02',
+    title: ['MTN, Orange, Wave.', 'Acceptez-les tous.'],
+    description: 'Plus de 80 % des transactions en Afrique subsaharienne passent par le Mobile Money. Intégrez-les en quelques clics et ne ratez plus aucune vente.',
     cta: 'Activer Mobile Money',
     ctaSub: 'Intégration en moins de 10 minutes',
-    stats: [
-      { value: '8+', label: 'opérateurs supportés' },
-      { value: '0 %', label: "frais d'installation" },
-      { value: '24/7', label: 'collecte automatique' },
-    ],
+    stats: [{ value: '8+', label: 'opérateurs supportés' }, { value: '0 %', label: "frais d'installation" }, { value: '24/7', label: 'collecte automatique' }],
     image: '/images/heros/paiement_mobile.jpg',
+    accent: '#0891B2', accentBg: '#ECFEFF', accentText: '#0E7490',
   },
   {
     id: 'secure',
     badge: 'Sécurité & conformité',
-    title: 'Vos transactions protégées, certifiées.',
-    description:
-      'Chiffrement de bout en bout, authentification à deux facteurs et conformité PCI-DSS niveau 1. Vos clients paient en toute sérénité.',
+    eyebrow: '03',
+    title: ['Vos transactions', 'protégées, certifiées.'],
+    description: 'Chiffrement de bout en bout, authentification à deux facteurs et conformité PCI-DSS niveau 1. Vos clients paient en toute sérénité.',
     cta: 'Découvrir la sécurité',
     ctaSub: 'Certifié PCI-DSS · Chiffrement AES-256',
-    stats: [
-      { value: '0', label: 'incident de sécurité' },
-      { value: 'PCI-DSS', label: 'niveau 1' },
-      { value: '256-bit', label: 'chiffrement' },
-    ],
+    stats: [{ value: '0', label: 'incident de sécurité' }, { value: 'PCI-DSS', label: 'niveau 1' }, { value: '256-bit', label: 'chiffrement' }],
     image: '/images/heros/security.jpg',
+    accent: '#059669', accentBg: '#ECFDF5', accentText: '#047857',
   },
   {
     id: 'api',
     badge: 'API & Développeurs',
-    title: 'Une API pensée pour aller vite.',
-    description:
-      'Documentation claire, SDKs en Node, Python et PHP, webhooks temps réel et sandbox dédié. Vos développeurs vont l\'adorer.',
+    eyebrow: '04',
+    title: ["Une API pensée", "pour aller vite."],
+    description: "Documentation claire, SDKs en Node, Python et PHP, webhooks temps réel et sandbox dédié. Vos développeurs vont l'adorer.",
     cta: 'Explorer la documentation',
     ctaSub: 'SDK disponibles · Sandbox gratuit',
-    stats: [
-      { value: '< 5 min', label: 'premier appel' },
-      { value: '3', label: 'SDKs officiels' },
-      { value: '99,9 %', label: 'uptime garanti' },
-    ],
+    stats: [{ value: '< 5 min', label: 'premier appel' }, { value: '3', label: 'SDKs officiels' }, { value: '99,9 %', label: 'uptime garanti' }],
     image: '/images/heros/developpeur.jpg',
+    accent: '#D97706', accentBg: '#FFFBEB', accentText: '#B45309',
   },
   {
     id: 'growth',
     badge: 'Croissance business',
-    title: 'Encaissez plus. Gérez moins.',
-    description:
-      'Relances automatiques, rapports en temps réel, liens de paiement partageables et analytics avancé. Hr Skills Pay, le copilote financier de votre croissance.',
+    eyebrow: '05',
+    title: ['Encaissez plus.', 'Gérez moins.'],
+    description: 'Relances automatiques, rapports en temps réel, liens de paiement partageables et analytics avancé. Hr Skills Pay, le copilote financier de votre croissance.',
     cta: 'Booster mon business',
     ctaSub: 'Essai gratuit · Sans engagement',
-    stats: [
-      { value: '+34 %', label: 'revenus en moyenne' },
-      { value: '-60 %', label: 'temps administratif' },
-      { value: '1 seul', label: 'outil pour tout gérer' },
-    ],
+    stats: [{ value: '+34 %', label: 'revenus en moyenne' }, { value: '-60 %', label: 'temps administratif' }, { value: '1 seul', label: 'outil pour tout' }],
     image: '/images/heros/business.jpg',
+    accent: '#DB2777', accentBg: '#FDF2F8', accentText: '#BE185D',
   },
 ];
 
-// ============================================================================
-// HOOK CARROUSEL
-// ============================================================================
-const useCarousel = (count) => {
-  const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const timer = useRef(null);
-
-  const goTo = useCallback((idx) => {
-    const next = ((idx % count) + count) % count;
-    setCurrent(next);
-  }, [count]);
-
-  const next = useCallback(() => goTo(current + 1), [current, goTo]);
-  const back = useCallback(() => goTo(current - 1), [current, goTo]);
-
+// ── Progress bar ──────────────────────────────────────────────────────────────
+const ProgressBar = memo(({ active, duration, paused }) => {
+  const [width, setWidth] = useState(0);
+  const raf = useRef(null);
+  const startRef = useRef(null);
+  const pausedRef = useRef(paused);
+  const elapsed = useRef(0);
+  useEffect(() => { pausedRef.current = paused; }, [paused]);
   useEffect(() => {
-    if (paused) return;
-    timer.current = setInterval(next, SLIDE_DURATION);
-    return () => clearInterval(timer.current);
-  }, [paused, next]);
-
-  return { current, goTo, next, back, setPaused };
-};
-
-// ============================================================================
-// SOUS-COMPOSANTS
-// ============================================================================
-
-/** Badge violet */
-const Badge = ({ label }) => (
-  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-violet-200 bg-violet-50 mb-4">
-    <span className="w-1.5 h-1.5 rounded-full bg-violet-600" />
-    <span className="text-xs font-semibold text-violet-800 uppercase tracking-wide">{label}</span>
-  </div>
-);
-
-/** Statistiques (valeurs en violet) */
-const Stats = ({ stats }) => (
-  <div className="flex flex-wrap gap-x-8 gap-y-3 mt-6 pt-4 border-t border-gray-100">
-    {stats.map((s, i) => (
-      <div key={i} className="flex flex-col">
-        <span className="text-2xl font-bold text-violet-700 leading-none">{s.value}</span>
-        <span className="text-xs text-gray-500 mt-0.5">{s.label}</span>
-      </div>
-    ))}
-  </div>
-);
-
-/** Slide */
-const Slide = ({ slide, isActive }) => {
-  const [imgLoaded, setImgLoaded] = useState(false);
-
-  if (!isActive) return null;
-
+    if (!active) { setWidth(0); elapsed.current = 0; return; }
+    const tick = (ts) => {
+      if (!startRef.current) startRef.current = ts;
+      if (!pausedRef.current) {
+        elapsed.current = ts - startRef.current;
+        const p = Math.min(elapsed.current / duration, 1);
+        setWidth(p * 100);
+        if (p < 1) raf.current = requestAnimationFrame(tick);
+      } else {
+        startRef.current = ts - elapsed.current;
+        raf.current = requestAnimationFrame(tick);
+      }
+    };
+    raf.current = requestAnimationFrame(tick);
+    return () => { cancelAnimationFrame(raf.current); startRef.current = null; elapsed.current = 0; };
+  }, [active, duration]);
   return (
-    <div className="w-full max-w-[1200px] mx-auto px-6 sm:px-8 lg:px-10">
-      <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        {/* Texte à gauche */}
-        <div>
-          <Badge label={slide.badge} />
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-violet-800 leading-tight tracking-tight">
-            {slide.title}
-          </h1>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed max-w-lg">
-            {slide.description}
-          </p>
+    <div style={{ height: 2, width: 28, borderRadius: 2, background: '#E5E7EB', overflow: 'hidden' }}>
+      {active && <div style={{ height: '100%', width: `${width}%`, background: '#7C3AED', borderRadius: 2, transition: 'none' }} />}
+    </div>
+  );
+});
 
-          <div className="mt-8 flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={() => (window.location.href = '/register')}
-              className="px-6 py-3 bg-violet-700 text-white font-semibold rounded-lg
-                         hover:bg-violet-800 transition-colors text-sm shadow-sm"
-            >
-              {slide.cta}
-            </button>
-            <button
-              onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-6 py-3 border border-violet-300 text-violet-700 font-medium rounded-lg
-                         hover:bg-violet-50 transition-colors text-sm"
-            >
-              Voir la démo →
-            </button>
-          </div>
-          <p className="mt-2 text-xs text-gray-400">{slide.ctaSub}</p>
-          <Stats stats={slide.stats} />
+// ── Animated title ─────────────────────────────────────────────────────────────
+const AnimatedTitle = memo(({ lines, slideKey }) => {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    setVisible(false);
+    const t = setTimeout(() => setVisible(true), 50);
+    return () => clearTimeout(t);
+  }, [slideKey]);
+  return (
+    <h1 style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: 'clamp(2rem,4.5vw,3.2rem)', fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.02em', color: '#111827' }}>
+      {lines.map((line, li) => (
+        <span key={`${slideKey}-${li}`} style={{ display: 'block', overflow: 'hidden' }}>
+          <span style={{ display: 'block', transform: visible ? 'translateY(0)' : 'translateY(110%)', opacity: visible ? 1 : 0, transition: `transform 0.75s cubic-bezier(0.22,1,0.36,1) ${li * 90}ms, opacity 0.5s ease ${li * 90}ms` }}>
+            {line}
+          </span>
+        </span>
+      ))}
+    </h1>
+  );
+});
+
+// ── Image panel (star of the show) ────────────────────────────────────────────
+const ImagePanel = memo(({ slide, slideKey }) => {
+  const [entered, setEntered] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    setEntered(false); setLoaded(false);
+    const t = setTimeout(() => setEntered(true), 80);
+    return () => clearTimeout(t);
+  }, [slideKey]);
+  return (
+    <div style={{ position: 'relative', display: 'flex', justifyContent: 'flex-end' }}>
+      <style>{`
+        @keyframes kenBurns { 0% { transform: scale(1.07) translate(0.5%,0.5%); } 100% { transform: scale(1) translate(0,0); } }
+        @keyframes shimmer  { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        @keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+      `}</style>
+
+      <div style={{ position: 'relative', width: '100%', maxWidth: 500, transform: entered ? 'translateY(0) scale(1)' : 'translateY(28px) scale(0.96)', opacity: entered ? 1 : 0, transition: 'transform 0.85s cubic-bezier(0.22,1,0.36,1), opacity 0.65s ease' }}>
+
+        {/* Tinted bg pad */}
+        <div style={{ position: 'absolute', inset: '-8px -8px -20px -8px', borderRadius: 28, background: slide.accentBg, zIndex: 0, transition: 'background 0.8s ease' }} />
+
+        {/* Card */}
+        <div style={{ position: 'relative', zIndex: 1, borderRadius: 20, overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 20px 60px rgba(0,0,0,0.12),0 4px 16px rgba(0,0,0,0.06)', background: '#F3F4F6' }}>
+          {!loaded && (
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg,#F3F4F6 25%,#E9EAEC 50%,#F3F4F6 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.6s infinite' }} />
+          )}
+          <img
+            key={slideKey}
+            src={slide.image}
+            alt={slide.badge}
+            onLoad={() => setLoaded(true)}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: loaded ? 1 : 0, transition: 'opacity 0.5s ease', animation: loaded ? 'kenBurns 8s ease-out forwards' : 'none' }}
+          />
+          {/* Bottom gradient */}
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(to top,rgba(0,0,0,0.18) 0%,transparent 100%)', pointerEvents: 'none' }} />
+          {/* Accent wash */}
+          <div style={{ position: 'absolute', top: 0, left: 0, width: '60%', height: '50%', background: `radial-gradient(ellipse at top left,${slide.accent}18 0%,transparent 70%)`, pointerEvents: 'none', transition: 'background 0.8s ease' }} />
         </div>
 
-        {/* Image à droite */}
-        <div className="relative hidden lg:flex justify-end">
-          <div className="relative w-full max-w-md">
-            {!imgLoaded && (
-              <div className="absolute inset-0 bg-gray-100 rounded-xl animate-pulse" />
-            )}
-            <img
-              src={slide.image}
-              alt={slide.title}
-              className="relative rounded-xl shadow-lg object-cover w-full"
-              style={{ maxHeight: '420px' }}
-              onLoad={() => setImgLoaded(true)}
-            />
+        {/* Trust badge — bottom left */}
+        <div style={{ position: 'absolute', bottom: -16, left: -16, zIndex: 2, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', background: 'white', borderRadius: 14, boxShadow: '0 8px 32px rgba(0,0,0,0.1),0 1px 4px rgba(0,0,0,0.06)', border: `1px solid ${slide.accentBg}`, transform: entered ? 'translateY(0)' : 'translateY(16px)', opacity: entered ? 1 : 0, transition: 'transform 0.75s cubic-bezier(0.22,1,0.36,1) 0.3s,opacity 0.6s ease 0.3s' }}>
+          <div style={{ width: 32, height: 32, borderRadius: 10, flexShrink: 0, background: slide.accentBg, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.6s ease' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={slide.accent} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </div>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: '#111827', lineHeight: 1.3 }}>{slide.badge}</div>
+            <div style={{ fontSize: 10, color: '#9CA3AF', marginTop: 1 }}>{slide.ctaSub}</div>
+          </div>
+        </div>
+
+        {/* Slide counter pill — top right */}
+        <div style={{ position: 'absolute', top: -12, right: -12, zIndex: 2, padding: '5px 12px', background: slide.accent, borderRadius: 999, fontSize: 11, fontWeight: 700, color: 'white', letterSpacing: '0.06em', textTransform: 'uppercase', boxShadow: `0 4px 12px ${slide.accent}55`, transform: entered ? 'translateY(0) rotate(-2deg)' : 'translateY(-12px) rotate(-2deg)', opacity: entered ? 1 : 0, transition: 'transform 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s,opacity 0.5s ease 0.2s' }}>
+          {slide.eyebrow} / 05
         </div>
       </div>
     </div>
   );
-};
+});
 
-/** Navigation flèches (violet au hover) */
-const NavButton = ({ dir, onClick }) => (
+// ── Slide content (left column) ───────────────────────────────────────────────
+const SlideContent = memo(({ slide, slideKey }) => {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => { setVisible(false); const t = setTimeout(() => setVisible(true), 80); return () => clearTimeout(t); }, [slideKey]);
+  const fade = (delay) => ({ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(14px)', transition: `opacity 0.65s ease ${delay}ms,transform 0.65s cubic-bezier(0.22,1,0.36,1) ${delay}ms` });
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: 520 }}>
+      {/* Badge */}
+      <div style={{ ...fade(0), marginBottom: 20 }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '5px 14px 5px 8px', background: slide.accentBg, border: `1px solid ${slide.accent}30`, borderRadius: 999, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: slide.accentText, transition: 'all 0.5s ease' }}>
+          <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: slide.accent, animation: 'pulse 2s infinite' }} />
+          {slide.badge}
+        </span>
+      </div>
+
+      <AnimatedTitle lines={slide.title} slideKey={slideKey} />
+
+      <p style={{ ...fade(200), marginTop: 18, fontSize: 15, lineHeight: 1.75, color: '#6B7280', maxWidth: 430 }}>
+        {slide.description}
+      </p>
+
+      <div style={{ ...fade(280), display: 'flex', gap: 12, marginTop: 28, flexWrap: 'wrap' }}>
+        <button
+          onClick={() => (window.location.href = '/register')}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 22px', background: slide.accent, color: 'white', border: 'none', borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer', boxShadow: `0 4px 14px ${slide.accent}45`, transition: 'all 0.15s' }}
+          onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(1.08)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+          onMouseLeave={e => { e.currentTarget.style.filter = ''; e.currentTarget.style.transform = ''; }}
+        >
+          {slide.cta}
+          <svg width="14" height="14" fill="none" stroke="white" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5-5 5M6 12h12" /></svg>
+        </button>
+        <button
+          onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 22px', background: 'white', color: '#374151', border: '1.5px solid #E5E7EB', borderRadius: 12, fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s' }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = slide.accent; e.currentTarget.style.color = slide.accent; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.color = '#374151'; }}
+        >
+          Voir la démo
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        </button>
+      </div>
+
+      <p style={{ ...fade(340), marginTop: 10, fontSize: 11, color: '#9CA3AF' }}>{slide.ctaSub}</p>
+
+      <div style={{ ...fade(400), display: 'flex', flexWrap: 'wrap', gap: '16px 32px', marginTop: 28, paddingTop: 24, borderTop: '1px solid #F3F4F6' }}>
+        {slide.stats.map((s, i) => (
+          <div key={i}>
+            <div style={{ fontFamily: "'DM Serif Display',Georgia,serif", fontSize: 26, color: slide.accent, lineHeight: 1, transition: 'color 0.5s ease' }}>{s.value}</div>
+            <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 3, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+});
+
+// ── Arrow button ──────────────────────────────────────────────────────────────
+const NavArrow = memo(({ dir, onClick, accent }) => (
   <button
     onClick={onClick}
     aria-label={dir === 'left' ? 'Précédent' : 'Suivant'}
-    className="absolute top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full
-               bg-white border border-gray-200 shadow-sm flex items-center justify-center
-               text-gray-600 hover:bg-violet-50 hover:text-violet-700 hover:border-violet-200
-               transition-colors focus:outline-none focus:ring-1 focus:ring-violet-400
-               ${dir === 'left' ? 'left-4 sm:left-6' : 'right-4 sm:right-6'}"
+    style={{ position: 'absolute', top: '50%', [dir === 'left' ? 'left' : 'right']: 0, transform: 'translateY(-50%)', zIndex: 30, width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', border: '1.5px solid #E5E7EB', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', color: '#6B7280', cursor: 'pointer', transition: 'all 0.15s' }}
+    onMouseEnter={e => { e.currentTarget.style.borderColor = accent; e.currentTarget.style.color = accent; e.currentTarget.style.boxShadow = `0 4px 20px ${accent}30`; e.currentTarget.style.transform = 'translateY(-50%) scale(1.08)'; }}
+    onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.color = '#6B7280'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
   >
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-        d={dir === 'left' ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'} />
+    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={dir === 'left' ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'} />
     </svg>
   </button>
-);
+));
 
-/** Dots de navigation (violet pour l'actif) */
-const Dots = ({ total, current, onClick }) => (
-  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2">
-    {Array.from({ length: total }).map((_, i) => (
-      <button
-        key={i}
-        onClick={() => onClick(i)}
-        aria-label={`Slide ${i + 1}`}
-        className={`rounded-full transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-violet-400
-          ${i === current
-            ? 'w-8 h-1.5 bg-violet-700'
-            : 'w-2 h-1.5 bg-gray-300 hover:bg-violet-400'
-          }`}
-      />
-    ))}
-  </div>
-);
-
-// ============================================================================
-// COMPOSANT PRINCIPAL
-// ============================================================================
+// ── Main ──────────────────────────────────────────────────────────────────────
 const Hero = () => {
-  const { current, goTo, next, back, setPaused } = useCarousel(SLIDES.length);
+  const { current, goTo, next, back, setPaused, paused } = (() => {
+    const count = SLIDES.length;
+    const [current, setCurrent] = useState(0);
+    const [paused, setPaused] = useState(false);
+    const timer = useRef(null);
+    const goTo = useCallback((idx) => setCurrent(((idx % count) + count) % count), [count]);
+    const next = useCallback(() => goTo(current + 1), [current, goTo]);
+    const back = useCallback(() => goTo(current - 1), [current, goTo]);
+    useEffect(() => { if (paused) return; timer.current = setInterval(next, SLIDE_DURATION); return () => clearInterval(timer.current); }, [paused, next]);
+    return { current, goTo, next, back, setPaused, paused };
+  })();
+
+  const [slideKey, setSlideKey] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
+  const prevRef = useRef(current);
+  useEffect(() => { if (prevRef.current !== current) { setSlideKey(k => k + 1); prevRef.current = current; } }, [current]);
+
+  const slide = SLIDES[current];
 
   return (
-    <section
-      id="home"
-      className="relative bg-white overflow-hidden"
-      style={{ minHeight: '100vh', maxHeight: '900px', height: '100vh' }}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onTouchStart={(e) => setTouchStart(e.touches[0].clientX)}
-      onTouchEnd={(e) => {
-        if (!touchStart) return;
-        const diff = touchStart - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) diff > 0 ? next() : back();
-        setTouchStart(null);
-      }}
-      aria-label="Carrousel principal"
-    >
-      {/* Conteneur des slides */}
-      <div className="relative h-full flex items-center">
-        {SLIDES.map((slide, i) => (
-          <Slide key={slide.id} slide={slide} isActive={i === current} />
-        ))}
-      </div>
+    <>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=DM+Serif+Display&display=swap" />
+      <section
+        id="home"
+        style={{ position: 'relative', background: 'white', overflow: 'hidden', minHeight: '100svh', fontFamily: "'DM Sans',system-ui,sans-serif" }}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onTouchStart={(e) => setTouchStart(e.touches[0].clientX)}
+        onTouchEnd={(e) => { if (!touchStart) return; const diff = touchStart - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) diff > 0 ? next() : back(); setTouchStart(null); }}
+        aria-label="Carrousel principal"
+      >
+        {/* Subtle bg tint — right side */}
+        <div style={{ position: 'absolute', top: 0, right: 0, width: '55%', height: '100%', background: slide.accentBg, opacity: 0.4, transition: 'background 0.8s ease', pointerEvents: 'none', clipPath: 'ellipse(80% 100% at 100% 50%)' }} aria-hidden="true" />
 
-      {/* Navigation */}
-      <NavButton dir="left" onClick={back} />
-      <NavButton dir="right" onClick={next} />
-      <Dots total={SLIDES.length} current={current} onClick={goTo} />
+        {/* Content grid */}
+        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1200, margin: '0 auto', padding: '0 72px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'center', minHeight: '100svh' }}>
+          <SlideContent slide={slide} slideKey={slideKey} />
+          <ImagePanel slide={slide} slideKey={slideKey} />
+        </div>
 
-      {/* Bandeau d'accroche statique (en haut) avec texte violet */}
-      <div className="absolute top-8 left-0 right-0 z-20 text-center">
-        <p className="text-gray-600 text-sm sm:text-base font-medium max-w-2xl mx-auto px-4">
-          Infrastructure financière pour augmenter vos revenus. Acceptez les paiements, proposez des services financiers
-          et créez des modèles de revenus personnalisés — <span className="text-violet-700 font-semibold">de votre première transaction à votre milliardième</span>.
-        </p>
-      </div>
-    </section>
+        {/* Arrows — true extremities */}
+        <NavArrow dir="left"  onClick={back} accent={slide.accent} />
+        <NavArrow dir="right" onClick={next} accent={slide.accent} />
+
+        {/* Bottom indicator bar */}
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, padding: '16px 0', borderTop: '1px solid #F9FAFB', background: 'white', zIndex: 20 }}>
+          {SLIDES.map((s, i) => (
+            <button key={s.id} onClick={() => goTo(i)} aria-label={`Slide ${i + 1} — ${s.badge}`}
+              style={{ display: 'flex', flexDirection: 'column', gap: 6, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0' }}>
+              <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: i === current ? '#111827' : '#D1D5DB', transition: 'color 0.2s' }}>
+                {s.eyebrow}
+              </span>
+              <ProgressBar active={i === current} duration={SLIDE_DURATION} paused={paused} />
+            </button>
+          ))}
+        </div>
+      </section>
+    </>
   );
 };
 

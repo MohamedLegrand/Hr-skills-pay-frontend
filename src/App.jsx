@@ -14,14 +14,14 @@ import FAQ from "./pages/faq/FAQ";
 import Securite from "./pages/securite/Securite";
 import Partenaires from "./pages/partenaires/Partenaires";
 import Mentions from "./pages/mentions/Mentions";
-import Confidentialite from "./pages/confidentialite/Confidentialite";
+import Confidentialite from "./pages/confidentialite/Confidentialite"; 
 
 // login et register
 import Register from "./pages/register/Register"; 
 import Login from "./pages/login/Login";
 
 
-// ✅ Layout avec Header + Footer
+//  Layout avec Header + Footer
 function MainLayout() {
   return (
     <>
@@ -34,7 +34,7 @@ function MainLayout() {
   );
 }
 
-// ❌ Layout sans Header/Footer
+//  Layout sans Header/Footer
 function AuthLayout() {
   return (
     <main>
@@ -49,7 +49,7 @@ function App() {
       <ScrollToTop />
 
       <Routes>
-        {/* ✅ Pages AVEC header/footer */}
+        {/*  Pages AVEC header/footer */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />

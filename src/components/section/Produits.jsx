@@ -6,7 +6,7 @@ import { CreditCard, Code2, ShieldCheck, ArrowRight, Link2, Check } from 'lucide
 // 📦 DONNÉES CENTRALISÉES
 // ============================================================================
 
-const PAYMENT_PROVIDERS = [
+const PAYMENT_PROVIDERS = [ 
   {
     id: 'orange-money',
     name: 'Orange Money',

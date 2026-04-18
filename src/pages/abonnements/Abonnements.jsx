@@ -9,7 +9,7 @@ const Abonnements = () => {
   const [billingCycle, setBillingCycle] = useState('monthly'); // monthly ou annual
   const [selectedPlan, setSelectedPlan] = useState(null);
 
-  // Plans d'abonnement
+  // Plans d'abonnement 
   const plans = [
     {
       id: 'basic',

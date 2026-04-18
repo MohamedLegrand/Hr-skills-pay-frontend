@@ -9,7 +9,7 @@ const Mentions = () => {
   const [openSection, setOpenSection] = React.useState('company');
 
   // Informations entreprise 
-  const company = {
+  const company = { 
     name: 'Hr Skills Pay',
     legalName: 'Hr Skills Pay SARL',
     registration: 'RCCM CM/DOU/2024/B/12345',
