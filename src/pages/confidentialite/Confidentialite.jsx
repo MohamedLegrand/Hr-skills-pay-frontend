@@ -4,7 +4,7 @@ import {
   CheckCircle, AlertCircle, Cookie, Database,
   Globe, Clock, FileText, ExternalLink, Key,
   ChevronDown, ChevronUp, Download, Scale
-} from 'lucide-react';
+} from 'lucide-react'; 
 
 const Confidentialite = () => {
   const [openSection, setOpenSection] = useState('collection');

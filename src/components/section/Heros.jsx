@@ -240,6 +240,137 @@ const SlideContent = memo(({ slide, slideKey }) => {
   );
 });
 
+// ── Hero Banner (PHRASE D'ACCROCHE AVANT LE CARROUSEL) ─────────────────────────
+const HeroBanner = memo(() => {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 100);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        zIndex: 25,
+        maxWidth: 1280,
+        margin: '0 auto',
+        padding: '40px 80px 0 80px',
+      }}
+    >
+      <div
+        style={{
+          background: 'linear-gradient(135deg, #1E40AF 0%, #4C1D95 50%, #0F5B7A 100%)',
+          borderRadius: 32,
+          padding: '32px 48px',
+          textAlign: 'center',
+          transform: visible ? 'translateY(0) scale(1)' : 'translateY(-20px) scale(0.98)',
+          opacity: visible ? 1 : 0,
+          transition: 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease',
+          boxShadow: '0 20px 40px -12px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.05)',
+        }}
+      >
+        <span
+          style={{
+            display: 'inline-block',
+            background: 'rgba(255,255,255,0.15)',
+            backdropFilter: 'blur(4px)',
+            padding: '4px 16px',
+            borderRadius: 99,
+            fontSize: 12,
+            fontWeight: 600,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.9)',
+            marginBottom: 16,
+          }}
+        >
+          ✨ L'agrégateur de paiement nouvelle génération
+        </span>
+
+        <h2
+          style={{
+            fontFamily: "'DM Serif Display', Georgia, serif",
+            fontSize: 'clamp(1.5rem, 4vw, 2.2rem)',
+            fontWeight: 400,
+            lineHeight: 1.3,
+            color: 'white',
+            maxWidth: 800,
+            margin: '0 auto',
+          }}
+        >
+          Centralisez toutes vos transactions — Mobile Money, cartes, virements — 
+          <span style={{ display: 'block', color: 'rgba(255,255,255,0.9)', marginTop: 8 }}>
+            et <strong style={{ color: '#FCD34D' }}>doublez votre chiffre d'affaires</strong> grâce à une expérience de paiement fluide.
+          </span>
+        </h2>
+
+        <div
+          style={{
+            display: 'flex',
+            gap: 12,
+            justifyContent: 'center',
+            marginTop: 24,
+            flexWrap: 'wrap',
+          }}
+        >
+          <button
+            onClick={() => (window.location.href = '/register')}
+            style={{
+              padding: '12px 28px',
+              background: 'white',
+              color: '#1E40AF',
+              border: 'none',
+              borderRadius: 40,
+              fontSize: 14,
+              fontWeight: 700,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.2)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            }}
+          >
+            Commencer maintenant
+            <span style={{ marginLeft: 8 }}>→</span>
+          </button>
+          <button
+            onClick={() => document.getElementById('produits')?.scrollIntoView({ behavior: 'smooth' })}
+            style={{
+              padding: '12px 28px',
+              background: 'rgba(255,255,255,0.15)',
+              backdropFilter: 'blur(4px)',
+              color: 'white',
+              border: '1px solid rgba(255,255,255,0.25)',
+              borderRadius: 40,
+              fontSize: 14,
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.25)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            Découvrir les solutions
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+});
+
 // ── Arrow button ──────────────────────────────────────────────────────────────
 const NavArrow = memo(({ dir, onClick, accent }) => (
   <button
@@ -288,11 +419,14 @@ const Hero = () => {
         onTouchEnd={(e) => { if (!touchStart) return; const diff = touchStart - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) diff > 0 ? next() : back(); setTouchStart(null); }}
         aria-label="Carrousel principal"
       >
+        {/* BANNIÈRE TITRE - PHRASE D'ACCROCHE EN HAUT */}
+        <HeroBanner />
+
         {/* Subtle bg gradient — right side */}
         <div style={{ position: 'absolute', top: 0, right: 0, width: '50%', height: '100%', background: `radial-gradient(ellipse at 100% 50%, ${slide.accentBg} 0%, transparent 70%)`, opacity: 0.6, transition: 'background 0.8s ease', pointerEvents: 'none' }} aria-hidden="true" />
 
         {/* Content grid */}
-        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '0 80px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', minHeight: '100svh' }}>
+        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '40px 80px 60px 80px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', minHeight: 'calc(100svh - 240px)' }}>
           <SlideContent slide={slide} slideKey={slideKey} />
           <ImagePanel slide={slide} slideKey={slideKey} />
         </div>

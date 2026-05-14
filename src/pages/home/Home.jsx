@@ -9,7 +9,7 @@ function Home() {
   return (
     <div>
       <Heros />
-      <Produits />
+      <Produits /> 
       <Solutions /> 
       <Tarif />
       <Devellopeus />

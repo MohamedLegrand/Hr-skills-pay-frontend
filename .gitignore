@@ -7,10 +7,32 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dépendances
 node_modules
 dist
 dist-ssr
 *.local
+
+# Environnement - FICHIERS SENSIBLES
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+.env.*.local
+
+# Fichiers de build
+/build
+/.next
+/out
+/.output
+
+# Cache
+.cache
+.parcel-cache
+.next/cache
+.eslintcache
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +44,43 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Fichiers système
+Thumbs.db
+desktop.ini
+
+# Clés et secrets (sécurité)
+*.pem
+*.key
+*.crt
+.secrets
+
+# Vercel
+.vercel
+
+# Tests
+/coverage
+*.lcov
+
+# TypeScript
+*.tsbuildinfo
+
+# Debug
+*.log
+*.tmp
+*.temp
+
+# OSX
+.AppleDouble
+.LSOverride
+._*
+
+# PNPM
+.pnpm-store
+
+# Yarn
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.json
+.yarn/install-state.gz
+.pnp.*

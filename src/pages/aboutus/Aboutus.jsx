@@ -1,8 +1,38 @@
 import React from 'react';
 import { 
   Target, Shield, Users, Globe, Zap, CheckCircle, 
-  ArrowRight, Award, Heart, TrendingUp, MapPin, Clock
+  ArrowRight, Award, Heart, TrendingUp, MapPin, Clock, Mail, Phone
 } from 'lucide-react';
+
+// ===== CONFIGURATION - Correction pour Vercel =====
+// En Next.js : utilisez NEXT_PUBLIC_* au lieu de REACT_APP_*
+// En Vite : utilisez import.meta.env.VITE_*
+
+// Détection automatique de l'environnement
+const getEnvVar = (name, defaultValue) => {
+  // Pour Next.js (Vercel)
+  if (typeof process !== 'undefined' && process.env && process.env[name]) {
+    return process.env[name];
+  }
+  // Pour Next.js avec préfixe NEXT_PUBLIC_
+  if (typeof process !== 'undefined' && process.env && process.env[`NEXT_PUBLIC_${name}`]) {
+    return process.env[`NEXT_PUBLIC_${name}`];
+  }
+  // Pour Vite
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[`VITE_${name}`]) {
+    return import.meta.env[`VITE_${name}`];
+  }
+  // Valeur par défaut
+  return defaultValue;
+};
+
+const APP_CONFIG = {
+  contactEmail: getEnvVar('CONTACT_EMAIL', 'contact@hrskillspay.com'),
+  salesEmail: getEnvVar('SALES_EMAIL', 'commercial@hrskillspay.com'),
+  supportPhone: getEnvVar('SUPPORT_PHONE', '+237677246900'),
+  companyName: getEnvVar('COMPANY_NAME', 'Hr Skills Pay'),
+  foundedYear: getEnvVar('FOUNDED_YEAR', '2022'),
+};
 
 const Aboutus = () => {
   
@@ -42,35 +72,70 @@ const Aboutus = () => {
     { value: '4.9/5', label: 'Satisfaction client', icon: Award }
   ];
 
-  // Équipe dirigeante (placeholders)
+  // Équipe dirigeante - avec images locales
   const team = [
     {
       name: 'Jean-Pierre MBALLA',
       role: 'CEO & Co-fondateur',
       bio: '15 ans d\'expérience dans la fintech africaine. Ancien de Orange Money et MTN.',
-      image: 'https://placehold.co/200x200/e2e8f0/475569?text=JP'
+      image: '/images/team/ceo.jpg',
+      fallback: 'JP'
     },
     {
       name: 'Amina KOUMBA',
       role: 'CTO & Co-fondatrice',
       bio: 'Ingénieure logiciel, experte en architectures distribuées et sécurité des paiements.',
-      image: 'https://placehold.co/200x200/e2e8f0/475569?text=AK'
+      image: '/images/team/cto.jpg',
+      fallback: 'AK'
     },
     {
       name: 'Marc TCHUENTE',
       role: 'Head of Partnerships',
       bio: 'Spécialiste des écosystèmes fintech en Afrique Centrale et de l\'Ouest.',
-      image: 'https://placehold.co/200x200/e2e8f0/475569?text=MT'
+      image: '/images/team/partnerships.jpg',
+      fallback: 'MT'
     }
   ];
 
   // Timeline de l'entreprise
   const milestones = [
-    { year: '2022', title: 'Création', desc: 'Lancement de Hr Skills Pay à Douala, avec 3 partenaires de paiement.' },
+    { year: APP_CONFIG.foundedYear, title: 'Création', desc: `Lancement de ${APP_CONFIG.companyName} à Douala, avec 3 partenaires de paiement.` },
     { year: '2023', title: 'Croissance', desc: '500+ entreprises nous font confiance. Expansion au Sénégal et Côte d\'Ivoire.' },
     { year: '2024', title: 'Innovation', desc: 'Lancement de l\'API v2, SDK mobiles et fonctionnalités enterprise.' },
     { year: '2025', title: 'Vision', desc: 'Devenir la plateforme de référence pour les paiements en Afrique francophone.' }
   ];
+
+  // Pays de présence
+  const countries = [
+    { name: 'Cameroun', flag: '🇨🇲', active: true },
+    { name: 'Sénégal', flag: '🇸🇳', active: true },
+    { name: 'Côte d\'Ivoire', flag: '🇨🇮', active: true },
+    { name: 'Mali', flag: '🇲🇱', active: true },
+    { name: 'Burkina Faso', flag: '🇧🇫', active: false },
+    { name: 'Gabon', flag: '🇬🇦', active: false }
+  ];
+
+  // Composant Image avec fallback
+  const TeamImage = ({ src, alt, fallback }) => {
+    const [imgError, setImgError] = React.useState(false);
+    
+    if (imgError || !src) {
+      return (
+        <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center mx-auto ring-4 ring-slate-100">
+          <span className="text-white font-bold text-xl">{fallback}</span>
+        </div>
+      );
+    }
+    
+    return (
+      <img 
+        src={src}
+        alt={alt}
+        className="w-24 h-24 rounded-2xl object-cover mx-auto ring-4 ring-slate-100 group-hover:ring-violet-200 transition-all"
+        onError={() => setImgError(true)}
+      />
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-slate-50/50 to-white">
@@ -102,27 +167,27 @@ const Aboutus = () => {
               </h1>
               
               <p className="text-lg text-slate-600 leading-relaxed">
-                Hr Skills Pay est une fintech camerounaise née d'une conviction simple : 
+                {APP_CONFIG.companyName} est une fintech camerounaise née d'une conviction simple : 
                 chaque entreprise, quelle que soit sa taille, mérite d'accéder à des solutions 
                 de paiement modernes, sécurisées et abordables.
               </p>
               
               <p className="text-slate-600">
-                Depuis 2022, nous accompagnons les entrepreneurs africains dans leur 
+                Depuis {APP_CONFIG.foundedYear}, nous accompagnons les entrepreneurs africains dans leur 
                 transformation digitale, en leur offrant une infrastructure de paiement 
                 unifiée pour Orange Money, MTN MoMo, cartes bancaires et plus encore.
               </p>
 
               <div className="flex flex-wrap gap-4 pt-4">
                 <a 
-                  href="#contact" 
+                  href="/contact"
                   className="inline-flex items-center gap-2 px-6 py-3.5 bg-violet-600 text-white rounded-xl font-semibold hover:bg-violet-700 transition-all group"
                 >
                   <span>Nous contacter</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a 
-                  href="#solutions" 
+                  href="/solutions"
                   className="inline-flex items-center gap-2 px-6 py-3.5 border border-slate-300 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 transition-all"
                 >
                   <span>Découvrir nos solutions</span>
@@ -142,7 +207,7 @@ const Aboutus = () => {
                   <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center mb-4">
                     <Globe className="w-10 h-10 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900">Hr Skills Pay</h3>
+                  <h3 className="text-xl font-bold text-slate-900">{APP_CONFIG.companyName}</h3>
                   <p className="text-sm text-slate-500 mt-2">Paiements unifiés pour l'Afrique</p>
                   <div className="mt-6 flex items-center gap-2 text-emerald-600">
                     <CheckCircle className="w-4 h-4" />
@@ -244,7 +309,7 @@ const Aboutus = () => {
               </div>
             </div>
 
-            {/* Carte / Illustration */}
+            {/* Carte présence */}
             <div className="bg-white rounded-2xl border border-slate-200 p-6 lg:p-8">
               <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-violet-600" />
@@ -255,29 +320,42 @@ const Aboutus = () => {
                 des équipes locales pour un support de proximité.
               </p>
               
-              {/* Carte simplifiée */}
+              {/* Carte stylisée */}
               <div className="relative aspect-video bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl overflow-hidden">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
                     <Globe className="w-16 h-16 text-slate-400 mx-auto mb-3" />
-                    <p className="text-sm font-medium text-slate-600">Carte interactive bientôt disponible</p>
+                    <p className="text-sm font-medium text-slate-600">Notre couverture s'étend</p>
                   </div>
                 </div>
                 
-                {/* Points de présence */}
-                <div className="absolute top-1/3 left-1/4 w-3 h-3 rounded-full bg-violet-600 animate-pulse" title="Douala" />
-                <div className="absolute top-1/2 left-1/3 w-3 h-3 rounded-full bg-violet-600 animate-pulse" title="Yaoundé" />
-                <div className="absolute top-1/4 left-1/2 w-3 h-3 rounded-full bg-violet-400" title="Dakar" />
-                <div className="absolute top-2/5 left-2/3 w-3 h-3 rounded-full bg-violet-400" title="Abidjan" />
+                {/* Points de présence animés */}
+                <div className="absolute top-[35%] left-[25%]">
+                  <div className="relative">
+                    <div className="w-3 h-3 rounded-full bg-violet-600 animate-pulse" />
+                    <div className="absolute -top-1 -left-1 w-5 h-5 rounded-full bg-violet-400 animate-ping opacity-75" />
+                  </div>
+                  <span className="absolute top-4 left-4 text-[10px] font-medium text-violet-700 whitespace-nowrap">Douala</span>
+                </div>
+                <div className="absolute top-[45%] left-[35%] w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
+                <div className="absolute top-[25%] left-[55%] w-2 h-2 rounded-full bg-violet-400" />
+                <div className="absolute top-[40%] left-[70%] w-2 h-2 rounded-full bg-violet-400" />
               </div>
               
               <div className="mt-4 grid grid-cols-2 gap-3">
-                {['Cameroun', 'Sénégal', 'Côte d\'Ivoire', 'Mali'].map((country) => (
-                  <div key={country} className="flex items-center gap-2 text-sm text-slate-600">
+                {countries.filter(c => c.active).map((country) => (
+                  <div key={country.name} className="flex items-center gap-2 text-sm text-slate-600">
+                    <span>{country.flag}</span>
                     <CheckCircle className="w-4 h-4 text-emerald-500" />
-                    {country}
+                    <span>{country.name}</span>
                   </div>
                 ))}
+              </div>
+              
+              <div className="mt-4 pt-4 border-t border-slate-100">
+                <p className="text-xs text-slate-500">
+                  🌍 Expansion en cours vers d'autres pays d'Afrique de l'Ouest et centrale.
+                </p>
               </div>
             </div>
           </div>
@@ -289,7 +367,7 @@ const Aboutus = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-slate-900">
-              L'équipe <span className="text-violet-600">Hr Skills Pay</span>
+              L'équipe <span className="text-violet-600">{APP_CONFIG.companyName}</span>
             </h2>
             <p className="mt-4 text-slate-600 max-w-2xl mx-auto">
               Des passionnés de fintech, d'innovation et d'impact social, unis par une même vision.
@@ -302,15 +380,12 @@ const Aboutus = () => {
                 key={index}
                 className="group text-center p-6 bg-white rounded-2xl border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all"
               >
-                <div className="relative inline-block mb-4">
-                  <img 
-                    src={member.image} 
-                    alt={member.name}
-                    className="w-24 h-24 rounded-2xl object-cover mx-auto ring-4 ring-slate-100 group-hover:ring-violet-200 transition-all"
-                  />
-                  <div className="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 border-4 border-white" />
-                </div>
-                <h4 className="font-semibold text-slate-900">{member.name}</h4>
+                <TeamImage 
+                  src={member.image} 
+                  alt={member.name}
+                  fallback={member.fallback}
+                />
+                <h4 className="font-semibold text-slate-900 mt-4">{member.name}</h4>
                 <p className="text-sm text-violet-600 font-medium mt-1">{member.role}</p>
                 <p className="text-sm text-slate-600 mt-3">{member.bio}</p>
               </div>
@@ -333,23 +408,24 @@ const Aboutus = () => {
                 Prêt à transformer vos paiements ?
               </h2>
               <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
-                Rejoignez les 500+ entreprises qui font confiance à Hr Skills Pay 
+                Rejoignez les 500+ entreprises qui font confiance à {APP_CONFIG.companyName} 
                 pour accepter des paiements simples, sécurisés et scalables.
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a 
-                  href="#contact"
+                  href="/register"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-900 rounded-2xl font-semibold shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all group"
                 >
                   <span>Commencer gratuitement</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a 
-                  href="#solutions"
+                  href="mailto:commercial@hrskillspay.com"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 border border-white/20 text-white rounded-2xl font-semibold hover:bg-white/20 transition-all"
                 >
-                  <span>Voir nos solutions</span>
+                  <Mail className="w-4 h-4" />
+                  <span>Contacter les ventes</span>
                 </a>
               </div>
               

@@ -11,7 +11,7 @@ const Mentions = () => {
   // Informations entreprise 
   const company = { 
     name: 'Hr Skills Pay',
-    legalName: 'Hr Skills Pay SARL',
+    legalName: 'Hr Skills Pay SARL', 
     registration: 'RCCM CM/DOU/2024/B/12345',
     capital: '10 000 000 FCFA',
     address: 'Akwa, Rue des Palmiers, Immeuble Le Prestige, Douala, Cameroun',

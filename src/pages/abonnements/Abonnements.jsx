@@ -2,22 +2,49 @@ import React, { useState } from 'react';
 import { 
   Check, X, Star, Zap, Shield, Users, Clock, 
   ArrowRight, HelpCircle, Award, TrendingUp, 
-  CreditCard, RefreshCw, Lock, Info
+  CreditCard, RefreshCw, Lock, Info, Mail, Phone
 } from 'lucide-react';
 
-const Abonnements = () => {
-  const [billingCycle, setBillingCycle] = useState('monthly'); // monthly ou annual
-  const [selectedPlan, setSelectedPlan] = useState(null);
+// ===== CONFIGURATION - Correction pour Vercel =====
+// Détection automatique de l'environnement (Next.js, Vite, React)
+const getEnvVar = (name, defaultValue) => {
+  // Pour Next.js (Vercel) avec préfixe NEXT_PUBLIC_
+  if (typeof process !== 'undefined' && process.env && process.env[`NEXT_PUBLIC_${name}`]) {
+    return process.env[`NEXT_PUBLIC_${name}`];
+  }
+  // Pour React (Create React App) avec préfixe REACT_APP_
+  if (typeof process !== 'undefined' && process.env && process.env[`REACT_APP_${name}`]) {
+    return process.env[`REACT_APP_${name}`];
+  }
+  // Pour Vite
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[`VITE_${name}`]) {
+    return import.meta.env[`VITE_${name}`];
+  }
+  // Valeur par défaut
+  return defaultValue;
+};
 
-  // Plans d'abonnement 
+const APP_CONFIG = {
+  contactEmail: getEnvVar('CONTACT_EMAIL', 'contact@hrskillspay.com'),
+  salesEmail: getEnvVar('SALES_EMAIL', 'commercial@hrskillspay.com'),
+  supportPhone: getEnvVar('SUPPORT_PHONE', '+237 677 246 900'),
+  appUrl: getEnvVar('URL', 'https://hrskillspay.com'),
+};
+
+const Abonnements = () => {
+  const [billingCycle, setBillingCycle] = useState('monthly');
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [showContactModal, setShowContactModal] = useState(false);
+
+  // Plans d'abonnement avec prix Cameroun
   const plans = [
     {
       id: 'basic',
-      name: 'Basic',
+      name: 'Démarrage',
       tagline: 'Pour tester et démarrer',
       price: {
         monthly: 5000,
-        annual: 50000, // 2 mois gratuits
+        annual: 50000,
         currency: 'FCFA'
       },
       description: 'Idéal pour les freelances et petites entreprises qui débutent.',
@@ -26,68 +53,74 @@ const Abonnements = () => {
         { label: 'Orange Money + MTN MoMo', included: true },
         { label: 'Checkout hébergé', included: true },
         { label: 'Dashboard basique', included: true },
-        { label: 'Support email', included: true },
+        { label: 'Support email (48h)', included: true },
         { label: 'API REST', included: false },
         { label: 'Paiements récurrents', included: false },
         { label: 'Support prioritaire', included: false },
-        { label: 'White-label', included: false } 
+        { label: 'White-label', included: false },
+        { label: 'Statistiques avancées', included: false }
       ],
       cta: 'Commencer gratuitement',
       popular: false,
       gradient: 'from-slate-500 to-slate-700',
-      badge: null
+      badge: null,
+      link: '/register?plan=basic'
     },
     {
       id: 'standard',
-      name: 'Standard',
+      name: 'Business',
       tagline: 'Pour croître et scaler',
       price: {
-        monthly: 10000,
-        annual: 100000, // 2 mois gratuits
+        monthly: 15000,
+        annual: 150000,
         currency: 'FCFA'
       },
       description: 'Pour les e-commerce et entreprises en croissance.',
       features: [
         { label: 'Transactions illimitées', included: true },
-        { label: 'Tous les wallets mobiles', included: true },
+        { label: 'Tous les wallets (Orange, MTN, Wave)', included: true },
         { label: 'Checkout + API complète', included: true },
-        { label: 'Dashboard analytics', included: true },
-        { label: 'Support email + chat', included: true },
+        { label: 'Dashboard analytics avancé', included: true },
+        { label: 'Support email + chat (24h)', included: true },
         { label: 'Paiements récurrents', included: true },
-        { label: 'Liens de paiement', included: true },
+        { label: 'Liens de paiement personnalisés', included: true },
         { label: 'Support prioritaire', included: true },
+        { label: 'Webhooks', included: true },
         { label: 'White-label', included: false }
       ],
       cta: 'Essai gratuit 14 jours',
       popular: true,
       gradient: 'from-violet-600 to-indigo-600',
-      badge: 'Plus populaire'
+      badge: 'Plus populaire',
+      link: '/register?plan=standard'
     },
     {
       id: 'premium',
-      name: 'Premium',
-      tagline: 'Pour les besoins enterprise',
+      name: 'Enterprise',
+      tagline: 'Pour les besoins sur mesure',
       price: {
-        monthly: 20000,
-        annual: 200000, // 2 mois gratuits
+        monthly: 35000,
+        annual: 350000,
         currency: 'FCFA'
       },
       description: 'Pour les grandes entreprises et besoins spécifiques.',
       features: [
-        { label: 'Tout du plan Standard', included: true },
+        { label: 'Tout du plan Business', included: true },
         { label: 'Volumes négociés', included: true },
         { label: 'SDK mobiles dédiés', included: true },
         { label: 'Webhooks avancés', included: true },
         { label: 'Dashboard white-label', included: true },
-        { label: 'Support dédié 24/7', included: true },
+        { label: 'Support dédié 24/7 (1h)', included: true },
         { label: 'SLA garanti 99.99%', included: true },
         { label: 'Onboarding assisté', included: true },
-        { label: 'Expert technique dédié', included: true }
+        { label: 'Expert technique dédié', included: true },
+        { label: 'Formation équipe incluse', included: true }
       ],
       cta: 'Contacter les ventes',
       popular: false,
       gradient: 'from-amber-500 to-orange-500',
-      badge: 'Meilleure valeur'
+      badge: 'Meilleure valeur',
+      link: '#contact'
     }
   ];
 
@@ -95,32 +128,36 @@ const Abonnements = () => {
   const faq = [
     {
       q: 'Puis-je changer de plan à tout moment ?',
-      a: 'Oui, vous pouvez upgrader ou downgrader votre plan à tout moment depuis votre dashboard. Le changement est immédiat et la facturation est ajustée au prorata.'
+      a: 'Oui, vous pouvez upgrader ou downgrader votre plan à tout moment depuis votre dashboard. Le changement est immédiat et la facturation est ajustée au prorata des jours restants.'
     },
     {
       q: 'Y a-t-il un engagement minimum ?',
-      a: 'Non, tous nos plans sont sans engagement. Vous pouvez résilier à tout moment avec un préavis de 7 jours. Aucun frais caché.'
+      a: 'Non, tous nos plans sont sans engagement. Vous pouvez résilier à tout moment. Aucun frais caché.'
     },
     {
       q: 'Comment fonctionne l\'essai gratuit ?',
-      a: 'Le plan Standard inclut 14 jours d\'essai gratuit sans carte bancaire. Vous accédez à toutes les fonctionnalités. À la fin, vous choisissez de souscrire ou de rester sur le plan Basic.'
+      a: 'Le plan Business inclut 14 jours d\'essai gratuit sans carte bancaire. Vous accédez à toutes les fonctionnalités. À la fin, vous choisissez de souscrire ou de revenir au plan Démarrage.'
     },
     {
       q: 'Les frais de transaction sont-ils inclus ?',
       a: 'Non, l\'abonnement couvre l\'accès à la plateforme. Les frais de transaction (2.5% pour Mobile Money, 3.4% pour les cartes) s\'appliquent en plus sur chaque paiement réussi.'
     },
     {
-      q: 'Proposez-vous des tarifs personnalisés ?',
-      a: 'Oui, pour les volumes élevés (>50M FCFA/mois), contactez notre équipe commerciale pour des tarifs dégressifs et des conditions enterprise.'
+      q: 'Proposez-vous des tarifs personnalisés pour les associations ?',
+      a: 'Oui, nous proposons des tarifs préférentiels pour les associations et ONG. Contactez-nous pour en discuter.'
+    },
+    {
+      q: 'Comment sont gérés les remboursements ?',
+      a: 'Les remboursements sont gratuits et les frais de transaction initiaux vous sont recrédités. Aucun frais supplémentaire n\'est appliqué.'
     }
   ];
 
   // Garanties
   const guarantees = [
-    { icon: Lock, label: 'Sans engagement', desc: 'Résiliable à tout moment' },
-    { icon: RefreshCw, label: 'Satisfait ou remboursé', desc: '30 jours garantis' },
-    { icon: Shield, label: 'Sécurité maximale', desc: 'Certifié PCI DSS' },
-    { icon: Clock, label: 'Support 24/7', desc: 'Toujours disponible' }
+    { icon: Lock, label: 'Sans engagement', desc: 'Résiliable à tout moment', color: 'violet' },
+    { icon: RefreshCw, label: 'Satisfait ou remboursé', desc: '30 jours garantis', color: 'emerald' },
+    { icon: Shield, label: 'Sécurité maximale', desc: 'Certifié PCI DSS', color: 'blue' },
+    { icon: Clock, label: 'Support 24/7', desc: 'Toujours disponible', color: 'amber' }
   ];
 
   // Formatage du prix
@@ -133,6 +170,17 @@ const Abonnements = () => {
     const yearlyMonthly = monthlyPrice * 12;
     const savings = yearlyMonthly - annualPrice;
     return savings;
+  };
+
+  // Gestion du clic sur CTA
+  const handleCtaClick = (plan) => {
+    if (plan.id === 'premium') {
+      setShowContactModal(true);
+    } else if (plan.link && !plan.link.startsWith('#')) {
+      window.location.href = plan.link;
+    } else if (plan.link === '#contact') {
+      setShowContactModal(true);
+    }
   };
 
   return (
@@ -176,7 +224,7 @@ const Abonnements = () => {
             }`} />
           </button>
           <span className={`text-sm font-medium ${billingCycle === 'annual' ? 'text-slate-900' : 'text-slate-500'}`}>
-            Annuel <span className="text-emerald-600 text-xs font-bold">-17%</span>
+            Annuel <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-1.5 py-0.5 rounded-full ml-1">-2 mois offerts</span>
           </span>
         </div>
 
@@ -192,7 +240,7 @@ const Abonnements = () => {
                 className={`relative bg-white rounded-3xl border-2 overflow-hidden transition-all duration-300 hover:shadow-2xl ${
                   plan.popular
                     ? 'border-violet-500 shadow-xl shadow-violet-500/20 scale-105 z-10'
-                    : 'border-slate-200 hover:border-violet-300'
+                    : 'border-slate-200 hover:border-violet-300 hover:shadow-lg'
                 }`}
               >
                 {/* Badge Populaire */}
@@ -249,7 +297,7 @@ const Abonnements = () => {
                 {/* CTA */}
                 <div className="px-6 pb-6 pt-2">
                   <button
-                    onClick={() => setSelectedPlan(plan.id)}
+                    onClick={() => handleCtaClick(plan)}
                     className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold transition-all duration-300 group ${
                       plan.popular
                         ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/25 hover:shadow-xl hover:shadow-violet-500/40 hover:-translate-y-0.5'
@@ -271,9 +319,9 @@ const Abonnements = () => {
             {guarantees.map((item, index) => {
               const Icon = item.icon;
               return (
-                <div key={index} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200">
-                  <div className="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-5 h-5 text-violet-600" />
+                <div key={index} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-violet-200 transition-colors">
+                  <div className={`w-10 h-10 rounded-lg bg-${item.color}-100 flex items-center justify-center flex-shrink-0`}>
+                    <Icon className={`w-5 h-5 text-${item.color}-600`} />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-slate-900">{item.label}</p>
@@ -294,34 +342,39 @@ const Abonnements = () => {
             <p className="text-slate-600">Visualisez toutes les fonctionnalités incluses dans chaque plan</p>
           </div>
 
-          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[640px]">
                 <thead className="bg-slate-50">
                   <tr>
                     <th className="text-left p-4 text-sm font-semibold text-slate-700">Fonctionnalité</th>
-                    <th className="text-center p-4 text-sm font-semibold text-slate-700">Basic</th>
-                    <th className="text-center p-4 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600">Standard</th>
-                    <th className="text-center p-4 text-sm font-semibold text-slate-700">Premium</th>
+                    <th className="text-center p-4 text-sm font-semibold text-slate-700">Démarrage</th>
+                    <th className="text-center p-4 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600">Business</th>
+                    <th className="text-center p-4 text-sm font-semibold text-slate-700">Enterprise</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {[
                     { feature: 'Transactions/mois', basic: '100', standard: 'Illimitées', premium: 'Illimitées + volumes' },
-                    { feature: 'Mobile Money', basic: '✓', standard: '✓', premium: '✓' },
-                    { feature: 'Cartes bancaires', basic: '✓', standard: '✓', premium: '✓' },
+                    { feature: 'Orange Money', basic: '✓', standard: '✓', premium: '✓' },
+                    { feature: 'MTN Mobile Money', basic: '✓', standard: '✓', premium: '✓' },
+                    { feature: 'Wave', basic: '✕', standard: '✓', premium: '✓' },
+                    { feature: 'Cartes bancaires', basic: '✕', standard: '✓', premium: '✓' },
                     { feature: 'Checkout hébergé', basic: '✓', standard: '✓', premium: '✓' },
                     { feature: 'API REST', basic: '✕', standard: '✓', premium: '✓' },
                     { feature: 'SDK Mobile', basic: '✕', standard: '✕', premium: '✓' },
                     { feature: 'Paiements récurrents', basic: '✕', standard: '✓', premium: '✓' },
-                    { feature: 'Support', basic: 'Email', standard: 'Email + Chat', premium: 'Dédié 24/7' },
-                    { feature: 'SLA', basic: 'Best effort', standard: '99.9%', premium: '99.99%' },
-                    { feature: 'White-label', basic: '✕', standard: '✕', premium: '✓' }
+                    { feature: 'Liens de paiement', basic: '✕', standard: '✓', premium: '✓' },
+                    { feature: 'Support', basic: 'Email 48h', standard: 'Email + Chat 24h', premium: 'Dédié 24/7 1h' },
+                    { feature: 'SLA garanti', basic: 'Best effort', standard: '99.9%', premium: '99.99%' },
+                    { feature: 'White-label', basic: '✕', standard: '✕', premium: '✓' },
+                    { feature: 'Statistiques avancées', basic: '✕', standard: '✓', premium: '✓' },
+                    { feature: 'Onboarding assisté', basic: '✕', standard: '✕', premium: '✓' }
                   ].map((row, idx) => (
-                    <tr key={idx} className="hover:bg-slate-50">
-                      <td className="p-4 text-sm text-slate-700">{row.feature}</td>
+                    <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                      <td className="p-4 text-sm font-medium text-slate-700">{row.feature}</td>
                       <td className="p-4 text-center text-sm text-slate-600">{row.basic}</td>
-                      <td className="p-4 text-center text-sm font-medium bg-violet-50">{row.standard}</td>
+                      <td className="p-4 text-center text-sm font-medium bg-violet-50/50">{row.standard}</td>
                       <td className="p-4 text-center text-sm text-slate-600">{row.premium}</td>
                     </tr>
                   ))}
@@ -340,7 +393,7 @@ const Abonnements = () => {
             <p className="text-slate-600">Tout ce que vous devez savoir sur nos abonnements</p>
           </div>
 
-          <div className="max-w-3xl mx-auto space-y-4">
+          <div className="max-w-3xl mx-auto space-y-3">
             {faq.map((item, idx) => (
               <FAQItem key={idx} question={item.q} answer={item.a} />
             ))}
@@ -357,26 +410,27 @@ const Abonnements = () => {
             
             <div className="relative">
               <h2 className="text-2xl lg:text-3xl font-black text-white mb-4">
-                Toujours hésitant ?
+                Prêt à faire évoluer votre activité ?
               </h2>
               <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
-                Commencez gratuitement avec le plan Basic. Passez au plan supérieur 
+                Commencez gratuitement avec le plan Démarrage. Passez au plan supérieur 
                 quand vous êtes prêt. Aucun risque, aucune carte requise.
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a 
-                  href="#contact"
+                  href="/register"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-900 rounded-2xl font-semibold shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all group"
                 >
-                  <span>Parler à un expert</span>
+                  <span>Commencer maintenant</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a 
-                  href="#demo"
+                  href={`mailto:${APP_CONFIG.salesEmail}`}
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 border border-white/20 text-white rounded-2xl font-semibold hover:bg-white/20 transition-all"
                 >
-                  <span>Voir une démo</span>
+                  <Mail className="w-4 h-4" />
+                  <span>Contacter les ventes</span>
                 </a>
               </div>
               
@@ -391,10 +445,18 @@ const Abonnements = () => {
                 <span className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400" /> Support 24/7
                 </span>
+                <span className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400" /> Paiement sécurisé
+                </span>
               </div>
             </div>
           </div>
         </div>
+
+        {/* ========== MODAL CONTACT ENTREPRISE ========== */}
+        {showContactModal && (
+          <ContactModal onClose={() => setShowContactModal(false)} />
+        )}
 
       </div>
     </div>
@@ -406,13 +468,13 @@ const FAQItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden transition-all hover:border-violet-200">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-slate-50 transition-colors"
       >
         <span className="font-semibold text-slate-900">{question}</span>
-        <span className={`w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+        <span className={`w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}>
           <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
@@ -420,6 +482,57 @@ const FAQItem = ({ question, answer }) => {
       </button>
       <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96' : 'max-h-0'}`}>
         <p className="px-6 pb-4 text-sm text-slate-600 leading-relaxed">{answer}</p>
+      </div>
+    </div>
+  );
+};
+
+// Composant Modal de contact
+const ContactModal = ({ onClose }) => {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-bold text-slate-900">Contactez notre équipe</h3>
+          <button onClick={onClose} className="p-1 hover:bg-slate-100 rounded-lg transition-colors">
+            <X className="w-5 h-5 text-slate-500" />
+          </button>
+        </div>
+        
+        <p className="text-sm text-slate-600 mb-6">
+          Notre équipe commerciale vous répondra sous 24h pour discuter de vos besoins spécifiques.
+        </p>
+        
+        <div className="space-y-4">
+          <a 
+            href={`mailto:${APP_CONFIG.salesEmail}`}
+            className="flex items-center gap-3 p-3 border border-slate-200 rounded-xl hover:border-violet-300 hover:bg-violet-50 transition-colors"
+          >
+            <Mail className="w-5 h-5 text-violet-600" />
+            <div>
+              <p className="font-medium text-slate-900">{APP_CONFIG.salesEmail}</p>
+              <p className="text-xs text-slate-500">Réponse sous 24h</p>
+            </div>
+          </a>
+          
+          <a 
+            href={`tel:${APP_CONFIG.supportPhone.replace(/\s/g, '')}`}
+            className="flex items-center gap-3 p-3 border border-slate-200 rounded-xl hover:border-violet-300 hover:bg-violet-50 transition-colors"
+          >
+            <Phone className="w-5 h-5 text-violet-600" />
+            <div>
+              <p className="font-medium text-slate-900">{APP_CONFIG.supportPhone}</p>
+              <p className="text-xs text-slate-500">Lun-Ven, 9h-18h</p>
+            </div>
+          </a>
+        </div>
+        
+        <button
+          onClick={onClose}
+          className="w-full mt-6 px-4 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+        >
+          Fermer
+        </button>
       </div>
     </div>
   );

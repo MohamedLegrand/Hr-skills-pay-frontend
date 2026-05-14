@@ -12,7 +12,7 @@ const Partenaires = () => {
       id: 'orange-money',
       name: 'Orange Money', 
       logo: '📱',
-      color: 'from-orange-500 to-amber-500',
+      color: 'from-orange-500 to-amber-500', 
       description: 'Leader du mobile money en Afrique francophone. Plus de 50 millions d\'utilisateurs actifs.',
       category: 'Mobile Money',
       countries: ['Cameroun', 'Sénégal', 'Côte d\'Ivoire', 'Mali', 'Burkina'],
