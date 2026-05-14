@@ -1,13 +1,14 @@
 // Header.jsx
 import { useState, useEffect, useCallback, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 // ===== CONSTANTES =====
 const NAV_LINKS = [
-  { label: "Accueil",      href: "/#home",         id: "home" },
-  { label: "Produits",     href: "/#produits",     id: "produits" },
-  { label: "Solutions",    href: "/#solutions",    id: "solutions" },
-  { label: "Tarif",       href: "/#tarif",       id: "tarif" },
-  { label: "Développeurs", href: "/#developpeurs", id: "developpeurs" }, 
+  { label: "Accueil",      href: "/",              id: "home" },
+  { label: "Produits",     href: "/produits",     id: "produits" },
+  { label: "Solutions",    href: "/solutions",    id: "solutions" },
+  { label: "Tarif",        href: "/tarif",        id: "tarif" },
+  { label: "Développeurs", href: "/developpeurs", id: "developpeurs" }, 
 ];
 
 const SCROLL_THRESHOLD = 100;
@@ -83,7 +84,6 @@ const scrollToSection = (id, closeMenu) => {
 };
 
 // ===== LOGO SVG INLINE (fallback propre) =====
-// Version agrandie avec meilleure visibilité
 const LogoMark = () => (
   <svg
     width="52"
@@ -93,7 +93,6 @@ const LogoMark = () => (
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
   >
-    {/* Fond avec dégradé */}
     <defs>
       <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="rgba(255,255,255,0.2)" />
@@ -104,7 +103,6 @@ const LogoMark = () => (
     <rect width="52" height="52" rx="12" fill="url(#logoGrad)" />
     <rect width="52" height="52" rx="12" stroke="rgba(255,255,255,0.2)" strokeWidth="1.2" />
 
-    {/* Lettre H stylisée plus grande */}
     <text
       x="50%"
       y="50%"
@@ -119,7 +117,6 @@ const LogoMark = () => (
       H
     </text>
 
-    {/* Accent décoratif */}
     <rect x="31" y="35" width="12" height="2.5" rx="1.25" fill="rgba(255,255,255,0.5)" />
     <rect x="31" y="40" width="8" height="2.5" rx="1.25" fill="rgba(255,255,255,0.3)" />
   </svg>
@@ -127,18 +124,25 @@ const LogoMark = () => (
 
 // ===== SOUS-COMPOSANTS =====
 
-/** Logo principal - VERSION AGRANDIE */
+/** Logo principal */
 const Logo = ({ onClick }) => {
   const [imgFailed, setImgFailed] = useState(false);
+  const navigate = useNavigate();
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    onClick?.();
+    navigate('/');
+    setTimeout(() => scrollToSection("home"), 100);
+  };
 
   return (
-    <a
-      href="/#home"
-      onClick={(e) => { e.preventDefault(); onClick?.(); scrollToSection("home"); }}
+    <Link
+      to="/"
+      onClick={handleClick}
       className="flex items-center gap-3 flex-shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-xl"
       aria-label="Hr Skills Pay — Retour à l'accueil"
     >
-      {/* Conteneur image / fallback - AGRANDI */}
       <div className="relative flex-shrink-0">
         {imgFailed ? (
           <div className="transition-transform duration-200 group-hover:scale-[1.04]">
@@ -157,7 +161,6 @@ const Logo = ({ onClick }) => {
         )}
       </div>
 
-      {/* Wordmark - TEXTES AGRANDIS */}
       <div className="flex flex-col leading-tight">
         <span className="text-[17px] sm:text-xl font-bold text-white tracking-tight">
           Hr Skills
@@ -169,7 +172,7 @@ const Logo = ({ onClick }) => {
           Pay
         </span>
       </div>
-    </a>
+    </Link>
   );
 };
 
@@ -179,69 +182,86 @@ const Divider = () => (
 );
 
 /** Navigation desktop */
-const DesktopNav = ({ activeId, onNavigate }) => (
-  <nav
-    className="hidden lg:flex items-center gap-0.5"
-    role="navigation"
-    aria-label="Navigation principale"
-  >
-    {NAV_LINKS.map(({ id, href, label }) => (
-      <a
-        key={id}
-        href={href}
-        onClick={(e) => { e.preventDefault(); onNavigate(id); }}
-        aria-current={activeId === id ? "page" : undefined}
-        className={`relative px-3.5 py-2 text-[13.5px] font-medium rounded-lg transition-all duration-150
-          focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30 ${
-          activeId === id
-            ? "text-white bg-white/12"
-            : "text-white/65 hover:text-white hover:bg-white/8"
-        }`}
+const DesktopNav = ({ activeId, onNavigate }) => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (id, href) => {
+    if (href === '/') {
+      navigate('/');
+      setTimeout(() => scrollToSection(id), 100);
+    } else {
+      navigate(href);
+    }
+    onNavigate?.(id);
+  };
+
+  return (
+    <nav
+      className="hidden lg:flex items-center gap-0.5"
+      role="navigation"
+      aria-label="Navigation principale"
+    >
+      {NAV_LINKS.map(({ id, href, label }) => (
+        <button
+          key={id}
+          onClick={() => handleNavigation(id, href)}
+          aria-current={activeId === id ? "page" : undefined}
+          className={`relative px-3.5 py-2 text-[13.5px] font-medium rounded-lg transition-all duration-150
+            focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30 ${
+            activeId === id
+              ? "text-white bg-white/12"
+              : "text-white/65 hover:text-white hover:bg-white/8"
+          }`}
+        >
+          {label}
+          {activeId === id && (
+            <span
+              className="absolute bottom-[5px] left-1/2 -translate-x-1/2 w-[18px] h-[2px] rounded-full"
+              style={{ background: "rgba(255,255,255,0.6)" }}
+            />
+          )}
+        </button>
+      ))}
+    </nav>
+  );
+};
+
+/** Actions desktop */
+const DesktopActions = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
+      <button
+        className="px-4 py-2 text-[13px] font-medium text-white/75 hover:text-white
+                   hover:bg-white/8 rounded-lg transition-all duration-150
+                   focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30"
+        onClick={() => navigate("/login")}
       >
-        {label}
-        {activeId === id && (
-          <span
-            className="absolute bottom-[5px] left-1/2 -translate-x-1/2 w-[18px] h-[2px] rounded-full"
-            style={{ background: "rgba(255,255,255,0.6)" }}
-          />
-        )}
-      </a>
-    ))}
-  </nav>
-);
+        Connexion
+      </button>
 
-/** Actions desktop - LIENS CORRIGÉS */
-const DesktopActions = () => (
-  <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
-    <button
-      className="px-4 py-2 text-[13px] font-medium text-white/75 hover:text-white
-                 hover:bg-white/8 rounded-lg transition-all duration-150
-                 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30"
-      onClick={() => (window.location.href = "/login")}
-    >
-      Connexion
-    </button>
-
-    <button
-      className="relative px-4 py-2 text-[13px] font-semibold rounded-lg
-                 transition-all duration-150 active:scale-[0.97]
-                 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50
-                 overflow-hidden group"
-      style={{
-        background: "rgba(255,255,255,1)",
-        color: "#4C1D95",
-      }}
-      onClick={() => (window.location.href = "/register")}
-    >
-      <span
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{ background: "rgba(237,233,254,1)" }}
-        aria-hidden="true"
-      />
-      <span className="relative">S'inscrire</span>
-    </button>
-  </div>
-);
+      <button
+        className="relative px-4 py-2 text-[13px] font-semibold rounded-lg
+                   transition-all duration-150 active:scale-[0.97]
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50
+                   overflow-hidden group"
+        style={{
+          background: "rgba(255,255,255,1)",
+          color: "#4C1D95",
+        }}
+        onClick={() => navigate("/register")}
+      >
+        <span
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{ background: "rgba(237,233,254,1)" }}
+          aria-hidden="true"
+        />
+        <span className="relative">S'inscrire</span>
+      </button>
+    </div>
+  );
+};
 
 /** Bouton hamburger */
 const HamburgerButton = ({ isOpen, onClick }) => (
@@ -271,12 +291,37 @@ const HamburgerButton = ({ isOpen, onClick }) => (
   </button>
 );
 
-/** Menu mobile - LIENS CORRIGÉS */
+/** Menu mobile */
 const MobileMenu = ({ isOpen, activeId, onNavigate, onClose, onLogin, onRegister }) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
+
+  const handleNavigation = (id, href) => {
+    onClose();
+    if (href === '/') {
+      navigate('/');
+      setTimeout(() => scrollToSection(id), 100);
+    } else {
+      navigate(href);
+    }
+    onNavigate?.(id);
+  };
+
+  const handleLoginClick = () => {
+    onClose();
+    navigate('/login');
+    onLogin?.();
+  };
+
+  const handleRegisterClick = () => {
+    onClose();
+    navigate('/register');
+    onRegister?.();
+  };
 
   if (!isOpen) return null;
 
@@ -300,12 +345,11 @@ const MobileMenu = ({ isOpen, activeId, onNavigate, onClose, onLogin, onRegister
         <div className="p-3 space-y-0.5">
 
           {NAV_LINKS.map(({ id, href, label }) => (
-            <a
+            <button
               key={id}
-              href={href}
-              onClick={(e) => { e.preventDefault(); onNavigate(id); }}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-medium
-                         transition-all duration-150 ${
+              onClick={() => handleNavigation(id, href)}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-medium
+                         transition-all duration-150 text-left ${
                 activeId === id
                   ? "bg-white/12 text-white"
                   : "text-white/65 hover:text-white hover:bg-white/6"
@@ -317,14 +361,14 @@ const MobileMenu = ({ isOpen, activeId, onNavigate, onClose, onLogin, onRegister
                 }`}
               />
               {label}
-            </a>
+            </button>
           ))}
 
           <div className="h-px bg-white/10 !my-3 mx-1" />
 
           <div className="grid grid-cols-2 gap-2 pb-3 px-1">
             <button
-              onClick={() => { onClose(); onLogin(); }}
+              onClick={handleLoginClick}
               className="py-3 rounded-xl text-[13px] font-medium text-white/70
                          border border-white/15 hover:bg-white/8 hover:text-white
                          transition-colors focus:outline-none"
@@ -332,7 +376,7 @@ const MobileMenu = ({ isOpen, activeId, onNavigate, onClose, onLogin, onRegister
               Connexion
             </button>
             <button
-              onClick={() => { onClose(); onRegister(); }}
+              onClick={handleRegisterClick}
               className="py-3 rounded-xl text-[13px] font-semibold active:scale-[0.97]
                          transition-all focus:outline-none"
               style={{ background: "white", color: "#4C1D95" }}
@@ -359,9 +403,6 @@ const Header = () => {
   useEffect(() => { menuOpenRef.current = menuOpen; }, [menuOpen]);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
-  const handleNav = useCallback((id) => scrollToSection(id, closeMenu), [closeMenu]);
-  const handleLogin  = useCallback(() => { closeMenu(); window.location.href = "/login"; },    [closeMenu]);
-  const handleReg    = useCallback(() => { closeMenu(); window.location.href = "/register"; }, [closeMenu]);
 
   useEffect(() => {
     if (isDesktop && menuOpenRef.current) setMenuOpen(false);
@@ -395,7 +436,7 @@ const Header = () => {
 
           <Logo onClick={closeMenu} />
 
-          <DesktopNav activeId={activeId} onNavigate={handleNav} />
+          <DesktopNav activeId={activeId} onNavigate={closeMenu} />
 
           <div className="hidden lg:flex items-center gap-1">
             <Divider />
@@ -404,7 +445,7 @@ const Header = () => {
 
           <div className="flex lg:hidden items-center gap-1.5">
             <button
-              onClick={handleReg}
+              onClick={() => { closeMenu(); window.location.href = "/register"; }}
               className="px-3 py-1.5 text-[12px] sm:text-[13px] font-semibold rounded-lg
                          active:scale-[0.97] transition-all whitespace-nowrap"
               style={{ background: "white", color: "#4C1D95" }}
@@ -420,10 +461,10 @@ const Header = () => {
       <MobileMenu
         isOpen={menuOpen}
         activeId={activeId}
-        onNavigate={handleNav}
+        onNavigate={closeMenu}
         onClose={closeMenu}
-        onLogin={handleLogin}
-        onRegister={handleReg}
+        onLogin={closeMenu}
+        onRegister={closeMenu}
       />
     </header>
   );

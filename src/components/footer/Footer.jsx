@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Footer() {
   return (
     <footer className="bg-violet-900 text-violet-100 mt-20">
@@ -6,7 +8,6 @@ export default function Footer() {
         {/* Colonne 1 : Identité */}
         <div className="lg:col-span-2">
           <div className="flex items-center space-x-3 mb-4">
-            {/* Chemin corrigé : /images/logo.png (pas besoin de /public) */}
             <img 
               src="/images/logo.jpeg"  
               alt="Hr Skill Pay" 
@@ -22,7 +23,6 @@ export default function Footer() {
             Plateforme sécurisée d'agrégation de paiements pour entreprises et développeurs.
           </p>
           <div className="flex space-x-4 mt-6">
-            {/* Chemin corrigé pour l'icône Facebook */}
             <a 
               href="https://facebook.com" 
               target="_blank" 
@@ -46,8 +46,8 @@ export default function Footer() {
         <div>
           <h3 className="text-white font-semibold text-lg mb-4">Entreprise</h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="/aboutus" className="hover:text-white transition-colors duration-200">À propos</a></li>
-            <li><a href="/contact" className="hover:text-white transition-colors duration-200">Contact</a></li>
+            <li><Link to="/aboutus" className="hover:text-white transition-colors duration-200">À propos</Link></li>
+            <li><Link to="/contact" className="hover:text-white transition-colors duration-200">Contact</Link></li>
           </ul>
         </div>
 
@@ -55,8 +55,8 @@ export default function Footer() {
         <div>
           <h3 className="text-white font-semibold text-lg mb-4">Produits</h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="/passerelle" className="hover:text-white transition-colors duration-200">Passerelle de paiement</a></li>
-            <li><a href="/abonnements" className="hover:text-white transition-colors duration-200">Paiement récurrent</a></li>
+            <li><Link to="/passerelle" className="hover:text-white transition-colors duration-200">Passerelle de paiement</Link></li>
+            <li><Link to="/abonnements" className="hover:text-white transition-colors duration-200">Paiement récurrent</Link></li>
           </ul>
         </div>
 
@@ -64,8 +64,8 @@ export default function Footer() {
         <div>
           <h3 className="text-white font-semibold text-lg mb-4">Ressources</h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="/docs" className="hover:text-white transition-colors duration-200">Documentation API</a></li>
-            <li><a href="/faq" className="hover:text-white transition-colors duration-200">FAQ</a></li>
+            <li><Link to="/docs" className="hover:text-white transition-colors duration-200">Documentation API</Link></li>
+            <li><Link to="/faq" className="hover:text-white transition-colors duration-200">FAQ</Link></li>
           </ul>
         </div>
 
@@ -73,10 +73,10 @@ export default function Footer() {
         <div>
           <h3 className="text-white font-semibold text-lg mb-4">Support</h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="/securite" className="hover:text-white transition-colors duration-200">Sécurité</a></li>
-            <li><a href="/partenaires" className="hover:text-white transition-colors duration-200">Partenaires</a></li>
-            <li><a href="/mentions" className="hover:text-white transition-colors duration-200">Mentions légales</a></li>
-            <li><a href="/confidentialite" className="hover:text-white transition-colors duration-200">Politique de confidentialité</a></li>
+            <li><Link to="/securite" className="hover:text-white transition-colors duration-200">Sécurité</Link></li>
+            <li><Link to="/partenaires" className="hover:text-white transition-colors duration-200">Partenaires</Link></li>
+            <li><Link to="/mentions" className="hover:text-white transition-colors duration-200">Mentions légales</Link></li>
+            <li><Link to="/confidentialite" className="hover:text-white transition-colors duration-200">Politique de confidentialité</Link></li>
           </ul>
         </div>
 
@@ -117,7 +117,6 @@ export default function Footer() {
         <p>© 2026 Hr Skills Pay. Tous droits réservés.</p>
         <div className="flex flex-wrap justify-center gap-4 items-center">
           <span className="text-xs uppercase tracking-wider">Paiements sécurisés</span>
-          {/* Chemins corrigés pour les logos mobile money */}
           <img 
             src="/images/produits/momo.jpg"  
             alt="MTN Mobile Money" 

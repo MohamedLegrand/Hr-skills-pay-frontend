@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, ArrowRight, CheckCircle, Shield, Zap, Users } from 'lucide-react';
 
 // ─────────────────────────────────────────────────────────────
@@ -133,38 +134,43 @@ const Section = ({ title, children }) => (
   </div>
 );
 
-const SuccessScreen = () => (
-  <section id="register-success" className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center p-6">
-    <div className="text-center max-w-md w-full">
-      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-violet-200 animate-bounce">
-        <CheckCircle className="w-10 h-10 text-white" />
-      </div>
-      <h2 className="text-2xl font-bold text-slate-900 mb-3">Compte créé avec succès !</h2>
-      <p className="text-slate-600 mb-2">
-        Bienvenue sur <span className="font-semibold text-violet-600">HR-skills pay</span>.
-      </p>
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mt-4 text-left">
-        <p className="text-sm text-amber-800 font-medium mb-1">Prochaine étape</p>
-        <p className="text-sm text-amber-700">
-          Connectez-vous pour soumettre vos documents KYC et activer votre compte marchand.
+const SuccessScreen = () => {
+  const navigate = useNavigate();
+  
+  return (
+    <section id="register-success" className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center p-6">
+      <div className="text-center max-w-md w-full">
+        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-violet-200 animate-bounce">
+          <CheckCircle className="w-10 h-10 text-white" />
+        </div>
+        <h2 className="text-2xl font-bold text-slate-900 mb-3">Compte créé avec succès !</h2>
+        <p className="text-slate-600 mb-2">
+          Bienvenue sur <span className="font-semibold text-violet-600">HR-skills pay</span>.
         </p>
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mt-4 text-left">
+          <p className="text-sm text-amber-800 font-medium mb-1">Prochaine étape</p>
+          <p className="text-sm text-amber-700">
+            Connectez-vous pour soumettre vos documents KYC et activer votre compte marchand.
+          </p>
+        </div>
+        <button
+          onClick={() => navigate('/login')}
+          className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-200 group"
+        >
+          <span>Se connecter</span>
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </button>
       </div>
-      <a
-        href="/login"
-        className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-200 group"
-      >
-        <span>Se connecter</span>
-        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-      </a>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 // ─────────────────────────────────────────────────────────────
 // COMPOSANT PRINCIPAL — PAGE STANDALONE HR-skills pay
 // ─────────────────────────────────────────────────────────────
 
 const Register = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     nom: '', prenom: '', email: '', dateNaissance: '', genre: '',
     telephone: '', pays: '', devise: '', motDePasse: '', confirmerMotDePasse: '',
@@ -510,13 +516,13 @@ const Register = () => {
                 </div>
                 <span className="text-xs text-slate-600 leading-relaxed">
                   J'accepte les{' '}
-                  <a href="/mentions" className="text-violet-600 hover:text-violet-800 font-medium underline underline-offset-2">
+                  <Link to="/mentions" className="text-violet-600 hover:text-violet-800 font-medium underline underline-offset-2">
                     conditions générales d'utilisation
-                  </a>{' '}
+                  </Link>{' '}
                   et la{' '}
-                  <a href="/confidentialite" className="text-violet-600 hover:text-violet-800 font-medium underline underline-offset-2">
+                  <Link to="/confidentialite" className="text-violet-600 hover:text-violet-800 font-medium underline underline-offset-2">
                     politique de confidentialité
-                  </a>{' '}
+                  </Link>{' '}
                   <span className="text-red-500">*</span>
                 </span>
               </label>
@@ -549,9 +555,9 @@ const Register = () => {
             {/* Lien connexion */}
             <p className="text-center text-sm text-slate-500 pt-2">
               Déjà un compte ?{' '}
-              <a href="/login" className="text-violet-600 hover:text-violet-800 font-semibold transition-colors">
+              <Link to="/login" className="text-violet-600 hover:text-violet-800 font-semibold transition-colors">
                 Se connecter
-              </a>
+              </Link>
             </p>
 
           </form>

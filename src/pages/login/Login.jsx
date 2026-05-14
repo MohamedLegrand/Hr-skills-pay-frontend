@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff, ArrowRight, CheckCircle, Shield, Mail, Lock } from 'lucide-react';
 
 const FormField = ({ label, name, value, onChange, placeholder, type = 'text', error, required, icon: Icon, focused, onFocus, onBlur }) => {
@@ -86,6 +87,7 @@ const PasswordInput = ({ label, name, value, onChange, error, placeholder, show,
 };
 
 const Login = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', motDePasse: '', remember: false });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -130,14 +132,14 @@ const Login = () => {
       // Simulation d'appel API (à supprimer en prod)
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Redirection après succès
-      window.location.href = '/dashboard';
+      // Redirection après succès avec React Router
+      navigate('/dashboard');
     } catch (err) {
       setErrors({ submit: 'Email ou mot de passe incorrect' });
     } finally {
       setLoading(false);
     }
-  }, [validate, form]);
+  }, [validate, form, navigate]);
 
   const handleFocus = useCallback((field) => setFocused(field), []);
   const handleBlur = useCallback(() => setFocused(''), []);
@@ -157,11 +159,17 @@ const Login = () => {
             loading="eager"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
-              e.currentTarget.parentElement.innerHTML = `
-                <svg class="w-12 h-12 lg:w-14 lg:h-14 text-violet-600 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                </svg>
-              `;
+              const parent = e.currentTarget.parentElement;
+              if (parent) {
+                const svg = document.createElement('div');
+                svg.innerHTML = `
+                  <svg class="w-12 h-12 lg:w-14 lg:h-14 text-violet-600 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                  </svg>
+                `;
+                parent.appendChild(svg.firstChild);
+                e.currentTarget.remove();
+              }
             }}
           />
         </div>
@@ -225,9 +233,9 @@ const Login = () => {
                 />
                 <span className="text-slate-600 group-hover:text-slate-800 transition-colors">Se souvenir de moi</span>
               </label>
-              <a href="/forgot-password" className="text-violet-600 hover:text-violet-800 font-medium transition-colors">
+              <Link to="/forgot-password" className="text-violet-600 hover:text-violet-800 font-medium transition-colors">
                 Mot de passe oublié ?
-              </a>
+              </Link>
             </div>
 
             {/* Erreur globale */}
@@ -276,9 +284,9 @@ const Login = () => {
             {/* Lien inscription */}
             <p className="text-center text-sm text-slate-500 pt-3 border-t border-slate-100">
               Pas encore de compte ?{' '}
-              <a href="/register" className="text-violet-600 hover:text-violet-800 font-semibold transition-colors">
+              <Link to="/register" className="text-violet-600 hover:text-violet-800 font-semibold transition-colors">
                 Créer un compte marchand
-              </a>
+              </Link>
             </p>
 
           </form>
