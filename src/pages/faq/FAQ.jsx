@@ -149,7 +149,10 @@ const FAQ = () => {
   const popularFAQs = faqData.filter(faq => faq.popular).slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50/50 to-white py-16 px-4">
+    <section 
+      id="faq"
+      className="min-h-screen bg-gradient-to-b from-white via-slate-50/50 to-white py-16 px-4"
+    >
       <div className="max-w-5xl mx-auto">
         
         {/* ========== EN-TÊTE ========== */}
@@ -371,7 +374,7 @@ const FAQ = () => {
         </div>
 
       </div>
-    </div>
+    </section>
   );
 };
 

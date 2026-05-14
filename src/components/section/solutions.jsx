@@ -16,8 +16,8 @@ const PAYMENT_PROVIDERS = [
     region: 'Afrique Francophone',
     processingTime: 'Instantané',
     fee: '2.5%',
-    image: '/images/orange.jpg',
-    placeholder: 'https://placehold.co/320x120/ff7900/ffffff?text=Orange+Money',
+    image: '/images/produits/orange.jpg',
+    placeholder: 'https://placehold.co/320x120/f97316/ffffff?text=Orange+Money',
     gradient: 'from-orange-500 to-amber-500'
   },
   {
@@ -26,7 +26,7 @@ const PAYMENT_PROVIDERS = [
     region: 'Afrique Subsaharienne',
     processingTime: '< 3s',
     fee: '2.5%',
-    image: '/images/momo.jpg',
+    image: '/images/produits/momo.jpg',
     placeholder: 'https://placehold.co/320x120/fbbf24/1e293b?text=MTN+MoMo',
     gradient: 'from-yellow-400 to-amber-500'
   }
@@ -124,7 +124,6 @@ const PaymentProviderCard = memo(({ provider }) => {
 
   return (
     <article className="group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg hover:border-violet-300/50 transition-all duration-300">
-      {/* Header */}
       <div className={`h-14 bg-gradient-to-r ${provider.gradient} px-3 flex items-center justify-between`}>
         <div className="flex items-center gap-2.5">
           <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center">
@@ -145,7 +144,6 @@ const PaymentProviderCard = memo(({ provider }) => {
         <StatusBadge />
       </div>
 
-      {/* Content */}
       <div className="p-3.5">
         <div className="grid grid-cols-2 gap-2 mb-3 pb-3 border-b border-slate-100">
           <div>
@@ -160,6 +158,7 @@ const PaymentProviderCard = memo(({ provider }) => {
         <button 
           className="w-full py-1.5 text-[10px] font-medium text-violet-700 hover:text-violet-900 hover:bg-violet-50 rounded transition-colors flex items-center justify-center gap-1"
           aria-label={`Activer ${provider.name}`}
+          onClick={() => window.location.href = `/onboarding?provider=${provider.id}`}
         >
           Activer
           <ArrowRight className="w-2.5 h-2.5" aria-hidden="true" />
@@ -174,8 +173,7 @@ const PersonaCard = memo(({ persona }) => {
   const Icon = persona.icon;
   
   return (
-    <article className="group bg-white rounded-xl border border-slate-200 p-4 hover:shadow-lg hover:border-violet-300/50 transition-all duration-300 flex flex-col">
-      {/* Header */}
+    <article className="group bg-white rounded-xl border border-slate-200 p-4 hover:shadow-lg hover:border-violet-300/50 transition-all duration-300 flex flex-col h-full">
       <div className="flex items-start gap-3 mb-3">
         <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${persona.gradient} flex items-center justify-center flex-shrink-0`}>
           <span className="text-lg mr-0.5" aria-hidden="true">{persona.emoji}</span>
@@ -186,7 +184,6 @@ const PersonaCard = memo(({ persona }) => {
         </div>
       </div>
 
-      {/* Features */}
       <ul className="space-y-2.5 mb-4 flex-grow">
         {persona.features.map((feature, idx) => (
           <li key={idx} className="flex flex-col gap-0.5">
@@ -194,12 +191,11 @@ const PersonaCard = memo(({ persona }) => {
               <Check className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" aria-hidden="true" />
               <span className="text-xs font-medium text-slate-700">{feature.label}</span>
             </div>
-            <span className="text-[10px] text-slate-400 ml-5.5">{feature.desc}</span>
+            <span className="text-[10px] text-slate-400 ml-5">{feature.desc}</span>
           </li>
         ))}
       </ul>
 
-      {/* CTA */}
       <a 
         href={persona.ctaLink}
         className={`inline-flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-white rounded-lg bg-gradient-to-r ${persona.gradient} hover:opacity-90 transition-opacity`}
@@ -222,7 +218,6 @@ export default function Solutions() {
       className="relative py-16 lg:py-24 bg-gradient-to-b from-white via-slate-50/30 to-white"
       aria-labelledby="solutions-heading"
     >
-      {/* Background subtil */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true">
         <div className="absolute top-10 left-1/4 w-72 h-72 bg-violet-200/15 rounded-full blur-3xl" />
         <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-indigo-200/10 rounded-full blur-3xl" />

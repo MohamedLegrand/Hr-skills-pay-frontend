@@ -134,7 +134,7 @@ const Section = ({ title, children }) => (
 );
 
 const SuccessScreen = () => (
-  <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center p-6">
+  <section id="register-success" className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center p-6">
     <div className="text-center max-w-md w-full">
       <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-violet-200 animate-bounce">
         <CheckCircle className="w-10 h-10 text-white" />
@@ -157,7 +157,7 @@ const SuccessScreen = () => (
         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
       </a>
     </div>
-  </div>
+  </section>
 );
 
 // ─────────────────────────────────────────────────────────────
@@ -278,288 +278,286 @@ const Register = () => {
   }
 
   return (
-    <>
-      {/* 
-        ⚠️ PAGE STANDALONE — Aucun header/footer importé
-        Cette page s'affiche seule avec son propre layout
-      */}
+    <section id="register" className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center p-4 lg:p-6">
       
-      <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center p-4 lg:p-6">
+      {/* Carte du formulaire — logo intégré à l'intérieur */}
+      <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl shadow-violet-200/50 border border-violet-100 overflow-hidden">
         
-        {/* Carte du formulaire — logo intégré à l'intérieur */}
-        <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl shadow-violet-200/50 border border-violet-100 overflow-hidden">
-          
-          {/* Logo centré dans la carte (taille réduite) */}
-          <div className="flex justify-center pt-8 pb-2">
-            <img 
-              src="/images/logo.png" 
-              alt="HR-skills pay" 
-              className="w-12 h-12 lg:w-14 lg:h-14 object-contain drop-shadow-sm"
-              loading="eager"
-              onError={(e) => {
-                // Fallback SVG si le logo ne charge pas
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.parentElement.innerHTML = `
+        {/* Logo centré dans la carte (taille réduite) */}
+        <div className="flex justify-center pt-8 pb-2">
+          <img 
+            src="/images/logo.png" 
+            alt="HR-skills pay" 
+            className="w-12 h-12 lg:w-14 lg:h-14 object-contain drop-shadow-sm"
+            loading="eager"
+            onError={(e) => {
+              // Fallback SVG si le logo ne charge pas
+              e.currentTarget.style.display = 'none';
+              if (e.currentTarget.parentElement) {
+                const fallbackSvg = document.createElement('div');
+                fallbackSvg.innerHTML = `
                   <svg class="w-12 h-12 lg:w-14 lg:h-14 text-violet-600 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                   </svg>
                 `;
-              }}
-            />
+                e.currentTarget.parentElement.appendChild(fallbackSvg);
+                e.currentTarget.remove();
+              }
+            }}
+          />
+        </div>
+
+        {/* En-tête du formulaire */}
+        <div className="px-6 lg:px-8 pb-4 border-b border-slate-100 text-center">
+          <div>
+            <h1 className="text-xl lg:text-2xl font-black text-slate-900 tracking-tight">
+              HR-<span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">skills pay</span>
+            </h1>
           </div>
-
-          {/* En-tête du formulaire */}
-          <div className="px-6 lg:px-8 pb-4 border-b border-slate-100 text-center">
-            <div>
-              <h1 className="text-xl lg:text-2xl font-black text-slate-900 tracking-tight">
-                HR-<span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">skills pay</span>
-              </h1>
-            </div>
-            <div className="mt-2">
-              <h2 className="text-lg lg:text-xl font-bold text-slate-900">Créer un compte marchand</h2>
-              <p className="text-sm text-slate-500 mt-1">
-                Remplissez le formulaire ci-dessous pour commencer
-              </p>
-            </div>
-          </div>
-
-          {/* Formulaire */}
-          <div className="px-6 lg:px-8 py-6 overflow-y-auto max-h-[calc(100vh-340px)]">
-            <form onSubmit={handleSubmit} noValidate className="space-y-6">
-              
-              {/* Informations personnelles */}
-              <Section title="Informations personnelles">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <FormField label="Nom" name="nom" value={form.nom} onChange={handleChange} placeholder="Dupont" error={errors.nom} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
-                  <FormField label="Prénom" name="prenom" value={form.prenom} onChange={handleChange} placeholder="Jean" error={errors.prenom} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
-                  <FormField label="Email" name="email" value={form.email} onChange={handleChange} placeholder="jean@email.com" type="email" error={errors.email} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
-                  <FormField label="Date de naissance" name="dateNaissance" value={form.dateNaissance} onChange={handleChange} type="date" error={errors.dateNaissance} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
-                  
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">Genre</label>
-                    <select 
-                      name="genre" 
-                      value={form.genre} 
-                      onChange={handleChange} 
-                      onFocus={() => handleFocus('genre')} 
-                      onBlur={handleBlur} 
-                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 outline-none transition-all duration-200 ${errors.genre ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200' : focused === 'genre' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
-                    >
-                      <option value="">Sélectionner un genre</option>
-                      <option value="homme">Homme</option>
-                      <option value="femme">Femme</option>
-                      <option value="autre">Autre</option>
-                    </select>
-                  </div>
-                </div>
-              </Section>
-
-              {/* Sécurité du compte */}
-              <Section title="Sécurité du compte">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <FormField label="Téléphone" name="telephone" value={form.telephone} onChange={handleChange} placeholder="+237 6XX XXX XXX" type="tel" error={errors.telephone} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
-                  
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">Pays <span className="text-red-500">*</span></label>
-                    <select 
-                      name="pays" 
-                      value={form.pays} 
-                      onChange={handleChange} 
-                      onFocus={() => handleFocus('pays')} 
-                      onBlur={handleBlur} 
-                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 outline-none transition-all duration-200 ${errors.pays ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200' : focused === 'pays' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
-                    >
-                      <option value="">Sélectionner un pays</option>
-                      {africanCountries.map(country => (
-                        <option key={country.code} value={country.code}>
-                          {country.flag} {country.name}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.pays && <p className="text-xs text-red-500 mt-1 ml-1">{errors.pays}</p>}
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">Devise <span className="text-red-500">*</span></label>
-                    <select 
-                      name="devise" 
-                      value={form.devise} 
-                      onChange={handleChange} 
-                      onFocus={() => handleFocus('devise')} 
-                      onBlur={handleBlur} 
-                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 outline-none transition-all duration-200 ${errors.devise ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200' : focused === 'devise' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
-                    >
-                      <option value="">Sélectionner une devise</option>
-                      <option value="XAF">XAF — Franc CFA (CEMAC)</option>
-                      <option value="XOF">XOF — Franc CFA (UEMOA)</option>
-                      <option value="USD">USD — Dollar américain</option>
-                      <option value="EUR">EUR — Euro</option>
-                    </select>
-                    {errors.devise && <p className="text-xs text-red-500 mt-1 ml-1">{errors.devise}</p>}
-                  </div>
-
-                  <PasswordInput 
-                    label="Mot de passe" 
-                    name="motDePasse" 
-                    value={form.motDePasse} 
-                    onChange={handleChange} 
-                    error={errors.motDePasse} 
-                    placeholder="Min. 8 caractères" 
-                    show={showPassword} 
-                    onToggle={() => setShowPassword(!showPassword)}
-                    focused={focused}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                  />
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">Confirmer <span className="text-red-500">*</span></label>
-                    <div className="relative">
-                      <input
-                        type={showConfirm ? 'text' : 'password'}
-                        name="confirmerMotDePasse"
-                        value={form.confirmerMotDePasse}
-                        onChange={handleChange}
-                        onFocus={() => handleFocus('confirmerMotDePasse')}
-                        onBlur={handleBlur}
-                        placeholder="Répéter le mot de passe"
-                        className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 placeholder-slate-400 outline-none transition-all duration-200 pr-10 ${errors.confirmerMotDePasse ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200' : focused === 'confirmerMotDePasse' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
-                      />
-                      <button 
-                        type="button" 
-                        onClick={() => setShowConfirm(!showConfirm)} 
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-violet-500 transition-colors"
-                        aria-label={showConfirm ? 'Masquer' : 'Afficher'}
-                      >
-                        {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
-                    {errors.confirmerMotDePasse && <p className="text-xs text-red-500 mt-1 ml-1">{errors.confirmerMotDePasse}</p>}
-                    {form.confirmerMotDePasse && form.confirmerMotDePasse === form.motDePasse && form.motDePasse && (
-                      <p className="text-xs text-emerald-600 mt-2 ml-1 flex items-center gap-1">
-                        <CheckCircle className="w-3 h-3" /> Mots de passe identiques
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </Section>
-
-              {/* Informations professionnelles */}
-              <Section title="Informations professionnelles">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="sm:col-span-2">
-                    <FormField label="Nom de l'entreprise / activité" name="nomEntreprise" value={form.nomEntreprise} onChange={handleChange} placeholder="Ex : Boutique Kamga SARL" error={errors.nomEntreprise} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">Secteur d'activité <span className="text-red-500">*</span></label>
-                    <select 
-                      name="secteur" 
-                      value={form.secteur} 
-                      onChange={handleChange} 
-                      onFocus={() => handleFocus('secteur')} 
-                      onBlur={handleBlur} 
-                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 outline-none transition-all duration-200 ${errors.secteur ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200' : focused === 'secteur' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
-                    >
-                      <option value="">Sélectionner</option>
-                      <option value="commerce">🛒 Commerce</option>
-                      <option value="restauration">🍽️ Restauration</option>
-                      <option value="services">💼 Services</option>
-                      <option value="education">🎓 Éducation</option>
-                      <option value="sante">🏥 Santé</option>
-                      <option value="tech">💻 Technologie</option>
-                      <option value="autre">📦 Autre</option>
-                    </select>
-                    {errors.secteur && <p className="text-xs text-red-500 mt-1 ml-1">{errors.secteur}</p>}
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">Type de structure</label>
-                    <select 
-                      name="typeStructure" 
-                      value={form.typeStructure} 
-                      onChange={handleChange} 
-                      onFocus={() => handleFocus('typeStructure')} 
-                      onBlur={handleBlur} 
-                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 outline-none transition-all duration-200 ${focused === 'typeStructure' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
-                    >
-                      <option value="">Sélectionner</option>
-                      <option value="physique">👤 Personne physique</option>
-                      <option value="sarl">🏢 SARL</option>
-                      <option value="sa">🏛️ SA</option>
-                      <option value="ong">🤝 ONG/Association</option>
-                      <option value="autre">📋 Autre</option>
-                    </select>
-                  </div>
-                </div>
-              </Section>
-
-              {/* CGU */}
-              <div className="bg-violet-50/80 border border-violet-100 rounded-xl p-4">
-                <label className="flex items-start gap-3 cursor-pointer group">
-                  <div className="relative mt-0.5 flex-shrink-0">
-                    <input 
-                      type="checkbox" 
-                      name="cgu" 
-                      checked={form.cgu} 
-                      onChange={handleChange} 
-                      className="sr-only peer" 
-                    />
-                    <div className="w-5 h-5 rounded-md border-2 border-violet-300 peer-checked:bg-violet-600 peer-checked:border-violet-600 transition-all duration-200 flex items-center justify-center">
-                      {form.cgu && <CheckCircle className="w-3.5 h-3.5 text-white" />}
-                    </div>
-                  </div>
-                  <span className="text-xs text-slate-600 leading-relaxed">
-                    J'accepte les{' '}
-                    <a href="#" className="text-violet-600 hover:text-violet-800 font-medium underline underline-offset-2">
-                      conditions générales d'utilisation
-                    </a>{' '}
-                    et la{' '}
-                    <a href="#" className="text-violet-600 hover:text-violet-800 font-medium underline underline-offset-2">
-                      politique de confidentialité
-                    </a>{' '}
-                    <span className="text-red-500">*</span>
-                  </span>
-                </label>
-                {errors.cgu && <p className="text-xs text-red-500 mt-2 ml-8">{errors.cgu}</p>}
-              </div>
-
-              {/* Bouton submit */}
-              <button 
-                type="submit" 
-                className="w-full py-4 px-6 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-violet-200 hover:shadow-xl hover:shadow-violet-300 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 group"
-              >
-                <span>Créer mon compte marchand</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              {/* Trust badges */}
-              <div className="flex flex-wrap items-center justify-center gap-3 pt-2 pb-1">
-                {[
-                  { icon: Shield, text: 'Données sécurisées' },
-                  { icon: Zap, text: 'Activation rapide' },
-                  { icon: Users, text: 'Support 24/7' }
-                ].map(({ icon: Icon, text }) => (
-                  <span key={text} className="flex items-center gap-1.5 text-xs text-slate-500">
-                    <Icon className="w-3.5 h-3.5 text-emerald-500" />
-                    {text}
-                  </span>
-                ))}
-              </div>
-
-              {/* Lien connexion */}
-              <p className="text-center text-sm text-slate-500 pt-2">
-                Déjà un compte ?{' '}
-                <a href="/login" className="text-violet-600 hover:text-violet-800 font-semibold transition-colors">
-                  Se connecter
-                </a>
-              </p>
-
-            </form>
+          <div className="mt-2">
+            <h2 className="text-lg lg:text-xl font-bold text-slate-900">Créer un compte marchand</h2>
+            <p className="text-sm text-slate-500 mt-1">
+              Remplissez le formulaire ci-dessous pour commencer
+            </p>
           </div>
         </div>
+
+        {/* Formulaire */}
+        <div className="px-6 lg:px-8 py-6 overflow-y-auto max-h-[calc(100vh-340px)]">
+          <form onSubmit={handleSubmit} noValidate className="space-y-6">
+            
+            {/* Informations personnelles */}
+            <Section title="Informations personnelles">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField label="Nom" name="nom" value={form.nom} onChange={handleChange} placeholder="Dupont" error={errors.nom} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
+                <FormField label="Prénom" name="prenom" value={form.prenom} onChange={handleChange} placeholder="Jean" error={errors.prenom} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
+                <FormField label="Email" name="email" value={form.email} onChange={handleChange} placeholder="jean@email.com" type="email" error={errors.email} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
+                <FormField label="Date de naissance" name="dateNaissance" value={form.dateNaissance} onChange={handleChange} type="date" error={errors.dateNaissance} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
+                
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Genre</label>
+                  <select 
+                    name="genre" 
+                    value={form.genre} 
+                    onChange={handleChange} 
+                    onFocus={() => handleFocus('genre')} 
+                    onBlur={handleBlur} 
+                    className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 outline-none transition-all duration-200 ${errors.genre ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200' : focused === 'genre' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
+                  >
+                    <option value="">Sélectionner un genre</option>
+                    <option value="homme">Homme</option>
+                    <option value="femme">Femme</option>
+                    <option value="autre">Autre</option>
+                  </select>
+                </div>
+              </div>
+            </Section>
+
+            {/* Sécurité du compte */}
+            <Section title="Sécurité du compte">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField label="Téléphone" name="telephone" value={form.telephone} onChange={handleChange} placeholder="+237 6XX XXX XXX" type="tel" error={errors.telephone} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
+                
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Pays <span className="text-red-500">*</span></label>
+                  <select 
+                    name="pays" 
+                    value={form.pays} 
+                    onChange={handleChange} 
+                    onFocus={() => handleFocus('pays')} 
+                    onBlur={handleBlur} 
+                    className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 outline-none transition-all duration-200 ${errors.pays ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200' : focused === 'pays' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
+                  >
+                    <option value="">Sélectionner un pays</option>
+                    {africanCountries.map(country => (
+                      <option key={country.code} value={country.code}>
+                        {country.flag} {country.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.pays && <p className="text-xs text-red-500 mt-1 ml-1">{errors.pays}</p>}
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Devise <span className="text-red-500">*</span></label>
+                  <select 
+                    name="devise" 
+                    value={form.devise} 
+                    onChange={handleChange} 
+                    onFocus={() => handleFocus('devise')} 
+                    onBlur={handleBlur} 
+                    className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 outline-none transition-all duration-200 ${errors.devise ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200' : focused === 'devise' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
+                  >
+                    <option value="">Sélectionner une devise</option>
+                    <option value="XAF">XAF — Franc CFA (CEMAC)</option>
+                    <option value="XOF">XOF — Franc CFA (UEMOA)</option>
+                    <option value="USD">USD — Dollar américain</option>
+                    <option value="EUR">EUR — Euro</option>
+                  </select>
+                  {errors.devise && <p className="text-xs text-red-500 mt-1 ml-1">{errors.devise}</p>}
+                </div>
+
+                <PasswordInput 
+                  label="Mot de passe" 
+                  name="motDePasse" 
+                  value={form.motDePasse} 
+                  onChange={handleChange} 
+                  error={errors.motDePasse} 
+                  placeholder="Min. 8 caractères" 
+                  show={showPassword} 
+                  onToggle={() => setShowPassword(!showPassword)}
+                  focused={focused}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Confirmer <span className="text-red-500">*</span></label>
+                  <div className="relative">
+                    <input
+                      type={showConfirm ? 'text' : 'password'}
+                      name="confirmerMotDePasse"
+                      value={form.confirmerMotDePasse}
+                      onChange={handleChange}
+                      onFocus={() => handleFocus('confirmerMotDePasse')}
+                      onBlur={handleBlur}
+                      placeholder="Répéter le mot de passe"
+                      className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 placeholder-slate-400 outline-none transition-all duration-200 pr-10 ${errors.confirmerMotDePasse ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200' : focused === 'confirmerMotDePasse' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
+                    />
+                    <button 
+                      type="button" 
+                      onClick={() => setShowConfirm(!showConfirm)} 
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-violet-500 transition-colors"
+                      aria-label={showConfirm ? 'Masquer' : 'Afficher'}
+                    >
+                      {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                  {errors.confirmerMotDePasse && <p className="text-xs text-red-500 mt-1 ml-1">{errors.confirmerMotDePasse}</p>}
+                  {form.confirmerMotDePasse && form.confirmerMotDePasse === form.motDePasse && form.motDePasse && (
+                    <p className="text-xs text-emerald-600 mt-2 ml-1 flex items-center gap-1">
+                      <CheckCircle className="w-3 h-3" /> Mots de passe identiques
+                    </p>
+                  )}
+                </div>
+              </div>
+            </Section>
+
+            {/* Informations professionnelles */}
+            <Section title="Informations professionnelles">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                  <FormField label="Nom de l'entreprise / activité" name="nomEntreprise" value={form.nomEntreprise} onChange={handleChange} placeholder="Ex : Boutique Kamga SARL" error={errors.nomEntreprise} required focused={focused} onFocus={handleFocus} onBlur={handleBlur} />
+                </div>
+                
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Secteur d'activité <span className="text-red-500">*</span></label>
+                  <select 
+                    name="secteur" 
+                    value={form.secteur} 
+                    onChange={handleChange} 
+                    onFocus={() => handleFocus('secteur')} 
+                    onBlur={handleBlur} 
+                    className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 outline-none transition-all duration-200 ${errors.secteur ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200' : focused === 'secteur' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
+                  >
+                    <option value="">Sélectionner</option>
+                    <option value="commerce">🛒 Commerce</option>
+                    <option value="restauration">🍽️ Restauration</option>
+                    <option value="services">💼 Services</option>
+                    <option value="education">🎓 Éducation</option>
+                    <option value="sante">🏥 Santé</option>
+                    <option value="tech">💻 Technologie</option>
+                    <option value="autre">📦 Autre</option>
+                  </select>
+                  {errors.secteur && <p className="text-xs text-red-500 mt-1 ml-1">{errors.secteur}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Type de structure</label>
+                  <select 
+                    name="typeStructure" 
+                    value={form.typeStructure} 
+                    onChange={handleChange} 
+                    onFocus={() => handleFocus('typeStructure')} 
+                    onBlur={handleBlur} 
+                    className={`w-full px-4 py-3 text-sm rounded-xl border bg-white text-slate-800 outline-none transition-all duration-200 ${focused === 'typeStructure' ? 'border-violet-500 ring-2 ring-violet-200' : 'border-slate-200 hover:border-violet-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200'}`}
+                  >
+                    <option value="">Sélectionner</option>
+                    <option value="physique">👤 Personne physique</option>
+                    <option value="sarl">🏢 SARL</option>
+                    <option value="sa">🏛️ SA</option>
+                    <option value="ong">🤝 ONG/Association</option>
+                    <option value="autre">📋 Autre</option>
+                  </select>
+                </div>
+              </div>
+            </Section>
+
+            {/* CGU */}
+            <div className="bg-violet-50/80 border border-violet-100 rounded-xl p-4">
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <div className="relative mt-0.5 flex-shrink-0">
+                  <input 
+                    type="checkbox" 
+                    name="cgu" 
+                    checked={form.cgu} 
+                    onChange={handleChange} 
+                    className="sr-only peer" 
+                  />
+                  <div className="w-5 h-5 rounded-md border-2 border-violet-300 peer-checked:bg-violet-600 peer-checked:border-violet-600 transition-all duration-200 flex items-center justify-center">
+                    {form.cgu && <CheckCircle className="w-3.5 h-3.5 text-white" />}
+                  </div>
+                </div>
+                <span className="text-xs text-slate-600 leading-relaxed">
+                  J'accepte les{' '}
+                  <a href="/mentions" className="text-violet-600 hover:text-violet-800 font-medium underline underline-offset-2">
+                    conditions générales d'utilisation
+                  </a>{' '}
+                  et la{' '}
+                  <a href="/confidentialite" className="text-violet-600 hover:text-violet-800 font-medium underline underline-offset-2">
+                    politique de confidentialité
+                  </a>{' '}
+                  <span className="text-red-500">*</span>
+                </span>
+              </label>
+              {errors.cgu && <p className="text-xs text-red-500 mt-2 ml-8">{errors.cgu}</p>}
+            </div>
+
+            {/* Bouton submit */}
+            <button 
+              type="submit" 
+              className="w-full py-4 px-6 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-violet-200 hover:shadow-xl hover:shadow-violet-300 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 group"
+            >
+              <span>Créer mon compte marchand</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+
+            {/* Trust badges */}
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2 pb-1">
+              {[
+                { icon: Shield, text: 'Données sécurisées' },
+                { icon: Zap, text: 'Activation rapide' },
+                { icon: Users, text: 'Support 24/7' }
+              ].map(({ icon: Icon, text }) => (
+                <span key={text} className="flex items-center gap-1.5 text-xs text-slate-500">
+                  <Icon className="w-3.5 h-3.5 text-emerald-500" />
+                  {text}
+                </span>
+              ))}
+            </div>
+
+            {/* Lien connexion */}
+            <p className="text-center text-sm text-slate-500 pt-2">
+              Déjà un compte ?{' '}
+              <a href="/login" className="text-violet-600 hover:text-violet-800 font-semibold transition-colors">
+                Se connecter
+              </a>
+            </p>
+
+          </form>
+        </div>
       </div>
-    </>
+    </section>
   );
 };
 

@@ -77,9 +77,6 @@ const SECURITY_PILLARS = [
 //  COMPOSANTS RÉUTILISABLES
 // ============================================================================
 
-/**
- * Badge "Actif" avec point animé
- */
 const StatusBadge = memo(() => (
   <span
     style={{
@@ -110,9 +107,6 @@ const StatusBadge = memo(() => (
 ));
 StatusBadge.displayName = 'StatusBadge';
 
-// ─────────────────────────────────────────────
-//  PaymentProviderCard
-// ─────────────────────────────────────────────
 const PaymentProviderCard = memo(({ provider, onActivate }) => {
   const [bgLoaded,   setBgLoaded]   = useState(false);
   const [bgError,    setBgError]    = useState(false);
@@ -141,18 +135,16 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
       }}
       role="listitem"
     >
-      {/* ── IMAGE DE FOND (hauteur fixe, object-fit: cover) ── */}
       <div
         style={{
           position: 'relative',
           width: '100%',
-          height: 110,          // hauteur fixe et maîtrisée
+          height: 110,
           overflow: 'hidden',
           flexShrink: 0,
           background: provider.accentBg,
         }}
       >
-        {/* Image de fond pleine largeur */}
         <img
           src={bgError ? provider.placeholder : provider.image}
           alt=""
@@ -165,14 +157,13 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
             inset: 0,
             width: '100%',
             height: '100%',
-            objectFit: 'cover',       // couvre sans déformation
+            objectFit: 'cover',
             objectPosition: 'center',
-            opacity: bgLoaded ? 0.18 : 0, // subtil : laisse le violet ressortir
+            opacity: bgLoaded ? 0.18 : 0,
             transition: 'opacity .3s',
           }}
         />
 
-        {/* Overlay dégradé pour lisibilité */}
         <div
           aria-hidden="true"
           style={{
@@ -182,7 +173,6 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
           }}
         />
 
-        {/* Contenu sur l'image : logo + nom + badge */}
         <div
           style={{
             position: 'absolute',
@@ -195,7 +185,6 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            {/* ── LOGO (object-fit: contain dans un cadre carré) ── */}
             <div
               style={{
                 width: 48,
@@ -219,7 +208,7 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
                 style={{
                   width: '100%',
                   height: '100%',
-                  objectFit: 'contain',  // logo : contain pour ne pas couper
+                  objectFit: 'contain',
                   padding: 6,
                   opacity: logoLoaded ? 1 : 0,
                   transition: 'opacity .3s',
@@ -233,7 +222,7 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
                   margin: 0,
                   fontSize: 15,
                   fontWeight: 700,
-                  color: '#3b0764',   // violet très sombre
+                  color: '#3b0764',
                   lineHeight: 1.2,
                 }}
               >
@@ -243,7 +232,7 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
                 style={{
                   margin: '2px 0 0',
                   fontSize: 11,
-                  color: '#7c3aed',   // violet moyen
+                  color: '#7c3aed',
                 }}
               >
                 {provider.region}
@@ -255,7 +244,6 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
         </div>
       </div>
 
-      {/* ── CORPS DE LA CARTE ── */}
       <div
         style={{
           padding: '16px',
@@ -264,7 +252,6 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
           flexDirection: 'column',
         }}
       >
-        {/* Features */}
         <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
           {provider.features.map((feature, idx) => (
             <li
@@ -281,7 +268,6 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
           ))}
         </ul>
 
-        {/* Métriques */}
         <div
           style={{
             display: 'grid',
@@ -311,7 +297,6 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
           </div>
         </div>
 
-        {/* CTA */}
         <button
           onClick={() => onActivate?.(provider.id)}
           aria-label={`Activer ${provider.name}`}
@@ -339,9 +324,6 @@ const PaymentProviderCard = memo(({ provider, onActivate }) => {
 });
 PaymentProviderCard.displayName = 'PaymentProviderCard';
 
-// ─────────────────────────────────────────────
-//  SolutionCard
-// ─────────────────────────────────────────────
 const SolutionCard = memo(({ solution, onExplore }) => {
   const Icon = solution.icon;
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -369,12 +351,11 @@ const SolutionCard = memo(({ solution, onExplore }) => {
       }}
       role="listitem"
     >
-      {/* ── IMAGE BANDEAU (ratio 16:5 contrôlé) ── */}
       <div
         style={{
           position: 'relative',
           width: '100%',
-          aspectRatio: '16 / 5',    // ratio cohérent entre toutes les cartes
+          aspectRatio: '16 / 5',
           overflow: 'hidden',
           flexShrink: 0,
           background: solution.accentBg,
@@ -391,14 +372,13 @@ const SolutionCard = memo(({ solution, onExplore }) => {
             inset: 0,
             width: '100%',
             height: '100%',
-            objectFit: 'cover',       // remplit sans déformer
+            objectFit: 'cover',
             objectPosition: 'center',
             opacity: imgLoaded ? 0.22 : 0,
             transition: 'opacity .3s',
           }}
         />
 
-        {/* Overlay + icône centrale */}
         <div
           style={{
             position: 'absolute',
@@ -431,7 +411,6 @@ const SolutionCard = memo(({ solution, onExplore }) => {
         </div>
       </div>
 
-      {/* ── CORPS ── */}
       <div
         style={{
           padding: '16px',
@@ -440,7 +419,6 @@ const SolutionCard = memo(({ solution, onExplore }) => {
           flexDirection: 'column',
         }}
       >
-        {/* En-tête texte */}
         <div style={{ marginBottom: 10 }}>
           <h3
             style={{
@@ -540,9 +518,6 @@ const SolutionCard = memo(({ solution, onExplore }) => {
 });
 SolutionCard.displayName = 'SolutionCard';
 
-// ─────────────────────────────────────────────
-//  SectionHeading
-// ─────────────────────────────────────────────
 const SectionHeading = memo(({ id, icon: Icon, label, aside }) => (
   <div
     style={{
@@ -595,11 +570,11 @@ export default function Produits() {
 
   const handleExplore = useCallback((id) => {
     console.log('Explore:', id);
+    // window.location.href = `/docs/${id}`;
   }, []);
 
   return (
     <>
-      {/* Keyframes pour le badge animé */}
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; }
@@ -617,7 +592,6 @@ export default function Produits() {
           overflow: 'hidden',
         }}
       >
-        {/* Décorations de fond légères */}
         <div
           aria-hidden="true"
           style={{
@@ -655,7 +629,6 @@ export default function Produits() {
           }}
         >
 
-          {/* ── EN-TÊTE ── */}
           <header style={{ textAlign: 'center', marginBottom: 64 }}>
             <div
               style={{
@@ -714,7 +687,6 @@ export default function Produits() {
             </p>
           </header>
 
-          {/* ── MÉTHODES DE PAIEMENT ── */}
           <section aria-labelledby="payments-heading" style={{ marginBottom: 56 }}>
             <SectionHeading
               id="payments-heading"
@@ -740,7 +712,6 @@ export default function Produits() {
             </div>
           </section>
 
-          {/* ── INTÉGRATION ── */}
           <section aria-labelledby="integration-heading" style={{ marginBottom: 56 }}>
             <SectionHeading
               id="integration-heading"
@@ -765,7 +736,6 @@ export default function Produits() {
             </div>
           </section>
 
-          {/* ── SÉCURITÉ ── */}
           <section aria-labelledby="security-heading" style={{ marginBottom: 56 }}>
             <div
               style={{
@@ -775,7 +745,6 @@ export default function Produits() {
                 border: '1px solid #5b21b6',
               }}
             >
-              {/* Header sécurité */}
               <div
                 style={{
                   display: 'flex',
@@ -813,7 +782,6 @@ export default function Produits() {
                 Infrastructure certifiée et auditée
               </p>
 
-              {/* Piliers */}
               <div
                 style={{
                   display: 'grid',
@@ -856,7 +824,6 @@ export default function Produits() {
             </div>
           </section>
 
-          {/* ── CTA ── */}
           <section style={{ textAlign: 'center' }}>
             <div
               style={{
@@ -927,7 +894,6 @@ export default function Produits() {
                 </a>
               </div>
 
-              {/* Badges de confiance */}
               <p
                 style={{
                   margin: 0,

@@ -167,7 +167,10 @@ const Securite = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50/50 to-white py-16 px-4">
+    <section 
+      id="securite"
+      className="min-h-screen bg-gradient-to-b from-white via-slate-50/50 to-white py-16 px-4"
+    >
       <div className="max-w-5xl mx-auto">
         
         {/* ========== EN-TÊTE ========== */}
@@ -191,7 +194,7 @@ const Securite = () => {
         </div>
 
         {/* ========== CERTIFICATIONS ========== */}
-        <section className="mb-16">
+        <div className="mb-16">
           <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">
             Certifications & Conformités
           </h2>
@@ -220,10 +223,10 @@ const Securite = () => {
               );
             })}
           </div>
-        </section>
+        </div>
 
         {/* ========== MESURES DE SÉCURITÉ ========== */}
-        <section className="mb-16">
+        <div className="mb-16">
           <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">
             Nos mesures de protection
           </h2>
@@ -252,10 +255,10 @@ const Securite = () => {
               );
             })}
           </div>
-        </section>
+        </div>
 
         {/* ========== BONNES PRATIQUES ========== */}
-        <section className="mb-16">
+        <div className="mb-16">
           <div className="bg-violet-50 border border-violet-200 rounded-2xl p-6 lg:p-8">
             <div className="flex items-center gap-3 mb-6">
               <HelpCircle className="w-6 h-6 text-violet-600" />
@@ -279,10 +282,10 @@ const Securite = () => {
               })}
             </div>
           </div>
-        </section>
+        </div>
 
         {/* ========== SIGNALEMENT SÉCURITÉ ========== */}
-        <section className="mb-16">
+        <div className="mb-16">
           <div className="bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-900 rounded-3xl p-8 lg:p-12 relative overflow-hidden">
             
             {/* Décoratif */}
@@ -325,10 +328,10 @@ const Securite = () => {
               </div>
             </div>
           </div>
-        </section>
+        </div>
 
         {/* ========== TRANSPARENCE & RAPPORTS ========== */}
-        <section className="text-center">
+        <div className="text-center">
           <h2 className="text-2xl font-bold text-slate-900 mb-6">
             Transparence et rapports
           </h2>
@@ -365,7 +368,7 @@ const Securite = () => {
               );
             })}
           </div>
-        </section>
+        </div>
 
         {/* Footer de confiance */}
         <div className="mt-16 pt-8 border-t border-slate-200 text-center">
@@ -384,7 +387,7 @@ const Securite = () => {
         </div>
 
       </div>
-    </div>
+    </section>
   );
 };
 

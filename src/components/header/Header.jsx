@@ -6,8 +6,8 @@ const NAV_LINKS = [
   { label: "Accueil",      href: "/#home",         id: "home" },
   { label: "Produits",     href: "/#produits",     id: "produits" },
   { label: "Solutions",    href: "/#solutions",    id: "solutions" },
-  { label: "Tarifs",       href: "/#tarifs",       id: "tarifs" },
-  { label: "Développeurs", href: "/#developpeurs", id: "developpeurs" },
+  { label: "Tarif",       href: "/#tarif",       id: "tarif" },
+  { label: "Développeurs", href: "/#developpeurs", id: "developpeurs" }, 
 ];
 
 const SCROLL_THRESHOLD = 100;

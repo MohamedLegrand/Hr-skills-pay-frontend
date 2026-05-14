@@ -5,9 +5,6 @@ import {
 } from 'lucide-react';
 
 // ===== CONFIGURATION - Correction pour Vercel =====
-// En Next.js : utilisez NEXT_PUBLIC_* au lieu de REACT_APP_*
-// En Vite : utilisez import.meta.env.VITE_*
-
 // Détection automatique de l'environnement
 const getEnvVar = (name, defaultValue) => {
   // Pour Next.js (Vercel)
@@ -138,10 +135,13 @@ const Aboutus = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50/50 to-white">
+    <section 
+      id="aboutus"
+      className="min-h-screen bg-gradient-to-b from-white via-slate-50/50 to-white"
+    >
       
       {/* ========== HERO SECTION ========== */}
-      <section className="relative py-20 lg:py-28 overflow-hidden">
+      <div className="relative py-20 lg:py-28 overflow-hidden">
         {/* Décoratif */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-20 left-10 w-96 h-96 bg-violet-200/20 rounded-full blur-3xl" />
@@ -228,7 +228,7 @@ const Aboutus = () => {
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* ========== CHIFFRES CLÉS ========== */}
       <section className="py-16 bg-white border-y border-slate-200">
@@ -446,7 +446,7 @@ const Aboutus = () => {
         </div>
       </section>
 
-    </div>
+    </section>
   );
 };
 

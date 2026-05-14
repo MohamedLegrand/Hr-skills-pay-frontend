@@ -148,7 +148,7 @@ const Passerelle = () => {
   // ========== ÉTAT DE SUCCÈS ==========
   if (status === 'success') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white flex items-center justify-center p-6">
+      <section id="passerelle" className="min-h-screen bg-gradient-to-b from-emerald-50 to-white flex items-center justify-center p-6">
         <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center border border-emerald-200">
           <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-10 h-10 text-emerald-600" />
@@ -185,14 +185,14 @@ const Passerelle = () => {
             </a>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 
   // ========== ÉTAT D'ERREUR ==========
   if (status === 'error') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-red-50 to-white flex items-center justify-center p-6">
+      <section id="passerelle" className="min-h-screen bg-gradient-to-b from-red-50 to-white flex items-center justify-center p-6">
         <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center border border-red-200">
           <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6">
             <AlertCircle className="w-10 h-10 text-red-600" />
@@ -220,13 +220,13 @@ const Passerelle = () => {
             </a>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 
   // ========== FORMULAIRE DE PAIEMENT ==========
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-8 px-4">
+    <section id="passerelle" className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-8 px-4">
       <div className="max-w-5xl mx-auto">
         
         {/* En-tête de sécurité */}
@@ -543,7 +543,7 @@ const Passerelle = () => {
         </div>
 
       </div>
-    </div>
+    </section>
   );
 };
 

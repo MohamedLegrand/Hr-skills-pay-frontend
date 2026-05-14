@@ -184,7 +184,10 @@ const Abonnements = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50/50 to-white py-16 px-4">
+    <section 
+      id="tarif"
+      className="min-h-screen bg-gradient-to-b from-white via-slate-50/50 to-white py-16 px-4"
+    >
       <div className="max-w-7xl mx-auto">
         
         {/* ========== EN-TÊTE ========== */}
@@ -403,8 +406,6 @@ const Abonnements = () => {
         {/* ========== CTA FINAL ========== */}
         <div className="text-center">
           <div className="bg-gradient-to-br from-violet-900 via-indigo-900 to-purple-900 rounded-3xl p-8 lg:p-12 relative overflow-hidden">
-            
-            {/* Décoratif */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl" />
             
@@ -434,7 +435,6 @@ const Abonnements = () => {
                 </a>
               </div>
               
-              {/* Trust badges */}
               <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-white/70">
                 <span className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400" /> 14 jours d'essai gratuit
@@ -459,7 +459,7 @@ const Abonnements = () => {
         )}
 
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -178,7 +178,10 @@ const refund = await client.payments.refund(paymentId, {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <section 
+      id="docs"
+      className="min-h-screen bg-white"
+    >
       <div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
         <div className="flex gap-8">
           
@@ -252,7 +255,7 @@ const refund = await client.payments.refund(paymentId, {
             
             {/* Introduction */}
             {activeSection === 'introduction' && (
-              <section className="space-y-6">
+              <div className="space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
                     <BookOpen className="w-5 h-5 text-violet-600" />
@@ -300,12 +303,12 @@ const refund = await client.payments.refund(paymentId, {
                     </div>
                   </div>
                 </div>
-              </section>
+              </div>
             )}
 
             {/* API Reference */}
             {activeSection === 'api' && (
-              <section className="space-y-6">
+              <div className="space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
                     <Code2 className="w-5 h-5 text-blue-600" />
@@ -333,7 +336,7 @@ const refund = await client.payments.refund(paymentId, {
                             <td className="p-3"><MethodBadge method={ep.method} /></td>
                             <td className="p-3 font-mono text-slate-700 text-xs">{ep.path}</td>
                             <td className="p-3 text-slate-600">{ep.desc}</td>
-                           </tr>
+                          </tr>
                         ))}
                       </tbody>
                     </table>
@@ -357,12 +360,12 @@ const refund = await client.payments.refund(paymentId, {
                   <h3 className="font-semibold text-slate-900 mb-3">↩️ Remboursement</h3>
                   <CodeBlock code={codeExamples.refund} language="javascript" id="refund" />
                 </div>
-              </section>
+              </div>
             )}
 
             {/* SDKs */}
             {activeSection === 'sdks' && (
-              <section className="space-y-6">
+              <div className="space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
                     <Terminal className="w-5 h-5 text-amber-600" />
@@ -398,12 +401,12 @@ const refund = await client.payments.refund(paymentId, {
                     <li>Compte développeur actif</li>
                   </ul>
                 </div>
-              </section>
+              </div>
             )}
 
             {/* Webhooks */}
             {activeSection === 'webhooks' && (
-              <section className="space-y-6">
+              <div className="space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
                     <Webhook className="w-5 h-5 text-emerald-600" />
@@ -428,12 +431,12 @@ const refund = await client.payments.refund(paymentId, {
                   <AlertCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
                   <p className="text-xs text-blue-800">Les webhooks sont réessayés automatiquement jusqu'à 3 fois en cas d'échec (délai exponentiel).</p>
                 </div>
-              </section>
+              </div>
             )}
 
             {/* Sécurité */}
             {activeSection === 'security' && (
-              <section className="space-y-6">
+              <div className="space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
                     <Shield className="w-5 h-5 text-emerald-600" />
@@ -459,12 +462,12 @@ const refund = await client.payments.refund(paymentId, {
                     );
                   })}
                 </div>
-              </section>
+              </div>
             )}
 
             {/* Support */}
             {activeSection === 'support' && (
-              <section className="space-y-6">
+              <div className="space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
                     <MessageSquare className="w-5 h-5 text-violet-600" />
@@ -501,7 +504,7 @@ const refund = await client.payments.refund(paymentId, {
                     <a href="/github" className="text-sm text-violet-600 hover:text-violet-800">GitHub</a>
                   </div>
                 </div>
-              </section>
+              </div>
             )}
 
             {/* Footer */}
@@ -513,7 +516,7 @@ const refund = await client.payments.refund(paymentId, {
           </main>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

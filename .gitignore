@@ -84,3 +84,4 @@ desktop.ini
 .yarn/build-state.json
 .yarn/install-state.gz
 .pnp.*
+.vercel

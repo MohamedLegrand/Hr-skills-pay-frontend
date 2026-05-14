@@ -106,7 +106,10 @@ const Partenaires = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-violet-50/30 to-white py-16 px-4">
+    <section 
+      id="partenaires"
+      className="min-h-screen bg-gradient-to-b from-white via-violet-50/30 to-white py-16 px-4"
+    >
       <div className="max-w-7xl mx-auto">
         
         {/* ========== EN-TÊTE ========== */}
@@ -328,7 +331,7 @@ const Partenaires = () => {
         </div>
 
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -8,7 +8,7 @@ export default function Footer() {
           <div className="flex items-center space-x-3 mb-4">
             {/* Chemin corrigé : /images/logo.png (pas besoin de /public) */}
             <img 
-              src="/images/logo.png" 
+              src="/images/logo.jpeg"  
               alt="Hr Skill Pay" 
               className="h-12 w-auto transition-transform duration-200 hover:scale-105" 
               onError={(e) => {
@@ -119,7 +119,7 @@ export default function Footer() {
           <span className="text-xs uppercase tracking-wider">Paiements sécurisés</span>
           {/* Chemins corrigés pour les logos mobile money */}
           <img 
-            src="/images/momo.jpg" 
+            src="/images/produits/momo.jpg"  
             alt="MTN Mobile Money" 
             className="h-6 w-auto transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 rounded-md"
             onError={(e) => {
@@ -128,7 +128,7 @@ export default function Footer() {
             }}
           />
           <img 
-            src="/images/orange.jpg" 
+            src="/images/produits/orange.jpg"   
             alt="Orange Money" 
             className="h-6 w-auto transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 rounded-md"
             onError={(e) => {

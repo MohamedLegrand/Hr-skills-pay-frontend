@@ -1,4 +1,4 @@
-// Hero.jsx — version professionnelle neutre (gris/blanc/bleu profond)
+// Hero.jsx — version professionnelle avec gestion des erreurs d'images
 import React, {
   useState, useEffect, useCallback, useRef, memo,
 } from 'react';
@@ -16,7 +16,8 @@ const SLIDES = [
     ctaSub: 'Aucune carte requise · Gratuit 30 jours',
     stats: [{ value: '+12 000', label: 'entreprises actives' }, { value: '99,9 %', label: 'disponibilité' }, { value: '< 2 s', label: 'traitement' }],
     image: '/images/heros/dashbord.jpg',
-    accent: '#1E40AF',      // Bleu profond professionnel
+    fallbackColor: '#1E40AF',
+    accent: '#1E40AF',
     accentBg: '#F0F4FF',
     accentText: '#1E3A8A',
   },
@@ -30,7 +31,8 @@ const SLIDES = [
     ctaSub: 'Intégration en moins de 10 minutes',
     stats: [{ value: '8+', label: 'opérateurs supportés' }, { value: '0 %', label: "frais d'installation" }, { value: '24/7', label: 'collecte automatique' }],
     image: '/images/heros/paiement_mobile.jpg',
-    accent: '#0F5B7A',      // Bleu canard élégant
+    fallbackColor: '#0F5B7A',
+    accent: '#0F5B7A',
     accentBg: '#EAF4F8',
     accentText: '#0A4A63',
   },
@@ -44,7 +46,8 @@ const SLIDES = [
     ctaSub: 'Certifié PCI-DSS · Chiffrement AES-256',
     stats: [{ value: '0', label: 'incident de sécurité' }, { value: 'PCI-DSS', label: 'niveau 1' }, { value: '256-bit', label: 'chiffrement' }],
     image: '/images/heros/security.jpg',
-    accent: '#2D5A4C',      // Vert sapin professionnel
+    fallbackColor: '#2D5A4C',
+    accent: '#2D5A4C',
     accentBg: '#EDF3F0',
     accentText: '#1E463B',
   },
@@ -58,7 +61,8 @@ const SLIDES = [
     ctaSub: 'SDK disponibles · Sandbox gratuit',
     stats: [{ value: '< 5 min', label: 'premier appel' }, { value: '3', label: 'SDKs officiels' }, { value: '99,9 %', label: 'uptime garanti' }],
     image: '/images/heros/developpeur.jpg',
-    accent: '#7A5C2E',      // Taupe / bronze élégant
+    fallbackColor: '#7A5C2E',
+    accent: '#7A5C2E',
     accentBg: '#F7F4EF',
     accentText: '#5E451C',
   },
@@ -72,7 +76,8 @@ const SLIDES = [
     ctaSub: 'Essai gratuit · Sans engagement',
     stats: [{ value: '+34 %', label: 'revenus en moyenne' }, { value: '-60 %', label: 'temps administratif' }, { value: '1 seul', label: 'outil pour tout' }],
     image: '/images/heros/business.jpg',
-    accent: '#4A5568',      // Gris ardoise élégant
+    fallbackColor: '#4A5568',
+    accent: '#4A5568',
     accentBg: '#F1F3F5',
     accentText: '#2D3748',
   },
@@ -131,15 +136,20 @@ const AnimatedTitle = memo(({ lines, slideKey }) => {
   );
 });
 
-// ── Image panel ────────────────────────────────────────────────────────────────
+// ── Image panel avec gestion d'erreur ──────────────────────────────────────────
 const ImagePanel = memo(({ slide, slideKey }) => {
   const [entered, setEntered] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  
   useEffect(() => {
-    setEntered(false); setLoaded(false);
+    setEntered(false); 
+    setLoaded(false);
+    setImgError(false);
     const t = setTimeout(() => setEntered(true), 80);
     return () => clearTimeout(t);
   }, [slideKey]);
+  
   return (
     <div style={{ position: 'relative', display: 'flex', justifyContent: 'flex-end' }}>
       <style>{`
@@ -153,16 +163,29 @@ const ImagePanel = memo(({ slide, slideKey }) => {
         <div style={{ position: 'absolute', inset: '-8px -8px -20px -8px', borderRadius: 28, background: slide.accentBg, zIndex: 0, transition: 'background 0.8s ease' }} />
 
         <div style={{ position: 'relative', zIndex: 1, borderRadius: 20, overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.05)', background: '#F3F4F6' }}>
-          {!loaded && (
+          {!loaded && !imgError && (
             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg,#F3F4F6 25%,#E9EAEC 50%,#F3F4F6 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.6s infinite' }} />
           )}
-          <img
-            key={slideKey}
-            src={slide.image}
-            alt={slide.badge}
-            onLoad={() => setLoaded(true)}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: loaded ? 1 : 0, transition: 'opacity 0.5s ease', animation: loaded ? 'kenBurns 8s ease-out forwards' : 'none' }}
-          />
+          
+          {!imgError ? (
+            <img
+              key={slideKey}
+              src={slide.image}
+              alt={slide.badge}
+              onLoad={() => setLoaded(true)}
+              onError={() => setImgError(true)}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: loaded ? 1 : 0, transition: 'opacity 0.5s ease', animation: loaded ? 'kenBurns 8s ease-out forwards' : 'none' }}
+            />
+          ) : (
+            <div style={{ width: '100%', height: '100%', background: slide.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ textAlign: 'center', color: 'white', padding: '20px' }}>
+                <div style={{ fontSize: '48px', marginBottom: '10px' }}>📷</div>
+                <div style={{ fontSize: '14px', fontWeight: '500' }}>{slide.badge}</div>
+                <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '8px' }}>Image en cours de chargement</div>
+              </div>
+            </div>
+          )}
+          
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(to top,rgba(0,0,0,0.12) 0%,transparent 100%)', pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', top: 0, left: 0, width: '60%', height: '50%', background: `radial-gradient(ellipse at top left,${slide.accent}12 0%,transparent 70%)`, pointerEvents: 'none', transition: 'background 0.8s ease' }} />
         </div>
