@@ -151,85 +151,85 @@ const FAQ = () => {
   return (
     <section 
       id="faq"
-      className="min-h-screen bg-gradient-to-b from-white via-slate-50/50 to-white py-16 px-4"
+      className="min-h-screen bg-gradient-to-b from-white via-slate-50/50 to-white py-12 sm:py-16 px-4"
     >
       <div className="max-w-5xl mx-auto">
         
-        {/* ========== EN-TÊTE ========== */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-violet-100 rounded-full mb-4">
-            <HelpCircle className="w-4 h-4 text-violet-600" />
-            <span className="text-xs font-semibold text-violet-700">FAQ</span>
+        {/* ========== EN-TÊTE RESPONSIVE ========== */}
+        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 bg-violet-100 rounded-full mb-3 sm:mb-4">
+            <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-violet-600" />
+            <span className="text-[10px] sm:text-xs font-semibold text-violet-700">FAQ</span>
           </div>
           
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 leading-tight px-2">
             Foire Aux{" "}
-            <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent inline-block">
               Questions
             </span>
           </h1>
           
-          <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-base lg:text-lg text-slate-600 max-w-2xl mx-auto px-4">
             Trouvez rapidement les réponses aux questions les plus courantes sur 
             Hr Skills Pay, nos services et fonctionnalités.
           </p>
         </div>
 
-        {/* ========== BARRE DE RECHERCHE ========== */}
-        <div className="max-w-2xl mx-auto mb-8">
+        {/* ========== BARRE DE RECHERCHE RESPONSIVE ========== */}
+        <div className="max-w-2xl mx-auto mb-6 sm:mb-8">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
             <input
               type="text"
               placeholder="Rechercher une question..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent shadow-sm transition-all"
+              className="w-full pl-9 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 bg-white border border-slate-200 rounded-xl sm:rounded-2xl text-sm sm:text-base text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent shadow-sm transition-all"
             />
           </div>
-          <p className="text-center text-xs text-slate-500 mt-2">
+          <p className="text-center text-[10px] sm:text-xs text-slate-500 mt-2">
             Essayez : "paiement", "abonnement", "sécurité", "remboursement"
           </p>
         </div>
 
-        {/* ========== CATÉGORIES ========== */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
+        {/* ========== CATÉGORIES RESPONSIVES ========== */}
+        <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 mb-8 sm:mb-10 lg:mb-12">
           {categories.map((category) => {
             const Icon = category.icon;
             return (
               <button
                 key={category.id}
                 onClick={() => setActiveCategory(category.id)}
-                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
+                className={`inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-[11px] sm:text-sm font-medium transition-all duration-300 ${
                   activeCategory === category.id
                     ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/25'
                     : 'bg-white text-slate-600 border border-slate-200 hover:border-violet-300 hover:text-violet-700'
                 }`}
               >
-                <Icon className="w-4 h-4" />
-                <span className="hidden sm:inline">{category.label}</span>
+                <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">{category.label}</span>
               </button>
             );
           })}
         </div>
 
-        {/* ========== QUESTIONS POPULAIRES ========== */}
+        {/* ========== QUESTIONS POPULAIRES RESPONSIVES ========== */}
         {searchQuery === '' && activeCategory === 'all' && (
-          <div className="mb-12">
-            <div className="flex items-center gap-2 mb-6">
-              <Star className="w-5 h-5 text-amber-500" />
-              <h2 className="text-xl font-bold text-slate-900">Questions populaires</h2>
+          <div className="mb-10 sm:mb-12">
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-4 sm:mb-6">
+              <Star className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />
+              <h2 className="text-base sm:text-xl font-bold text-slate-900">Questions populaires</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {popularFAQs.map((faq) => (
                 <div
                   key={faq.id}
                   onClick={() => toggleQuestion(faq.id)}
-                  className="p-5 bg-white rounded-2xl border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all cursor-pointer"
+                  className="p-3 sm:p-5 bg-white rounded-xl sm:rounded-2xl border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all cursor-pointer"
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <h3 className="font-semibold text-slate-900 text-sm">{faq.question}</h3>
-                    <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${openQuestions[faq.id] ? 'rotate-180' : ''}`} />
+                  <div className="flex items-start justify-between gap-2 sm:gap-3">
+                    <h3 className="text-xs sm:text-sm font-semibold text-slate-900">{faq.question}</h3>
+                    <ChevronDown className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 transition-transform flex-shrink-0 ${openQuestions[faq.id] ? 'rotate-180' : ''}`} />
                   </div>
                 </div>
               ))}
@@ -237,47 +237,47 @@ const FAQ = () => {
           </div>
         )}
 
-        {/* ========== LISTE DES QUESTIONS ========== */}
-        <div className="space-y-4 mb-16">
+        {/* ========== LISTE DES QUESTIONS RESPONSIVE ========== */}
+        <div className="space-y-3 sm:space-y-4 mb-12 sm:mb-16">
           {filteredFAQs.length > 0 ? (
             filteredFAQs.map((faq) => (
               <div
                 key={faq.id}
-                className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-violet-300 transition-all"
+                className="bg-white rounded-xl sm:rounded-2xl border border-slate-200 overflow-hidden hover:border-violet-300 transition-all"
               >
                 <button
                   onClick={() => toggleQuestion(faq.id)}
-                  className="w-full px-6 py-5 flex items-center justify-between gap-4 text-left hover:bg-slate-50 transition-colors"
+                  className="w-full px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3 sm:gap-4 text-left hover:bg-slate-50 transition-colors"
                   aria-expanded={openQuestions[faq.id]}
                 >
-                  <div className="flex items-center gap-3 flex-1">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1">
                     {faq.popular && (
-                      <Star className="w-4 h-4 text-amber-500 flex-shrink-0" />
+                      <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 flex-shrink-0" />
                     )}
-                    <span className="font-semibold text-slate-900">{faq.question}</span>
+                    <span className="text-xs sm:text-sm font-semibold text-slate-900">{faq.question}</span>
                   </div>
-                  <span className={`w-8 h-8 rounded-full border border-slate-300 flex items-center justify-center flex-shrink-0 transition-transform duration-300 ${openQuestions[faq.id] ? 'rotate-180' : ''}`}>
-                    <ChevronDown className="w-4 h-4 text-slate-500" />
+                  <span className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-slate-300 flex items-center justify-center flex-shrink-0 transition-transform duration-300 ${openQuestions[faq.id] ? 'rotate-180' : ''}`}>
+                    <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500" />
                   </span>
                 </button>
                 
                 <div className={`overflow-hidden transition-all duration-300 ${openQuestions[faq.id] ? 'max-h-96' : 'max-h-0'}`}>
-                  <div className="px-6 pb-5 pt-0">
-                    <div className="ml-7 pl-4 border-l-2 border-violet-200">
-                      <p className="text-slate-600 leading-relaxed">{faq.answer}</p>
+                  <div className="px-4 sm:px-6 pb-4 sm:pb-5 pt-0">
+                    <div className="ml-5 sm:ml-7 pl-3 sm:pl-4 border-l-2 border-violet-200">
+                      <p className="text-[11px] sm:text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
                     </div>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-              <Search className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Aucune question trouvée</h3>
-              <p className="text-slate-500 mb-4">Essayez de modifier votre recherche ou vos filtres.</p>
+            <div className="text-center py-12 sm:py-16 bg-white rounded-xl sm:rounded-2xl border border-slate-200">
+              <Search className="w-10 h-10 sm:w-12 sm:h-12 text-slate-300 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2">Aucune question trouvée</h3>
+              <p className="text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4">Essayez de modifier votre recherche ou vos filtres.</p>
               <button
                 onClick={() => { setSearchQuery(''); setActiveCategory('all'); }}
-                className="text-sm font-medium text-violet-600 hover:text-violet-800"
+                className="text-xs sm:text-sm font-medium text-violet-600 hover:text-violet-800"
               >
                 Réinitialiser les filtres
               </button>
@@ -285,90 +285,90 @@ const FAQ = () => {
           )}
         </div>
 
-        {/* ========== TOUJOURS DES QUESTIONS ? ========== */}
-        <div className="bg-gradient-to-br from-violet-900 via-indigo-900 to-purple-900 rounded-3xl p-8 lg:p-12 relative overflow-hidden">
+        {/* ========== TOUJOURS DES QUESTIONS ? RESPONSIVE ========== */}
+        <div className="bg-gradient-to-br from-violet-900 via-indigo-900 to-purple-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 relative overflow-hidden">
           
           {/* Décoratif */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-0 right-0 w-40 h-40 sm:w-64 sm:h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute -bottom-20 -left-20 w-60 h-60 sm:w-80 sm:h-80 bg-violet-500/10 rounded-full blur-3xl" />
           
           <div className="relative text-center">
-            <h2 className="text-2xl lg:text-3xl font-black text-white mb-4">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white mb-3 sm:mb-4">
               Toujours des questions ?
             </h2>
-            <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base lg:text-lg text-white/80 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
               Notre équipe support est disponible 24/7 pour vous aider. 
               Choisissez le canal qui vous convient le mieux.
             </p>
             
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto mb-6 sm:mb-8">
               <a
                 href="mailto:support@hrskillspay.com"
-                className="flex items-center justify-center gap-3 p-4 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition-all group"
+                className="flex items-center justify-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white/10 border border-white/20 rounded-lg sm:rounded-xl hover:bg-white/20 transition-all group"
               >
-                <Mail className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
-                <span className="text-white font-medium">Email</span>
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:scale-110 transition-transform" />
+                <span className="text-xs sm:text-sm text-white font-medium">Email</span>
               </a>
               <a
                 href="tel:+237600000000"
-                className="flex items-center justify-center gap-3 p-4 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition-all group"
+                className="flex items-center justify-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white/10 border border-white/20 rounded-lg sm:rounded-xl hover:bg-white/20 transition-all group"
               >
-                <Phone className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
-                <span className="text-white font-medium">Téléphone</span>
+                <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:scale-110 transition-transform" />
+                <span className="text-xs sm:text-sm text-white font-medium">Téléphone</span>
               </a>
               <a
                 href="#chat"
-                className="flex items-center justify-center gap-3 p-4 bg-white text-slate-900 rounded-xl hover:shadow-lg transition-all group"
+                className="flex items-center justify-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white text-slate-900 rounded-lg sm:rounded-xl hover:shadow-lg transition-all group"
               >
-                <MessageCircle className="w-5 h-5 text-violet-600 group-hover:scale-110 transition-transform" />
-                <span className="text-slate-900 font-medium">Chat en direct</span>
+                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-violet-600 group-hover:scale-110 transition-transform" />
+                <span className="text-xs sm:text-sm font-medium">Chat en direct</span>
               </a>
             </div>
             
             {/* Garanties */}
-            <div className="flex flex-wrap justify-center gap-6 text-sm text-white/70">
-              <span className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-400" /> Réponse sous 4h
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-[10px] sm:text-sm text-white/70">
+              <span className="flex items-center gap-1.5 sm:gap-2">
+                <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" /> Réponse sous 4h
               </span>
-              <span className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-400" /> Support bilingue FR/EN
+              <span className="flex items-center gap-1.5 sm:gap-2">
+                <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" /> Support bilingue FR/EN
               </span>
-              <span className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-400" /> Disponible 24/7
+              <span className="flex items-center gap-1.5 sm:gap-2">
+                <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" /> Disponible 24/7
               </span>
             </div>
           </div>
         </div>
 
-        {/* ========== LIENS UTILES ========== */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <a href="/docs" className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all group">
-            <div className="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <BookOpen className="w-5 h-5 text-violet-600" />
+        {/* ========== LIENS UTILES RESPONSIVES ========== */}
+        <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          <a href="/docs" className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-xl border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all group">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+              <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-violet-600" />
             </div>
             <div>
-              <p className="font-semibold text-slate-900 group-hover:text-violet-700 transition-colors">Documentation</p>
-              <p className="text-xs text-slate-500">Guides et tutoriels</p>
+              <p className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-violet-700 transition-colors">Documentation</p>
+              <p className="text-[10px] sm:text-xs text-slate-500">Guides et tutoriels</p>
             </div>
           </a>
           
-          <a href="/status" className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all group">
-            <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <Zap className="w-5 h-5 text-emerald-600" />
+          <a href="/status" className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-xl border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all group">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+              <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
             </div>
             <div>
-              <p className="font-semibold text-slate-900 group-hover:text-violet-700 transition-colors">Status API</p>
-              <p className="text-xs text-slate-500">Uptime en temps réel</p>
+              <p className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-violet-700 transition-colors">Status API</p>
+              <p className="text-[10px] sm:text-xs text-slate-500">Uptime en temps réel</p>
             </div>
           </a>
           
-          <a href="/contact" className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all group">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <MessageCircle className="w-5 h-5 text-blue-600" />
+          <a href="/contact" className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-xl border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all group">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+              <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
             </div>
             <div>
-              <p className="font-semibold text-slate-900 group-hover:text-violet-700 transition-colors">Contact</p>
-              <p className="text-xs text-slate-500">Formulaire de contact</p>
+              <p className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-violet-700 transition-colors">Contact</p>
+              <p className="text-[10px] sm:text-xs text-slate-500">Formulaire de contact</p>
             </div>
           </a>
         </div>

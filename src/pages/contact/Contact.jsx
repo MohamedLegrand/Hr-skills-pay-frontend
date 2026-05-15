@@ -52,109 +52,109 @@ const Contact = () => {
   return (
     <section 
       id="contact"
-      className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-16 px-6"
+      className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 sm:py-16 px-4 sm:px-6"
     >
       <div className="max-w-4xl mx-auto">
         
-        {/* En-tête */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-violet-100 rounded-full mb-4">
-            <MessageCircle className="w-4 h-4 text-violet-600" />
-            <span className="text-xs font-semibold text-violet-700">Contact</span>
+        {/* ========== EN-TÊTE RESPONSIVE ========== */}
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 bg-violet-100 rounded-full mb-3 sm:mb-4">
+            <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-violet-600" />
+            <span className="text-[10px] sm:text-xs font-semibold text-violet-700">Contact</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 px-2">
             Parlons de <span className="text-violet-600">votre projet</span>
           </h1>
-          <p className="mt-4 text-slate-600 max-w-xl mx-auto">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-base text-slate-600 max-w-xl mx-auto px-4">
             Une question ? Notre équipe est là pour vous aider à intégrer Hr Skills Pay.
           </p>
         </div>
 
-        {/* Messages de statut */}
+        {/* ========== MESSAGES DE STATUT RESPONSIFS ========== */}
         {status === 'success' && (
-          <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-3">
-            <CheckCircle className="w-5 h-5 text-emerald-600 mt-0.5" />
+          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-2 sm:gap-3">
+            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
             <div>
-              <p className="font-semibold text-emerald-800">Message envoyé !</p>
-              <p className="text-sm text-emerald-700">Nous vous répondrons sous 4 heures ouvrées.</p>
+              <p className="text-xs sm:text-sm font-semibold text-emerald-800">Message envoyé !</p>
+              <p className="text-[11px] sm:text-sm text-emerald-700">Nous vous répondrons sous 4 heures ouvrées.</p>
             </div>
           </div>
         )}
         
         {status === 'error' && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2 sm:gap-3">
+            <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 mt-0.5 flex-shrink-0" />
             <div>
-              <p className="font-semibold text-red-800">Erreur d'envoi</p>
-              <p className="text-sm text-red-700">Veuillez réessayer ou nous écrire directement.</p>
+              <p className="text-xs sm:text-sm font-semibold text-red-800">Erreur d'envoi</p>
+              <p className="text-[11px] sm:text-sm text-red-700">Veuillez réessayer ou nous écrire directement.</p>
             </div>
           </div>
         )}
 
-        {/* Formulaire */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
-          <form onSubmit={handleSubmit} className="space-y-5">
+        {/* ========== FORMULAIRE RESPONSIVE ========== */}
+        <div className="bg-white rounded-xl sm:rounded-2xl border border-slate-200 p-4 sm:p-6 md:p-8 shadow-sm">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             
             {/* Nom + Email */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">Nom complet *</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-1.5">Nom complet *</label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all ${errors.name ? 'border-red-300' : 'border-slate-200'}`}
+                  className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-sm ${errors.name ? 'border-red-300' : 'border-slate-200'}`}
                   placeholder="Votre nom"
                 />
-                {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+                {errors.name && <p className="mt-1 text-[10px] sm:text-xs text-red-600">{errors.name}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">Email *</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-1.5">Email *</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all ${errors.email ? 'border-red-300' : 'border-slate-200'}`}
+                  className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-sm ${errors.email ? 'border-red-300' : 'border-slate-200'}`}
                   placeholder="vous@entreprise.com"
                 />
-                {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+                {errors.email && <p className="mt-1 text-[10px] sm:text-xs text-red-600">{errors.email}</p>}
               </div>
             </div>
 
             {/* Sujet */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Sujet *</label>
+              <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-1.5">Sujet *</label>
               <input
                 type="text"
                 name="subject"
                 value={formData.subject}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all ${errors.subject ? 'border-red-300' : 'border-slate-200'}`}
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-sm ${errors.subject ? 'border-red-300' : 'border-slate-200'}`}
                 placeholder="Résumez votre demande"
               />
-              {errors.subject && <p className="mt-1 text-xs text-red-600">{errors.subject}</p>}
+              {errors.subject && <p className="mt-1 text-[10px] sm:text-xs text-red-600">{errors.subject}</p>}
             </div>
 
             {/* Message */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Message *</label>
+              <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1 sm:mb-1.5">Message *</label>
               <textarea
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
-                rows={5}
-                className={`w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all resize-none ${errors.message ? 'border-red-300' : 'border-slate-200'}`}
+                rows={4}
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all resize-none text-sm ${errors.message ? 'border-red-300' : 'border-slate-200'}`}
                 placeholder="Décrivez votre demande..."
               />
-              {errors.message && <p className="mt-1 text-xs text-red-600">{errors.message}</p>}
+              {errors.message && <p className="mt-1 text-[10px] sm:text-xs text-red-600">{errors.message}</p>}
             </div>
 
             {/* Consentement */}
-            <label className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl cursor-pointer">
-              <input type="checkbox" required className="mt-1 w-4 h-4 rounded border-slate-300 text-violet-600" />
-              <span className="text-sm text-slate-600">
+            <label className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-50 rounded-xl cursor-pointer">
+              <input type="checkbox" required className="mt-0.5 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded border-slate-300 text-violet-600" />
+              <span className="text-[11px] sm:text-sm text-slate-600">
                 J'accepte que mes informations soient utilisées pour me recontacter.
               </span>
             </label>
@@ -163,65 +163,65 @@ const Contact = () => {
             <button
               type="submit"
               disabled={status === 'submitting'}
-              className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-violet-600 text-white rounded-xl font-semibold hover:bg-violet-700 disabled:opacity-70 transition-all group"
+              className="w-full inline-flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 sm:py-4 bg-violet-600 text-white rounded-xl font-semibold text-sm sm:text-base hover:bg-violet-700 disabled:opacity-70 transition-all group"
             >
               {status === 'submitting' ? (
-                <><Loader2 className="w-5 h-5 animate-spin" />Envoi en cours...</>
+                <><Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />Envoi en cours...</>
               ) : (
-                <><span>Envoyer mon message</span><ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></>
+                <><span>Envoyer mon message</span><ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" /></>
               )}
             </button>
           </form>
         </div>
 
-        {/* Infos de contact */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <a href="mailto:support@hrskillspay.com" className="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-200 hover:border-violet-300 transition-all group">
-            <div className="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
-              <Mail className="w-5 h-5 text-violet-600" />
+        {/* ========== INFOS DE CONTACT RESPONSIVES ========== */}
+        <div className="mt-10 sm:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <a href="mailto:support@hrskillspay.com" className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 bg-white rounded-xl border border-slate-200 hover:border-violet-300 transition-all group">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
+              <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-violet-600" />
             </div>
             <div>
-              <p className="text-sm text-slate-500">Email</p>
-              <p className="font-semibold text-slate-900 group-hover:text-violet-600">support@hrskillspay.com</p>
-              <p className="text-xs text-slate-400 mt-1">Réponse sous 4h</p>
+              <p className="text-[10px] sm:text-sm text-slate-500">Email</p>
+              <p className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-violet-600 break-all">support@hrskillspay.com</p>
+              <p className="text-[9px] sm:text-xs text-slate-400 mt-1">Réponse sous 4h</p>
             </div>
           </a>
           
-          <a href="tel:+237600000000" className="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-200 hover:border-violet-300 transition-all group">
-            <div className="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
-              <Phone className="w-5 h-5 text-violet-600" />
+          <a href="tel:+237600000000" className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 bg-white rounded-xl border border-slate-200 hover:border-violet-300 transition-all group">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
+              <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-violet-600" />
             </div>
             <div>
-              <p className="text-sm text-slate-500">Téléphone</p>
-              <p className="font-semibold text-slate-900 group-hover:text-violet-600">+237 6XX XXX XXX</p>
-              <p className="text-xs text-slate-400 mt-1">Lun-Ven 9h-18h</p>
+              <p className="text-[10px] sm:text-sm text-slate-500">Téléphone</p>
+              <p className="text-xs sm:text-sm font-semibold text-slate-900 group-hover:text-violet-600">+237 6XX XXX XXX</p>
+              <p className="text-[9px] sm:text-xs text-slate-400 mt-1">Lun-Ven 9h-18h</p>
             </div>
           </a>
           
-          <div className="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-200">
-            <div className="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
-              <MapPin className="w-5 h-5 text-violet-600" />
+          <div className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 bg-white rounded-xl border border-slate-200">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-violet-600" />
             </div>
             <div>
-              <p className="text-sm text-slate-500">Adresse</p>
-              <p className="font-semibold text-slate-900">Douala, Cameroun</p>
-              <p className="text-xs text-slate-400 mt-1">Sur rendez-vous</p>
+              <p className="text-[10px] sm:text-sm text-slate-500">Adresse</p>
+              <p className="text-xs sm:text-sm font-semibold text-slate-900">Douala, Cameroun</p>
+              <p className="text-[9px] sm:text-xs text-slate-400 mt-1">Sur rendez-vous</p>
             </div>
           </div>
         </div>
 
-        {/* FAQ rapide */}
-        <div className="mt-12">
-          <h3 className="text-lg font-semibold text-slate-900 mb-4">Questions fréquentes</h3>
-          <div className="space-y-3">
+        {/* ========== FAQ RAPIDE RESPONSIVE ========== */}
+        <div className="mt-10 sm:mt-12">
+          <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 sm:mb-4">Questions fréquentes</h3>
+          <div className="space-y-2 sm:space-y-3">
             {[
               { q: 'Temps de réponse moyen ?', a: 'Nous répondons sous 4 heures ouvrées.' },
               { q: 'Support en anglais ?', a: 'Oui, notre équipe est bilingue FR/EN.' },
               { q: 'Urgence technique ?', a: 'Écrivez à security@hrskillspay.com pour une réponse <1h.' }
             ].map((faq, i) => (
-              <div key={i} className="p-4 bg-slate-50 rounded-xl">
-                <p className="font-medium text-slate-900">{faq.q}</p>
-                <p className="text-sm text-slate-600 mt-1">{faq.a}</p>
+              <div key={i} className="p-3 sm:p-4 bg-slate-50 rounded-xl">
+                <p className="text-xs sm:text-sm font-medium text-slate-900">{faq.q}</p>
+                <p className="text-[11px] sm:text-sm text-slate-600 mt-0.5 sm:mt-1">{faq.a}</p>
               </div>
             ))}
           </div>

@@ -1,4 +1,4 @@
-// Solutions.jsx
+// Solutions.jsx - Version responsive
 import React, { memo, useState } from 'react';
 import { 
   Code2, CreditCard, Link2, ShieldCheck, ArrowRight, 
@@ -107,12 +107,12 @@ const SECURITY_PILLARS = [
 ];
 
 // ============================================================================
-// 🧩 COMPOSANTS RÉUTILISABLES
+// 🧩 COMPOSANTS RÉUTILISABLES RESPONSIVES
 // ============================================================================
 
 const StatusBadge = memo(() => (
-  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-medium border bg-emerald-50 text-emerald-700 border-emerald-200">
-    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+  <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-medium border bg-emerald-50 text-emerald-700 border-emerald-200">
+    <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-500 animate-pulse" />
     Actif
   </span>
 ));
@@ -123,45 +123,45 @@ const PaymentProviderCard = memo(({ provider }) => {
   const [error, setError] = useState(false);
 
   return (
-    <article className="group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg hover:border-violet-300/50 transition-all duration-300">
-      <div className={`h-14 bg-gradient-to-r ${provider.gradient} px-3 flex items-center justify-between`}>
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-md bg-white/20 flex items-center justify-center">
+    <article className="group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg hover:border-violet-300/50 transition-all duration-300 h-full">
+      <div className={`h-12 sm:h-14 bg-gradient-to-r ${provider.gradient} px-2 sm:px-3 flex items-center justify-between`}>
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
+          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-md bg-white/20 flex items-center justify-center">
             <img
               src={error ? provider.placeholder : provider.image}
               alt={provider.name}
-              className={`max-h-5 w-auto object-contain transition-opacity ${loaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`max-h-4 sm:max-h-5 w-auto object-contain transition-opacity ${loaded ? 'opacity-100' : 'opacity-0'}`}
               loading="lazy"
               onLoad={() => setLoaded(true)}
               onError={() => { setError(true); setLoaded(true); }}
             />
           </div>
           <div>
-            <h4 className="text-white font-semibold text-xs">{provider.name}</h4>
-            <p className="text-white/80 text-[10px]">{provider.region}</p>
+            <h4 className="text-white font-semibold text-[10px] sm:text-xs">{provider.name}</h4>
+            <p className="text-white/70 sm:text-white/80 text-[8px] sm:text-[10px]">{provider.region}</p>
           </div>
         </div>
         <StatusBadge />
       </div>
 
-      <div className="p-3.5">
-        <div className="grid grid-cols-2 gap-2 mb-3 pb-3 border-b border-slate-100">
+      <div className="p-2.5 sm:p-3.5">
+        <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mb-2 sm:mb-3 pb-2 sm:pb-3 border-b border-slate-100">
           <div>
-            <span className="text-[10px] text-slate-400">Traitement</span>
-            <p className="text-sm font-semibold text-slate-900">{provider.processingTime}</p>
+            <span className="text-[8px] sm:text-[10px] text-slate-400">Traitement</span>
+            <p className="text-xs sm:text-sm font-semibold text-slate-900">{provider.processingTime}</p>
           </div>
           <div>
-            <span className="text-[10px] text-slate-400">Commission</span>
-            <p className="text-sm font-semibold text-slate-900">{provider.fee}</p>
+            <span className="text-[8px] sm:text-[10px] text-slate-400">Commission</span>
+            <p className="text-xs sm:text-sm font-semibold text-slate-900">{provider.fee}</p>
           </div>
         </div>
         <button 
-          className="w-full py-1.5 text-[10px] font-medium text-violet-700 hover:text-violet-900 hover:bg-violet-50 rounded transition-colors flex items-center justify-center gap-1"
+          className="w-full py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-medium text-violet-700 hover:text-violet-900 hover:bg-violet-50 rounded transition-colors flex items-center justify-center gap-1"
           aria-label={`Activer ${provider.name}`}
           onClick={() => window.location.href = `/onboarding?provider=${provider.id}`}
         >
           Activer
-          <ArrowRight className="w-2.5 h-2.5" aria-hidden="true" />
+          <ArrowRight className="w-2 h-2 sm:w-2.5 sm:h-2.5" aria-hidden="true" />
         </button>
       </div>
     </article>
@@ -173,35 +173,35 @@ const PersonaCard = memo(({ persona }) => {
   const Icon = persona.icon;
   
   return (
-    <article className="group bg-white rounded-xl border border-slate-200 p-4 hover:shadow-lg hover:border-violet-300/50 transition-all duration-300 flex flex-col h-full">
-      <div className="flex items-start gap-3 mb-3">
-        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${persona.gradient} flex items-center justify-center flex-shrink-0`}>
-          <span className="text-lg mr-0.5" aria-hidden="true">{persona.emoji}</span>
+    <article className="group bg-white rounded-xl border border-slate-200 p-3 sm:p-4 hover:shadow-lg hover:border-violet-300/50 transition-all duration-300 flex flex-col h-full">
+      <div className="flex items-start gap-2 sm:gap-3 mb-2 sm:mb-3">
+        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br ${persona.gradient} flex items-center justify-center flex-shrink-0`}>
+          <span className="text-base sm:text-lg" aria-hidden="true">{persona.emoji}</span>
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-slate-900">{persona.title}</h3>
-          <p className="text-[10px] text-slate-500">{persona.subtitle}</p>
+          <h3 className="text-xs sm:text-sm font-semibold text-slate-900">{persona.title}</h3>
+          <p className="text-[9px] sm:text-[10px] text-slate-500">{persona.subtitle}</p>
         </div>
       </div>
 
-      <ul className="space-y-2.5 mb-4 flex-grow">
+      <ul className="space-y-1.5 sm:space-y-2.5 mb-3 sm:mb-4 flex-grow">
         {persona.features.map((feature, idx) => (
           <li key={idx} className="flex flex-col gap-0.5">
-            <div className="flex items-center gap-2">
-              <Check className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" aria-hidden="true" />
-              <span className="text-xs font-medium text-slate-700">{feature.label}</span>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-500 flex-shrink-0" aria-hidden="true" />
+              <span className="text-[10px] sm:text-xs font-medium text-slate-700">{feature.label}</span>
             </div>
-            <span className="text-[10px] text-slate-400 ml-5">{feature.desc}</span>
+            <span className="text-[8px] sm:text-[10px] text-slate-400 ml-4 sm:ml-5">{feature.desc}</span>
           </li>
         ))}
       </ul>
 
       <a 
         href={persona.ctaLink}
-        className={`inline-flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-white rounded-lg bg-gradient-to-r ${persona.gradient} hover:opacity-90 transition-opacity`}
+        className={`inline-flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium text-white rounded-lg bg-gradient-to-r ${persona.gradient} hover:opacity-90 transition-opacity`}
       >
         {persona.cta}
-        <ArrowRight className="w-3 h-3" aria-hidden="true" />
+        <ArrowRight className="w-2.5 h-2.5 sm:w-3 sm:h-3" aria-hidden="true" />
       </a>
     </article>
   );
@@ -209,92 +209,93 @@ const PersonaCard = memo(({ persona }) => {
 PersonaCard.displayName = 'PersonaCard';
 
 // ============================================================================
-// 🎯 COMPOSANT PRINCIPAL
+// 🎯 COMPOSANT PRINCIPAL RESPONSIVE
 // ============================================================================
 export default function Solutions() {
   return (
     <section 
       id="solutions" 
-      className="relative py-16 lg:py-24 bg-gradient-to-b from-white via-slate-50/30 to-white"
+      className="relative py-12 sm:py-16 lg:py-24 bg-gradient-to-b from-white via-slate-50/30 to-white"
       aria-labelledby="solutions-heading"
     >
+      {/* Arrière-plan décoratif responsive */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute top-10 left-1/4 w-72 h-72 bg-violet-200/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-indigo-200/10 rounded-full blur-3xl" />
+        <div className="absolute top-10 left-1/4 w-48 h-48 sm:w-64 sm:h-64 lg:w-72 lg:h-72 bg-violet-200/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-1/4 w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 bg-indigo-200/10 rounded-full blur-3xl" />
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
-        {/* HEADER */}
-        <header className="text-center mb-14 lg:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-violet-100/70 border border-violet-200 rounded-full mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" aria-hidden="true" />
-            <span className="text-xs font-medium text-violet-800">Solutions</span>
+        {/* ========== HEADER RESPONSIVE ========== */}
+        <header className="text-center mb-10 sm:mb-12 lg:mb-16">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 bg-violet-100/70 border border-violet-200 rounded-full mb-3 sm:mb-4">
+            <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-violet-500 animate-pulse" aria-hidden="true" />
+            <span className="text-[10px] sm:text-xs font-medium text-violet-800">Solutions</span>
           </div>
           
-          <h1 id="solutions-heading" className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
+          <h1 id="solutions-heading" className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 leading-tight px-2">
             Des solutions adaptées{' '}
-            <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent whitespace-nowrap inline-block">
               à votre profil
             </span>
           </h1>
           
-          <p className="mt-4 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto px-4">
             Que vous soyez développeur, e-commerçant ou entreprise, trouvez l'outil parfait pour encaisser.
           </p>
         </header>
 
-        {/* MÉTHODES DE PAIEMENT */}
-        <section aria-labelledby="payments-heading" className="mb-14 lg:mb-16">
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-2.5">
-              <CreditCard className="w-5 h-5 text-violet-600" aria-hidden="true" />
-              <h2 id="payments-heading" className="text-lg font-semibold text-slate-900">
+        {/* ========== MÉTHODES DE PAIEMENT ========== */}
+        <section aria-labelledby="payments-heading" className="mb-10 sm:mb-12 lg:mb-16">
+          <div className="flex items-center justify-between mb-4 sm:mb-5">
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-violet-600" aria-hidden="true" />
+              <h2 id="payments-heading" className="text-base sm:text-lg font-semibold text-slate-900">
                 Méthodes de paiement
               </h2>
             </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" role="list">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4" role="list">
             {PAYMENT_PROVIDERS.map((provider) => (
               <PaymentProviderCard key={provider.id} provider={provider} />
             ))}
           </div>
         </section>
 
-        {/* SOLUTIONS PAR PERSONA */}
-        <section aria-labelledby="personas-heading" className="mb-14 lg:mb-16">
+        {/* ========== SOLUTIONS PAR PERSONA ========== */}
+        <section aria-labelledby="personas-heading" className="mb-10 sm:mb-12 lg:mb-16">
           <h2 id="personas-heading" className="sr-only">Solutions par type de client</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4" role="list">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4" role="list">
             {SOLUTIONS_BY_PERSONA.map((persona) => (
               <PersonaCard key={persona.id} persona={persona} />
             ))}
           </div>
         </section>
 
-        {/* SÉCURITÉ */}
-        <section aria-labelledby="security-heading" className="mb-14 lg:mb-16">
-          <div className="bg-gradient-to-br from-slate-900 via-violet-900 to-indigo-900 rounded-2xl p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <ShieldCheck className="w-5 h-5 text-emerald-400" aria-hidden="true" />
-              <span className="text-xs font-medium text-white/90">Sécurité enterprise</span>
+        {/* ========== SÉCURITÉ RESPONSIVE ========== */}
+        <section aria-labelledby="security-heading" className="mb-10 sm:mb-12 lg:mb-16">
+          <div className="bg-gradient-to-br from-slate-900 via-violet-900 to-indigo-900 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+              <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" aria-hidden="true" />
+              <span className="text-[10px] sm:text-xs font-medium text-white/90">Sécurité enterprise</span>
             </div>
             
-            <h2 id="security-heading" className="text-lg font-bold text-white mb-1">
+            <h2 id="security-heading" className="text-base sm:text-lg font-bold text-white mb-1">
               Transactions protégées
             </h2>
-            <p className="text-sm text-white/70 mb-4">Infrastructure certifiée et auditée</p>
+            <p className="text-xs sm:text-sm text-white/70 mb-3 sm:mb-4">Infrastructure certifiée et auditée</p>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
               {SECURITY_PILLARS.map((item, idx) => {
                 const Icon = item.icon;
                 return (
-                  <div key={idx} className="flex items-start gap-2">
-                    {Icon && <Icon className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" aria-hidden="true" />}
+                  <div key={idx} className="flex items-start gap-1.5 sm:gap-2">
+                    {Icon && <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 flex-shrink-0 mt-0.5" aria-hidden="true" />}
                     <div>
-                      <p className="text-xs font-medium text-white">{item.label}</p>
-                      <p className="text-[10px] text-white/60">{item.desc}</p>
+                      <p className="text-[10px] sm:text-xs font-medium text-white">{item.label}</p>
+                      <p className="text-[8px] sm:text-[10px] text-white/60">{item.desc}</p>
                     </div>
                   </div>
                 );
@@ -303,33 +304,33 @@ export default function Solutions() {
           </div>
         </section>
 
-        {/* CTA */}
+        {/* ========== CTA RESPONSIVE ========== */}
         <section className="text-center">
-          <div className="inline-flex flex-col sm:flex-row items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
             <a
               href="/register"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-medium text-sm shadow-lg shadow-violet-500/20 hover:shadow-xl hover:shadow-violet-500/30 hover:-translate-y-0.5 transition-all duration-200"
+              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-medium text-xs sm:text-sm shadow-lg shadow-violet-500/20 hover:shadow-xl hover:shadow-violet-500/30 hover:-translate-y-0.5 transition-all duration-200 w-full sm:w-auto"
             >
               Commencer gratuitement
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" aria-hidden="true" />
             </a>
             <a
               href="/demo"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl font-medium text-sm border border-slate-200 hover:border-violet-300 hover:bg-violet-50 transition-all duration-200"
+              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-white text-slate-900 rounded-xl font-medium text-xs sm:text-sm border border-slate-200 hover:border-violet-300 hover:bg-violet-50 transition-all duration-200 w-full sm:w-auto"
             >
               Voir la démo
             </a>
           </div>
           
-          <p className="mt-5 text-xs text-slate-500 flex items-center justify-center gap-4 flex-wrap">
+          <p className="mt-4 sm:mt-5 text-[10px] sm:text-xs text-slate-500 flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
             <span className="inline-flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" aria-hidden="true" /> PCI DSS
+              <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-500" aria-hidden="true" /> PCI DSS
             </span>
             <span className="inline-flex items-center gap-1">
-              <Check className="w-3.5 h-3.5 text-violet-500" aria-hidden="true" /> Sans carte
+              <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-violet-500" aria-hidden="true" /> Sans carte
             </span>
             <span className="inline-flex items-center gap-1">
-              <Code2 className="w-3.5 h-3.5 text-amber-500" aria-hidden="true" /> API docs
+              <Code2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500" aria-hidden="true" /> API docs
             </span>
           </p>
         </section>

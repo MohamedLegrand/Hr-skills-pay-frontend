@@ -1,14 +1,14 @@
 // Header.jsx
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 // ===== CONSTANTES =====
 const NAV_LINKS = [
-  { label: "Accueil",      href: "/",              id: "home" },
-  { label: "Produits",     href: "/produits",     id: "produits" },
-  { label: "Solutions",    href: "/solutions",    id: "solutions" },
-  { label: "Tarif",        href: "/tarif",        id: "tarif" },
-  { label: "Développeurs", href: "/developpeurs", id: "developpeurs" }, 
+  { label: "Accueil",      href: "/",              id: "home", isAnchor: true },
+  { label: "Produits",     href: "/#produits",     id: "produits", isAnchor: true },
+  { label: "Solutions",    href: "/#solutions",    id: "solutions", isAnchor: true },
+  { label: "Tarif",        href: "/#tarif",        id: "tarif", isAnchor: true },
+  { label: "Développeurs", href: "/#developpeurs", id: "developpeurs", isAnchor: true }, 
 ];
 
 const SCROLL_THRESHOLD = 100;
@@ -17,8 +17,13 @@ const SCROLL_THRESHOLD = 100;
 
 const useActiveSection = (sectionIds) => {
   const [activeId, setActiveId] = useState(sectionIds[0]);
+  const { pathname } = useLocation();
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
+    // Si on n'est pas sur la page d'accueil, pas de suivi des sections
+    if (!isHomePage) return;
+
     let ticking = false;
     const onScroll = () => {
       if (ticking) return;
@@ -38,7 +43,7 @@ const useActiveSection = (sectionIds) => {
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  }, [sectionIds]);
+  }, [sectionIds, isHomePage]);
 
   return activeId;
 };
@@ -70,12 +75,16 @@ const useMediaQuery = (query) => {
 
 const scrollToSection = (id, closeMenu) => {
   closeMenu?.();
+  
+  // Si on est sur la page d'accueil, on scroll directement
   if (id === "home") {
     window.scrollTo({ top: 0, behavior: "smooth" });
     return;
   }
+  
   const el = document.getElementById(id);
   if (!el) return;
+  
   const offset = window.innerWidth < 640 ? 72 : window.innerWidth < 1024 ? 80 : 88;
   window.scrollTo({
     top: el.getBoundingClientRect().top + window.pageYOffset - offset,
@@ -83,7 +92,7 @@ const scrollToSection = (id, closeMenu) => {
   });
 };
 
-// ===== LOGO SVG INLINE (fallback propre) =====
+// ===== LOGO SVG INLINE =====
 const LogoMark = () => (
   <svg
     width="52"
@@ -128,12 +137,21 @@ const LogoMark = () => (
 const Logo = ({ onClick }) => {
   const [imgFailed, setImgFailed] = useState(false);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const handleClick = (e) => {
     e.preventDefault();
     onClick?.();
-    navigate('/');
-    setTimeout(() => scrollToSection("home"), 100);
+    
+    if (pathname === '/') {
+      // Déjà sur l'accueil, on scroll en haut
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      // Sur une autre page, on navigue vers l'accueil
+      navigate('/');
+      // On scroll après la navigation
+      setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 100);
+    }
   };
 
   return (
@@ -176,23 +194,36 @@ const Logo = ({ onClick }) => {
   );
 };
 
-/** Séparateur vertical léger */
-const Divider = () => (
-  <div className="hidden lg:block h-5 w-px bg-white/15 mx-1 flex-shrink-0" aria-hidden="true" />
-);
-
 /** Navigation desktop */
 const DesktopNav = ({ activeId, onNavigate }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const isHomePage = pathname === '/';
 
   const handleNavigation = (id, href) => {
-    if (href === '/') {
-      navigate('/');
-      setTimeout(() => scrollToSection(id), 100);
-    } else {
-      navigate(href);
-    }
     onNavigate?.(id);
+    
+    if (href === '/') {
+      // Lien Accueil
+      if (isHomePage) {
+        scrollToSection('home', () => {});
+      } else {
+        navigate('/');
+        setTimeout(() => scrollToSection('home', () => {}), 100);
+      }
+    } else {
+      // Lien vers une section (#produits, #solutions, etc.)
+      const sectionId = href.replace('/#', '');
+      
+      if (isHomePage) {
+        // Déjà sur l'accueil, on scroll directement
+        scrollToSection(sectionId, () => {});
+      } else {
+        // Sur une autre page, on navigue vers l'accueil puis on scroll
+        navigate('/');
+        setTimeout(() => scrollToSection(sectionId, () => {}), 100);
+      }
+    }
   };
 
   return (
@@ -205,16 +236,16 @@ const DesktopNav = ({ activeId, onNavigate }) => {
         <button
           key={id}
           onClick={() => handleNavigation(id, href)}
-          aria-current={activeId === id ? "page" : undefined}
+          aria-current={activeId === id && isHomePage ? "page" : undefined}
           className={`relative px-3.5 py-2 text-[13.5px] font-medium rounded-lg transition-all duration-150
             focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30 ${
-            activeId === id
+            activeId === id && isHomePage
               ? "text-white bg-white/12"
               : "text-white/65 hover:text-white hover:bg-white/8"
           }`}
         >
           {label}
-          {activeId === id && (
+          {activeId === id && isHomePage && (
             <span
               className="absolute bottom-[5px] left-1/2 -translate-x-1/2 w-[18px] h-[2px] rounded-full"
               style={{ background: "rgba(255,255,255,0.6)" }}
@@ -294,6 +325,8 @@ const HamburgerButton = ({ isOpen, onClick }) => (
 /** Menu mobile */
 const MobileMenu = ({ isOpen, activeId, onNavigate, onClose, onLogin, onRegister }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -302,11 +335,25 @@ const MobileMenu = ({ isOpen, activeId, onNavigate, onClose, onLogin, onRegister
 
   const handleNavigation = (id, href) => {
     onClose();
+    
     if (href === '/') {
-      navigate('/');
-      setTimeout(() => scrollToSection(id), 100);
+      // Lien Accueil
+      if (isHomePage) {
+        scrollToSection('home', () => {});
+      } else {
+        navigate('/');
+        setTimeout(() => scrollToSection('home', () => {}), 100);
+      }
     } else {
-      navigate(href);
+      // Lien vers une section
+      const sectionId = href.replace('/#', '');
+      
+      if (isHomePage) {
+        scrollToSection(sectionId, () => {});
+      } else {
+        navigate('/');
+        setTimeout(() => scrollToSection(sectionId, () => {}), 100);
+      }
     }
     onNavigate?.(id);
   };
@@ -350,14 +397,14 @@ const MobileMenu = ({ isOpen, activeId, onNavigate, onClose, onLogin, onRegister
               onClick={() => handleNavigation(id, href)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-medium
                          transition-all duration-150 text-left ${
-                activeId === id
+                activeId === id && isHomePage
                   ? "bg-white/12 text-white"
                   : "text-white/65 hover:text-white hover:bg-white/6"
               }`}
             >
               <span
                 className={`w-1 h-1 rounded-full flex-shrink-0 transition-all ${
-                  activeId === id ? "bg-white scale-125" : "bg-white/25"
+                  activeId === id && isHomePage ? "bg-white scale-125" : "bg-white/25"
                 }`}
               />
               {label}
@@ -390,14 +437,21 @@ const MobileMenu = ({ isOpen, activeId, onNavigate, onClose, onLogin, onRegister
   );
 };
 
+/** Séparateur */
+const Divider = () => (
+  <div className="hidden lg:block h-5 w-px bg-white/15 mx-1 flex-shrink-0" aria-hidden="true" />
+);
+
 // ===== COMPOSANT PRINCIPAL =====
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const isDesktop  = useMediaQuery("(min-width: 1024px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const isScrolled = useScrolled();
   const sectionIds = NAV_LINKS.map((l) => l.id);
-  const activeId   = useActiveSection(sectionIds);
+  const activeId = useActiveSection(sectionIds);
+  const { pathname } = useLocation();
+  const isHomePage = pathname === '/';
 
   const menuOpenRef = useRef(menuOpen);
   useEffect(() => { menuOpenRef.current = menuOpen; }, [menuOpen]);
